@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinica-webapp-deployment
+  labels:
+    app: clinica-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clinica-webapp
+  template:
+    metadata:
+      labels:
+        app: clinica-webapp
+    spec:
+      containers:
+      - name: clinica-webapp
+        image: gcr.io/clinica-400119/clinica-webapp:v1.1
+        resources:
+          requests:
+            memory: "60Mi"
+            cpu: "100m"
+          limits:
+            memory: "100Mi"
+            cpu: "100m"
+        ports:
+          - name: http-port
+            containerPort: 80
+          - name: https-port
+            containerPort: 443
+        env:
+          - name: TZ
+            value: "America/Sao_Paulo"
+

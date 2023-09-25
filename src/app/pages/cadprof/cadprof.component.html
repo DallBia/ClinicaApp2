@@ -1,0 +1,66 @@
+<div class="linha01">
+  <div class="ti-botao">
+      <button class="Rosa" (click)="CliqueNovo()">
+          <!-- {{this.selectedFicha}} -->
+          NOVO
+      </button>
+  </div>
+  <div class="ti-container">
+      <div class="ti-controles">
+          <div class="ti-select">
+              <app-formulario></app-formulario>
+          </div>
+          <!-- <div class="ti-filtro">
+              <app-textbox [label]="meutxt.label" [nome]="meutxt.nome" [largura]="meutxt.largura" [altura]="meutxt.altura"></app-textbox>
+          </div> -->
+      </div>
+      <div class="ti-img"><i class="material-icons" id="funil" >filter_alt</i></div>
+  </div>
+  <div class="nome-area" margin-left="2vh">
+      <div class="nome-selec"><label *ngIf="this.nProf!==0">Ficha Nº {{this.ColAt.ficha}} - {{this.ColAt.nome}}</label></div>
+      <div class="linhadebaixo">
+          <div class="desde">
+              <label *ngIf="this.nProf>0">Admissão: {{this.ColAt.desde}}</label>
+          </div>
+          <div class="areas">
+              <label *ngIf="this.nProf>0">{{this.ColAt.area}}</label>
+          </div>
+          <div class="proxses">
+              <label *ngIf="this.nProf>0">Próxima sessão: 28/07/2023</label>
+              <!-- Próxima sessão: 28/07/2023 -->
+          </div>
+      </div>
+  </div>
+</div>
+<div class="corpo">
+  <div class="grid-result">
+          <app-grid02></app-grid02>
+  </div>
+  <div class="lado-direito">
+       <div class="formul-result">
+        <div *ngIf="this.nProf!=0">
+         <app-forms *ngIf="nChanges"></app-forms>
+        </div>
+
+      </div>
+      <div class="botoes-finais">
+          <div class="btnAnexar">
+              <button class="Branco" id="Anexar"> <!-- <button class="Branco" id="Anexar" (click)="abrirModal()">-->
+                  Anexar Arquivos
+              </button>
+          </div>
+          <div class="btnSalvar">
+              <button class="Rosa" id="Salvar" >  <!-- <button class="Rosa" id="Salvar" (click)="this.formCliente.submit()"> -->
+                  Salvar
+              </button>
+          </div>
+          <div class="btnFechar">
+              <button class="RosaEscuro" id="Cancelar">
+                Cancelar
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
+
+

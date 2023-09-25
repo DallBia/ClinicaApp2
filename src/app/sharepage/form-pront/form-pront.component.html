@@ -1,0 +1,8 @@
+<div class="tabela" *ngFor="let i of ListaPront" style="overflow-wrap: break-word;word-wrap: break-word;">
+    <label class="inicio">{{i.dtInsercao}} - {{i.nomeCliente}}</label><br>
+    <!-- <label class="corpo" [innerHTML]="i.texto"></label><br> -->
+    <label class="corpo" >{{i.texto}}</label><br>
+    <label class="fim">informação postada por: {{i.nomeColab}}</label><br>
+<hr>
+</div>
+<!-- [innerHTML]="i.texto" -->

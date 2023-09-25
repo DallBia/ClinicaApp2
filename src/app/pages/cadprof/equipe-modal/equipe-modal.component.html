@@ -1,0 +1,49 @@
+<div class="modal-inteiro">
+    <div class="moldura">
+        <div class="titulo">INSERIR NOVO MEMBRO DA EQUIPE</div>
+        <div>
+            <div class="input_box">
+                <label class="fLabel">Nome:</label>
+                <input type="text" class="fCampo" [(ngModel)]="formulario.nome" name="Nome" placeholder="(insira o nome)" required>
+            </div>
+            <div class="input_box">
+                <label class="fLabel">Endereço:</label>
+                <input type="text" class="fCampo" [(ngModel)]="formulario.endereco" name="endereco" placeholder="(rua, número, complemento, bairro, cidade, CEP)" required>
+            </div>
+            <div>
+                <label class="fLabel">Data Nascim:</label>
+                <input type="text" class="fMeioCampo" style="width: 15%;" [(ngModel)]="formulario.dtNasc" name="dtNasc" placeholder="(dd/mm/aaaa)" required>
+                <label class="fLabel">E-mail:</label>
+                <input type="text" class="fMeioCampo" style="width: 30%;" [(ngModel)]="formulario.email" name="email" required>
+                <label class="fLabel">Data Admissão:</label>
+                <input type="text" class="fMeioCampo" style="width: 15%;" [(ngModel)]="formulario.dtAdmis" name="dtAdmis" placeholder="(dd/mm/aaaa)" required>
+                
+            </div>
+            <label class="fLabel">Perfil:</label>
+            <select class="fLabel" style="width: 75%; border:none;" [(ngModel)]="formulario.idPerfil" name="nivel">
+                <option>Diretoria</option>
+                <option>Secretaria</option>
+                <option>Coordenação</option>
+                <option>Equipe Clínica</option>
+            </select>
+            <div>
+                <label class="fLabel">Telefone Fixo:</label>
+                <input type="text" class="fMeioCampo" [(ngModel)]="formulario.telFixo" name="telFixo" placeholder="(somente números)" required>
+                <label class="fLabel">Celular:</label>
+                <input type="text" class="fMeioCampo"  [(ngModel)]="formulario.celular" name="celular" required>
+            </div>
+            <div>
+                <label class="fLabel">Identidade:</label>
+                <input type="text" class="fMeioCampo" [(ngModel)]="formulario.rg" name="rg" placeholder="(somente números)" required>
+                <label class="fLabel">CPF:</label>
+                <input type="text" class="fMeioCampo"  [(ngModel)]="formulario.cpf" name="celular" required>
+            </div>
+        </div>
+            <div class="botoes">
+            <button class="rosa" (click)="salvar()">SALVAR</button>
+            <button class="escuro" (click)="fechar()">CANCELAR</button>
+        </div>
+    </div>
+   
+
+</div>
