@@ -1,7 +1,7 @@
 
 
 export const environment = {
-  production: false,
+  production: true,
   ApiUrl: 'http://clinica-api/api'
 };
 
