@@ -1,7 +1,15 @@
-<div class="Contorno">
+<div class="Contorno"*ngIf="this.l1 === false && this.c1 === false">
     <div class="Textos">
-        <div class="Nome">Francisco</div>
-        <div class="Sessao">Entrevista</div>
+        <div class="Nome">{{this.linha1}}</div>
+        <div class="Sessao">{{this.linha2}}</div>
     </div>
     <div class="Tag"></div>
 </div>
+<div class="Titulo"*ngIf="this.l1 === true && this.c1 === false">
+  <div class="sl">{{this.col}}</div>
+  <div class="Textoz">
+      <div class="Dono">{{this.linha1}}</div>
+      <div class="Area">{{this.linha2}}</div>
+  </div>
+</div>
+<div class="Hora"*ngIf="this.c1 === true">{{this.linha1}}</div>

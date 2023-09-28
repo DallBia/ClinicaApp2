@@ -3,42 +3,37 @@
   margin:2vh;
   height: 80%;
   width: 95%;
-  border: solid 2px black;
   display: flex;
 }
 .detalhes{
   height: 100%;
   width: 25%;
-  background-color: antiquewhite;
+  padding:5px;
 }
 .area{
-  position:sticky;
+  position: relative;
   top: 0;
   left: 0;
-  background-color: aquamarine;
   height: 100%;
+  overflow: auto;
   width: 75%;
 }
-.unidade{
-  position:sticky;
-  top: 0;
-  left: 0;
-  background-color: rgb(255, 255, 255);
-  height: 5vh;
-  width: 10vw;
+
+
+.area::-webkit-scrollbar-thumb {
+  background-color: #fddfed;
+  border-radius: 6px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+.area::-webkit-scrollbar {
+  width: 14px;
+  background-color:#ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ffb6b6;
+  border-radius: 6px;
+  padding: 2px;
+}
 
 
 
@@ -57,6 +52,7 @@
 }
 
 table {
+    position:sticky;
     border-collapse: collapse;
     width: 100%;
   }
@@ -64,7 +60,7 @@ table {
     /*border: 1px solid black;/*/
     padding: 8px;
     text-align: left;
-    min-width: 150px; /* Ajuste para o valor desejado */
+    min-width: 11vw; /* Ajuste para o valor desejado */
   }
 
   /* Fixa o cabeçalho no topo */
@@ -79,6 +75,10 @@ table {
   tbody td:first-child, thead th:first-child {
     position: sticky;
     left: 0;
+    display: flex; /* Ativa o modelo de layout flex */
+    justify-content: center; /* Alinha horizontalmente o conteúdo no centro */
+    align-items: center;
     z-index: 2; /* Garante que a primeira coluna fique acima das outras colunas */
-    background: white; /* Faz o fundo opaco para sobrepor conteúdo */
+    /* background: white;  */
+    background: linear-gradient(to right,white 0%,white 80%,rgba(255, 255, 255, 0) 100%);
   }

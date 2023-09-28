@@ -10,6 +10,7 @@ export class CustomDateComponent implements OnInit {
   displayedDate: Date = new Date();
   semana = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
   linkA!: string;
+  public diaString: string = '';
   constructor(private headerService: HeaderService) {}
 
   ngOnInit(): void {
@@ -19,16 +20,17 @@ export class CustomDateComponent implements OnInit {
   }
 
   onDateChange(event: any): void {
-    if(this.linkA == "AGENDA"){
-      if (event) {
-        this.displayedDate = event.value;
-      }
-    }
-    if(this.linkA == "AGENDA"){
+    // if(this.linkA == "AGENDA"){
+    //   if (event) {
+    //     this.displayedDate = event.value;
+    //   }
+    // }
+
     if (event) {
       this.displayedDate = event.value;
+      this.diaString = this.displayedDate.toISOString();
+      console.log(this.linkA);
+      console.log(this.diaString);
     }
-  }
-
   }
 }

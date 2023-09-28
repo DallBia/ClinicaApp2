@@ -6,9 +6,9 @@
   border-radius: 10px;
   display: inline-block;
   font-family:'Courier New', Courier, monospace;
-  font-size: 12pt;
+  font-size: 10pt;
   color: #6e0459;
-  background: linear-gradient(to right,var(--cor-clara) 0%,var(--cor-clara) 20%,var(--cor-media) 20%,var(--cor-media) 21%, 
+  background: linear-gradient(to right,var(--cor-clara) 0%,var(--cor-clara) 20%,var(--cor-media) 20%,var(--cor-media) 21%,
   white 21%, white 79%,var(--cor-media) 79%,var(--cor-media) 80%,var(--cor-clara) 80%, var(--cor-clara) 100%);
 }
 .mat-datepicker-content .mat-calendar-header {

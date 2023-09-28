@@ -51,6 +51,7 @@ import { Grid02Component } from './sharepage/grid02/grid02.component';
 import { FormProntComponent } from './sharepage/form-pront/form-pront.component';
 import { ModalComponent } from './sharepage/forms/modal/modal.component';
 import { EquipeModalComponent } from './pages/cadprof/equipe-modal/equipe-modal.component';
+import { DetalhesComponent } from './sharepage/detalhes/detalhes.component';
 
 registerLocaleData(localePt);
 
@@ -92,6 +93,7 @@ export function tokenGetter() {
     FormProntComponent,
     ModalComponent,
     EquipeModalComponent,
+    DetalhesComponent,
   ],
 
 
