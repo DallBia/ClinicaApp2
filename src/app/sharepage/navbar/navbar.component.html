@@ -7,7 +7,12 @@
     <div class="Username">{{ this.userService.usuario$ | async }}</div>
     <div class="header-right">
       <img [src]="imageNot" alt="Notificação" class="sino">
-      <app-custom-date></app-custom-date>
+      <div class="dCompl">
+        <label class="dia">{{this.diaSemana}}</label>
+        <br>
+        <label class="dia">{{this.hoje}}</label>
+      </div>
+
     </div>
 </header>
 <nav class="navbar navbar-expand-lg navbar-light">

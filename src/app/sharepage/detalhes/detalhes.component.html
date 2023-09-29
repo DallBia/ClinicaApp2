@@ -12,10 +12,8 @@
   <div>
     <label class="fLabel">Cliente:</label>
     <input type="text" id="cliente-select" list="valores" class="fCampo">
-    <datalist id="valores">
-      <option value="Opção 1"></option>
-      <option value="Opção 2"></option>
-      <option value="Opção 3"></option>
+    <datalist id="valores" *ngFor="let i of this.clienteService.dataSource">
+      <option>{{i.nome}}</option>
     </datalist>
   </div>
   <div>
@@ -62,7 +60,7 @@
     <div class="Obs1">
 
     </div>
-    <label class="fLabel">HIstórico:</label>
+    <label class="fLabel">HIstórico: </label>
     <div class="Obs1">
 
     </div>

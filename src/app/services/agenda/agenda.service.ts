@@ -1,4 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Agenda } from 'src/app/models/Agendas';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Response } from '../../models/Response';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +31,25 @@ public Horarios = [
 ];
 
 
+  public agendas: Agenda[] = [];
+  public agendasG: Agenda[] = [];
 
-  constructor() { }
 
+private apiUrl = `${environment.ApiUrl}/Agenda`;
 
+getAgendaByDate(date: string): Observable<Response<Agenda[]>> {
+  return this.http.get<Response<Agenda[]>>(`${this.apiUrl}/AgendaByDate/${date}`);
+}
+
+  constructor(private http: HttpClient) { }
+
+  BuscaAgenda(dia: string){
+    this.getAgendaByDate(dia).subscribe(data => {
+      this.agendas = data.dados;
+      this.agendasG = data.dados;
+      console.log(this.agendas)
+
+    });
+  }
 
 }

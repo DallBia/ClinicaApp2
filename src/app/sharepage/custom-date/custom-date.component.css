@@ -1,25 +1,27 @@
 .date-display {
   cursor: pointer;
-  margin: 10px;
-  border: 1px double #f084ce;
-  padding: 10px;
-  border-radius: 10px;
-  display: inline-block;
-  font-family:'Courier New', Courier, monospace;
-  font-size: 10pt;
-  color: #6e0459;
-  background: linear-gradient(to right,var(--cor-clara) 0%,var(--cor-clara) 20%,var(--cor-media) 20%,var(--cor-media) 21%,
-  white 21%, white 79%,var(--cor-media) 79%,var(--cor-media) 80%,var(--cor-clara) 80%, var(--cor-clara) 100%);
-}
+  border: solid 2px var(--cor-media);
+  border-radius:1.5vh;
+  height: 5vh;
+  width: 10vw;
+  display: flex;
+  background: linear-gradient(to right, var(--cor-clara) 0%,var(--cor-clara) 20%,#fddfed 21%, #fddfed 80%,var(--cor-clara) 81%,var(--cor-clara) 100%);
+  justify-content: center;
+  align-items: center;
+  padding-top: 1vh;
+  color:var(--cor-escura);
+  font-weight: bold;
+ }
 .mat-datepicker-content .mat-calendar-header {
   background-color: #f1aee4;
   color: #6e0459;
-}.date-text{
-  margin-right: 2vh;
+}
+.date-text{
+  margin-right: 10px;
 }
 .date-dia-da-semana{
-  margin-right: 2vh;
+  margin-right: 10px;
 }
 .date-calendario{
-  margin-right: 3vh;
+  margin-right: 10px;
 }

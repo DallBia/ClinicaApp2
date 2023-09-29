@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderService } from '../navbar/header.service';
+import { AgendaService } from 'src/app/services/agenda/agenda.service';
 
 @Component({
   selector: 'app-custom-date',
@@ -9,28 +10,27 @@ import { HeaderService } from '../navbar/header.service';
 export class CustomDateComponent implements OnInit {
   displayedDate: Date = new Date();
   semana = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
-  linkA!: string;
-  public diaString: string = '';
-  constructor(private headerService: HeaderService) {}
+  diaSemana: string = '';
+  dia: string = '';
+  constructor(public agendaService: AgendaService){}
+  onDateChange(newDate: Date) {
+    var diaDaSemana = newDate.getDay();
+    var diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    this.diaSemana = diasDaSemana[diaDaSemana];
+    console.log(this.diaSemana);
+    this.dia = newDate.toISOString();
+    console.log('Nova data selecionada:', this.dia);
+    const novoDia = new Date(newDate).toISOString().split('T')[0]
+    this.agendaService.BuscaAgenda(novoDia);
+  }
 
   ngOnInit(): void {
-    this.headerService.LinkA$.subscribe(link => {
-      this.linkA = link;
-    });
+    // this.headerService.LinkA$.subscribe(link => {
+    //   this.linkA = link;
+    // });
   }
 
-  onDateChange(event: any): void {
-    // if(this.linkA == "AGENDA"){
-    //   if (event) {
-    //     this.displayedDate = event.value;
-    //   }
-    // }
-
-    if (event) {
-      this.displayedDate = event.value;
-      this.diaString = this.displayedDate.toISOString();
-      console.log(this.linkA);
-      console.log(this.diaString);
-    }
-  }
 }
+
+
+//ꟷꚚꟷ ֍ ─●─

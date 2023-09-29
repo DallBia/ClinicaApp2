@@ -10,7 +10,7 @@
             <th class="t007">Sai Sozinho?</th>
         </thead>
         <tbody>
-            <tr *ngFor="let l of dataSource" [class.linhaDestacada]="l.selecionada">
+            <tr *ngFor="let l of this.clienteService.dataSource" [class.linhaDestacada]="l.selecionada">
                 <td class="t001" (click)="destacarLinha(l, l.Ficha)">(img)</td>
                 <td class="t002" (click)="destacarLinha(l, l.Ficha)"> {{l.Ficha}}</td>
                 <td class="t003" (click)="destacarLinha(l, l.Ficha)"> {{l.nome}}</td>

@@ -9,7 +9,7 @@ import { UserService } from '../../services/user.service'; // Importe o UserServ
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { LoginComponent } from 'src/app/pages/login/login.component';
 import { NavbarService } from './navbar.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 
 @Component({
@@ -28,8 +28,8 @@ export class NavbarComponent implements OnInit {
   UsrA$!: Observable<string | null>;
   public usr: string = "(---)";
   public Perf: string = '';
-
-
+  public hoje: string = '';
+  public diaSemana: string = '';
 
   constructor(
     private clienteService: ClienteService,
@@ -41,14 +41,19 @@ export class NavbarComponent implements OnInit {
 
   ) {
 
-
   }
 
 
 
-
   ngOnInit(): void {
-
+    this.hoje = new Date().toLocaleDateString('pt-BR');
+    const aHj = this.hoje.split('/');
+    const mes = parseInt(aHj[1], 10) - 1;
+    var diaMes = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro']
+    this.hoje = aHj[0] + ' de ' + diaMes[mes] + ' de ' + aHj[2];
+    var diaDaSemana = new Date().getDay();
+    var diasDaSemana = ['domingo,', 'segunda-feira,', 'terça-feira', 'quarta-feira,', 'quinta-feira,', 'sexta-feira,', 'sábado,'];
+    this.diaSemana = diasDaSemana[diaDaSemana];
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
