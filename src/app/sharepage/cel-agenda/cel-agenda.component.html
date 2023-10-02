@@ -1,15 +1,31 @@
-<div class="Contorno"*ngIf="this.l1 === false && this.c1 === false">
-    <div class="Textos">
-        <div class="Nome">{{this.linha1}}</div>
-        <div class="Sessao">{{this.linha2}}</div>
-    </div>
-    <div class="Tag"></div>
+<div class="Contorno" [ngStyle]="{'box-shadow': boxShadow}" *ngIf="this.l1 === false && this.c1 === false" (click)="AltHorario(this.lin, this.col)">
+  <div class="Textos">
+      <div class="Nome">{{this.linha1}}</div>
+      <div class="Sessao">{{this.linha2}}</div>
+  </div>
+  <div class="Tag" [style.background-color]="corDeFundo"></div>
 </div>
-<div class="Titulo"*ngIf="this.l1 === true && this.c1 === false">
+
+<div class="Titulo" *ngIf="this.l1 === true && this.c1 === false" (click)="MudarSala(this.lin, this.col)">
   <div class="sl">{{this.col}}</div>
   <div class="Textoz">
       <div class="Dono">{{this.linha1}}</div>
       <div class="Area">{{this.linha2}}</div>
   </div>
 </div>
+
 <div class="Hora"*ngIf="this.c1 === true">{{this.linha1}}</div>
+
+<div style="Display: none;">{{this.celAtual.id}}</div>
+<div style="Display: none;">{{this.celAtual.idCliente}}</div>
+<div style="Display: none;">{{this.celAtual.status}}</div>
+<div style="Display: none;">{{this.celAtual.sala}}</div>
+<div style="Display: none;">{{this.celAtual.repeticao}}</div>
+<div style="Display: none;">{{this.celAtual.obs}}</div>
+<div style="Display: none;">{{this.celAtual.idFuncAlt}}</div>
+<div style="Display: none;">{{this.celAtual.horario}}</div>
+<div style="Display: none;">{{this.celAtual.historico}}</div>
+<div style="Display: none;">{{this.celAtual.dtAlt}}</div>
+<div style="Display: none;">{{this.celAtual.diaDaSemana}}</div>
+<div style="Display: none;">{{this.celAtual.dia}}</div>
+

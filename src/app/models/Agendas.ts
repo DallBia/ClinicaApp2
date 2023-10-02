@@ -1,19 +1,19 @@
 export interface Agenda{
 
-  Id?: number;
-  IdCliente?: number;
-  IdFuncAlt?: number;
-  DtAlt?: string;
-  Horario?: string;
-  Sala?: number;
-  Unidade?: number;
-  Dia?: string;
-  DiaDaSemana?: string;
-  Repeticao?: string;
-  Subtitulo?: string;
-  Status?: string;
-  Historico?: string;
-  Obs?: string;
+  id?: number;
+  idCliente?: number; //
+  idFuncAlt?: number; //
+  dtAlt?: string; //
+  horario?: string; //
+  sala?: number; //
+  unidade?: number; //
+  dia?: string; //
+  diaDaSemana?: string; //
+  repeticao?: string; //
+  subtitulo?: string;
+  status?: string;
+  historico?: string; //
+  obs?: string;
 
 
 }

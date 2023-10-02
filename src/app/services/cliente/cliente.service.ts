@@ -71,6 +71,7 @@ export class ClienteService {
 
   constructor(private http: HttpClient) { }
 
+  public success: boolean = false;
   public clientes: Cliente[] = [];
   public clientesG: Cliente[] = [];
   // public ClienteAtual: Cliente[] = [];
@@ -133,14 +134,33 @@ export class ClienteService {
         item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toLocaleDateString('pt-BR') : '---'
         item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toLocaleDateString('pt-BR') : '---'
       })
-      this.clientes = data.dados;
+
       this.clientesG = data.dados;
       this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
-
+      this.clientes = data.dados;
+      this.success = data.sucesso;
+      this.success = this.Dados1();
+      console.log('Sucesso? ' + this.success)
       this.Carregar();
     });
   }
+
+  Dados1(): boolean {
+    if (this.success !== true) {
+      setTimeout(() => {
+        this.Dados1();
+      }, 300);
+    } else {
+      return true;
+    }
+    return true;
+  }
+
+
   async Carregar(){
+
+    console.log('Entrando em Carregar... ')
+    console.log(this.clientes)
     this.dataSource = [];
     for (let i of this.clientesG) {
       // let aCelular: string = '---';

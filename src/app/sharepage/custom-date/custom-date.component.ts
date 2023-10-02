@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { HeaderService } from '../navbar/header.service';
 import { AgendaService } from 'src/app/services/agenda/agenda.service';
@@ -12,25 +13,48 @@ export class CustomDateComponent implements OnInit {
   semana = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
   diaSemana: string = '';
   dia: string = '';
+  Unit: number = 0;
+  subscription!: Subscription;
+  changes: boolean = false;
+  ctrl: boolean = false;
+
+
   constructor(public agendaService: AgendaService){}
   onDateChange(newDate: Date) {
     var diaDaSemana = newDate.getDay();
     var diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
     this.diaSemana = diasDaSemana[diaDaSemana];
-    console.log(this.diaSemana);
     this.dia = newDate.toISOString();
-    console.log('Nova data selecionada:', this.dia);
     const novoDia = new Date(newDate).toISOString().split('T')[0]
-    this.agendaService.BuscaAgenda(novoDia);
+    this.agendaService.setDiaAtual(novoDia)
+    this.agendaService.setChangesA(false);
+    // this.agendaService.BuscaAgenda(novoDia);
+    // this.ctrl = this.Dados1();
+    this.agendaService.recarregar(novoDia,this.Unit);
   }
 
+  Dados1(): boolean {
+    if (this.changes !== true) {
+      setTimeout(() => {
+        this.Dados1();
+      }, 300);
+    } else {
+      return true;
+    }
+    return false;
+  }
+
+
   ngOnInit(): void {
-    // this.headerService.LinkA$.subscribe(link => {
-    //   this.linkA = link;
-    // });
+    this.subscription = this.agendaService.UnitA$.subscribe(
+      name => this.Unit = name
+    )
+    this.subscription = this.agendaService.ChangesA$.subscribe(
+      name => this.changes = name
+    )
   }
 
 }
 
 
-//ꟷꚚꟷ ֍ ─●─
+

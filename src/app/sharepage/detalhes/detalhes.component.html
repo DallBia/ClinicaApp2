@@ -3,22 +3,29 @@
   <div class="info">
     <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-custom-date></app-custom-date></div>
     <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-unidade></app-unidade></div>
-    <div class="nome">SALA</div>
-    <div class="nome">HORÁRIO</div>
-    <div class="nome" style="font-weight: bold; color:var(--cor-media)">ANTONIO FRANCISCO LISBOA ALEIJADINHO</div>
+    <div class="nome"*ngIf="this.agendaService.dSala !== 0">SALA {{this.agendaService.dSala}}</div>
+    <div class="nome">{{this.agendaService.dHora}}</div>
+    <div class="nome" style="font-weight: bold; color:var(--cor-media)">{{this.agendaService.dCliente}}</div>
    </div>
 </div>
-<div class="inferior">
-  <div>
-    <label class="fLabel">Cliente:</label>
-    <input type="text" id="cliente-select" list="valores" class="fCampo">
+<div class="inferior" *ngIf="this.agendaService.dSala !== 0">
+  <div *ngIf="this.agendaService.dHora !== '-'">
+    <label class="fLabel" for="cliente-select">Cliente:</label>
+    <input type="text" id="cliente-select" list="valores" class="fCampo" [(ngModel)]="this.agendaService.dCliente">
+    <datalist id="valores" *ngFor="let i of this.clienteService.dataSource">
+      <option>{{i.nome}}</option>
+    </datalist>
+  </div>
+  <div *ngIf="this.agendaService.dHora == '-'">
+    <label class="fLabel" for="colab-select">Colaborador:</label>
+    <input type="text" id="colab-select" list="valores" class="fCampo" [(ngModel)]="this.agendaService.dCliente">
     <datalist id="valores" *ngFor="let i of this.clienteService.dataSource">
       <option>{{i.nome}}</option>
     </datalist>
   </div>
   <div>
-    <label class="fLabel">Sessão:</label>
-    <input type="text" id="sessao-select" list="valores2" class="fCampo">
+    <label class="fLabel" for="sessao-select">Sessão:</label>
+    <input type="text" id="sessao-select" list="valores2" class="fCampo" [(ngModel)]="this.CelAtual.subtitulo">
     <datalist id="valores2">
       <option value="Entrevista"></option>
       <option value="Consulta"></option>
@@ -38,8 +45,8 @@
     </datalist>
   </div>
   <div class="repetition">
-    <label class="fLabel">Repetição:</label>
-    <select   class="fCampo">
+    <label class="fLabel" for="Repet">Repetição:</label>
+    <select id="Repet" class="fCampo" [(ngModel)]="this.CelAtual.repeticao">
       <option>Sessão única</option>
       <option>Semanal</option>
       <option>Quinzenal</option>
@@ -47,22 +54,25 @@
       <option>Cancelar Repetição</option>
     </select>
   </div>
-  <div class="seletores">
-    <label class="tags" style="background-color: lawngreen;">Realizada</label>
-    <label class="tags" style="background-color: rgb(238, 200, 103);">Desmarcada</label>
-    <label class="tags" style="background-color:rgb(231, 84, 113);">Falta</label>
-    <label class="tags" style="background-color:white;">A definir</label>
-    <label class="tags" style="background-color:silver;">Bloquear Hora</label>
-    <label class="tags" style="background-color:rgb(195, 231, 255);">Limpar Hora</label>
+  <div class="seletores" *ngIf="this.agendaService.dHora !== '-'" >
+    <div class="tags" (click)="setStatus('Realizado')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Realizado' ? true : false}" style="background-color: lawngreen;">Realizada</div>
+    <div class="tags" (click)="setStatus('Desmarcado')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Desmarcado' ? true : false}" style="background-color: rgb(238, 200, 103);">Desmarcada</div>
+    <div class="tags" (click)="setStatus('Falta')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Falta' ? true : false}" style="background-color:rgb(231, 84, 113);">Falta</div>
+    <div class="tags" (click)="setStatus('Pendente')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Pendente' ? true : false}" style="background-color:rgb(195, 231, 255);">Pendente</div>
+    <div class="tags" (click)="setStatus('Bloqueado')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Bloqueado' ? true : false}" style="background-color:silver;">Bloquear Hora</div>
+    <div class="tags" (click)="setStatus('Vago')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Vago' || '' ? true : false}" style="background-color:white;">Limpar Hora</div>
   </div>
   <div>
-    <label class="fLabel">Observações:</label>
-    <div class="Obs1">
-
+    <span class="fLabel" *ngIf="this.agendaService.dHora !== '-'">Observações:</span>
+    <div class="Obs1" id="Obs" *ngIf="this.agendaService.dHora !== '-'">
+      <textarea #obsTextarea [(ngModel)]="this.CelAtual.obs"
+      placeholder="Digite aqui..." class="box-Obs1"
+      ></textarea>
     </div>
-    <label class="fLabel">HIstórico: </label>
-    <div class="Obs1">
-
-    </div>
+    <span class="fLabel">Histórico:</span>
+      <pre id="Hist" class="Obs1">{{ this.CelAtual.historico }}</pre>
   </div>
+</div>
+<div class="bot" *ngIf="this.agendaService.dSala !== 0">
+<button class="rosa" (click)="salvaSessao()">Salvar</button>
 </div>

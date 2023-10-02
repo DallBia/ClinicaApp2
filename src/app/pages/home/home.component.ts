@@ -18,7 +18,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.clienteService.BuscaClientes();
     this.clienteService.setClienteA(0);
+
   }
 
   mostrarBotaoSalvar = false;
