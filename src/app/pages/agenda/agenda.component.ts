@@ -43,6 +43,7 @@ async main(){
 }
 
   async Dados1(): Promise<boolean> {
+    console.log('Entrando em Dados1 - Agenda')
     return new Promise<boolean>((resolve) => {
       const verificarSucesso1 = () => {
         if (this.agendaService.success === true) {
@@ -59,6 +60,7 @@ async main(){
     });
   }
   async Dados2(): Promise<boolean> {
+    console.log('Entrando em Dados2 - Agenda')
     return new Promise<boolean>((resolve) => {
       const verificarSucesso2 = () => {
         if (this.clienteService.clientes.length !== 0) {

@@ -122,7 +122,7 @@ export class ClienteService {
 
   }
 
-  BuscaClientes(){
+  async BuscaClientes(){
 
     this.clientes = [];
     this.clientesG = [];
@@ -139,21 +139,30 @@ export class ClienteService {
       this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
       this.clientes = data.dados;
       this.success = data.sucesso;
-      this.success = this.Dados1();
-      console.log('Sucesso? ' + this.success)
-      this.Carregar();
+
     });
+
+    this.success = await this.Dados1();
+    console.log('Sucesso? ' + this.success)
+    this.Carregar();
   }
 
-  Dados1(): boolean {
-    if (this.success !== true) {
-      setTimeout(() => {
-        this.Dados1();
-      }, 300);
-    } else {
-      return true;
-    }
-    return true;
+  async Dados1(): Promise<boolean> {
+    console.log('Entrando em Dados1 - cliente')
+    return new Promise<boolean>((resolve) => {
+      const verificarSucesso1 = () => {
+        if (this.success === true) {
+          console.log('Sucesso/cliente:' + this.success);
+          resolve(true);
+        } else {
+          setTimeout(() => {
+            verificarSucesso1();
+          }, 300);
+        }
+      };
+
+      verificarSucesso1();
+    });
   }
 
 
@@ -234,6 +243,7 @@ export class ClienteService {
         this.dataSource = [...this.dataSource, ...this.nLin]
       }
     }
+    console.log('Saindo do cliente.s')
   }
 
   converterParaDate(dataString: string): Date {

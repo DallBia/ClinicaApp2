@@ -68,11 +68,16 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
 
 
    BuscaAgenda(dia: string){
+    console.log('Chamando getAgenda - Ag.S')
     this.agendas = [];
     this.getAgendaByDate(dia).subscribe(async data => {
       this.agendas = data.dados;
+      setTimeout(() => {
+
+      }, 300);
       this.success = data.sucesso;
       const Chng = await this.Dados1();
+      console.log('saindo de Chg - dados1')
       this.setChangesA(Chng);
       this.setagendaG(this.agendas)
       console.log('Em agendaService:')
@@ -82,6 +87,7 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
 
 
   async Dados1(): Promise<boolean> {
+    console.log('Entrando em Dados1 - agenda.s')
     return new Promise<boolean>((resolve) => {
       const verificarSucesso = () => {
         if (this.success === true) {
@@ -105,6 +111,7 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
 
 
   async recarregar(dia: string, unit: number){
+    console.log('Entrando em async recarregar (Ag.S)')
   const xdia = dia == '' ? this.diaA.value : dia;
   const xUnit = unit == 0 ? this.UnitA.value : unit;
   const valor = xdia + '%' + xUnit;

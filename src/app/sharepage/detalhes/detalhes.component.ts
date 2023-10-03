@@ -25,8 +25,9 @@ export class DetalhesComponent {
   public Usr!: User | null;
 
   ngOnInit(): void {
-
+    console.log('Em detalhes - buscaCliente')
     this.clienteService.BuscaClientes()
+    console.log('Em detalhes, buscaAgenda')
     this.agendaService.BuscaAgenda(new Date().toISOString().split('T')[0])
     this.agendaService.dHora = '';
     this.agendaService.dSala = 0;

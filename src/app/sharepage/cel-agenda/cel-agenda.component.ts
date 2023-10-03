@@ -149,6 +149,7 @@ ngOnInit(){
   this.subscription2 = this.agendaService.agendaG$.subscribe(
     name => {
       this.agendaG = name;
+      console.log('cel-agenda - entrando em ReCarregar')
       this.ReCarregar(this.BuscaA);
     }
 
