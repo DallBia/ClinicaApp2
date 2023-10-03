@@ -41,14 +41,25 @@ public Horarios = [
   public dSala: number = 0;
   public dHora: string = '';
   public dCliente: string = '';
+  public dIdCliente: number = 0;
   public val: boolean = false;
 
 
 
 private apiUrl = `${environment.ApiUrl}/Agenda`;
-
-getAgendaByDate(date: string): Observable<Response<Agenda[]>> {
-  return this.http.get<Response<Agenda[]>>(`${this.apiUrl}/AgendaByDate/${date}`);
+getAgendaByDate(date: string): Promise<Response<Agenda[]>> {
+  return this.http.get<Response<Agenda[]>>(`${this.apiUrl}/AgendaByDate/${date}`)
+    .toPromise()
+    .then(response => {
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Resposta da API é indefinida.');
+      }
+    })
+    .catch(error => {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    });
 }
 
 CreateAgenda(agenda: Agenda) : Observable<Response<Agenda[]>>{
@@ -63,31 +74,76 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
 // }
   constructor(private http: HttpClient,
               private clienteService: ClienteService) {
-    this.recarregar(this.diaAtual,1)
+
+
    }
 
+   private BuscaA = new BehaviorSubject<string>(this.buscaIni);
+   BuscaA$ = this.BuscaA.asObservable();
+     setBuscaA(name: string) {
+       this.BuscaA.next(name);
+     }
 
-   BuscaAgenda(dia: string){
-    console.log('Chamando getAgenda - Ag.S')
-    this.agendas = [];
-    this.getAgendaByDate(dia).subscribe(async data => {
+     private EtapaA = new BehaviorSubject<number>(0);
+     EtapaA$ = this.EtapaA.asObservable();
+       setEtapaA(name: number) {
+         this.EtapaA.next(name);
+       }
+
+     private ChangesA = new BehaviorSubject<boolean>(false);
+     ChangesA$ = this.ChangesA.asObservable();
+     setChangesA(name: boolean) {
+       this.ChangesA.next(name);
+     }
+
+     // private agendaA = new BehaviorSubject<Agenda>(this.Vazia);
+     // agendaA$ = this.agendaA.asObservable();
+     // setAgendaAtual(name: Agenda) {
+     //   this.agendaA.next(name);
+     // }
+     private UnitA = new BehaviorSubject<number>(1);
+     UnitA$ = this.UnitA.asObservable();
+       setUnitAtual(name: number) {
+         this.UnitA.next(name);
+       }
+       private diaA = new BehaviorSubject<string>(this.diaAtual);
+       diaA$ = this.diaA.asObservable();
+         setDiaAtual(name: string) {
+           this.diaA.next(name);
+         }
+
+     private agendaG = new BehaviorSubject<Agenda[]>([]);
+     agendaG$ = this.agendaG.asObservable();
+     setagendaG(name: Agenda[]) {
+       this.agendaG.next(name);
+     }
+     getagendaG(): Agenda[] {
+      return this.agendaG.value;
+    }
+
+     private CelA = new BehaviorSubject<Agenda>(this.Vazia);
+     CelA$ = this.CelA.asObservable();
+     setCelA(name: Agenda) {
+       this.CelA.next(name);
+     }
+
+     async BuscaAgenda(dia: string): Promise<boolean> {
+      console.log('Chamando getAgenda - Ag.S');
+      this.agendas = [];
+      const data: Response<Agenda[]> = await this.getAgendaByDate(dia);
       this.agendas = data.dados;
-      setTimeout(() => {
-
-      }, 300);
       this.success = data.sucesso;
       const Chng = await this.Dados1();
-      console.log('saindo de Chg - dados1')
-      this.setChangesA(Chng);
-      this.setagendaG(this.agendas)
-      console.log('Em agendaService:')
-      console.log(this.agendas)
-    });
-  }
+      console.log('saindo de Chg - dados1');
+      //this.setChangesA(Chng);
+      this.setagendaG(this.agendas);
+      console.log('Em agendaService:');
+      console.log(this.agendas);
+      return true;
+    }
 
 
   async Dados1(): Promise<boolean> {
-    console.log('Entrando em Dados1 - agenda.s')
     return new Promise<boolean>((resolve) => {
       const verificarSucesso = () => {
         if (this.success === true) {
@@ -95,70 +151,57 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
         } else {
           setTimeout(() => {
             verificarSucesso();
-          }, 300);
+          }, 100);
         }
       };
 
       verificarSucesso();
     });
   }
-  // async main() {
-  //   const resultado = await this.Dados1();
-  //   console.log('Saindo do Dados1');
-  //   console.log(resultado); // true se sucesso, false caso contrário
-  // }
 
 
 
-  async recarregar(dia: string, unit: number){
-    console.log('Entrando em async recarregar (Ag.S)')
-  const xdia = dia == '' ? this.diaA.value : dia;
-  const xUnit = unit == 0 ? this.UnitA.value : unit;
-  const valor = xdia + '%' + xUnit;
-  this.BuscaAgenda(xdia);
-  this.val = await this.Dados1();
-  this.setBuscaA(valor);
-}
+  async recarregar(): Promise<boolean> {
+    console.log('Entrando em async recarregar (Ag.S)');
+    const xdia = this.diaA.value;
+    const xUnit = this.UnitA.value;
+    const valor = xdia + '%' + xUnit;
 
+    try {
+      const buscaConcluida = await this.BuscaAgenda(xdia);
 
+      if (buscaConcluida) {
+        this.val = await this.Dados1();
+        //this.setBuscaA(valor);
+        try {
+              const buscaCliConcluida = await this.clienteService.BuscaClientes();
 
-private BuscaA = new BehaviorSubject<string>(this.buscaIni);
-BuscaA$ = this.BuscaA.asObservable();
-  setBuscaA(name: string) {
-    this.BuscaA.next(name);
-  }
+              if (buscaCliConcluida) {
+                this.val = await this.Dados1();
+                this.setBuscaA(valor);
 
-  private ChangesA = new BehaviorSubject<boolean>(false);
-  ChangesA$ = this.ChangesA.asObservable();
-  setChangesA(name: boolean) {
-    this.ChangesA.next(name);
-  }
-
-  // private agendaA = new BehaviorSubject<Agenda>(this.Vazia);
-  // agendaA$ = this.agendaA.asObservable();
-  // setAgendaAtual(name: Agenda) {
-  //   this.agendaA.next(name);
-  // }
-  private UnitA = new BehaviorSubject<number>(1);
-  UnitA$ = this.UnitA.asObservable();
-    setUnitAtual(name: number) {
-      this.UnitA.next(name);
-    }
-    private diaA = new BehaviorSubject<string>(this.diaAtual);
-    diaA$ = this.diaA.asObservable();
-      setDiaAtual(name: string) {
-        this.diaA.next(name);
+                return true;
+              } else {
+                console.error('Busca de agenda não foi concluída com sucesso.');
+                return false;
+                // Lógica para tratamento de erro, se necessário
+              }
+            } catch (error) {
+              console.error('Erro ao buscar agenda:', error);
+              return false;
+              // Lógica para tratamento de erro, se necessário
+            }
+      } else {
+        console.error('Busca de agenda não foi concluída com sucesso.');
+        return false;
+        // Lógica para tratamento de erro, se necessário
       }
+    } catch (error) {
+      console.error('Erro ao buscar agenda:', error);
+      return false;
+      // Lógica para tratamento de erro, se necessário
+    }
 
-  private agendaG = new BehaviorSubject<Agenda[]>([]);
-  agendaG$ = this.agendaG.asObservable();
-  setagendaG(name: Agenda[]) {
-    this.agendaG.next(name);
   }
 
-  private CelA = new BehaviorSubject<Agenda>(this.Vazia);
-  CelA$ = this.CelA.asObservable();
-  setCelA(name: Agenda) {
-    this.CelA.next(name);
-  }
 }

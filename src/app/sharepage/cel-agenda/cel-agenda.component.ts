@@ -119,7 +119,7 @@ MudarSala(l:number, c:number){
 
   const periodo = l == 0 ? 'manhã' : 'tarde';
   console.log('Vou alterar o usuário da sala ' + c + ' para o período da ' + periodo)
-  this.agendaService.dCliente = '';
+
   this.agendaService.dHora = this.listaHorarios[this.lin].horario;
   this.agendaService.dSala = this.col;
   this.agendaService.dCliente = this.nCli;
@@ -134,34 +134,48 @@ MudarSala(l:number, c:number){
     this.agendaService.dHora = this.listaHorarios[this.lin].horario;
     this.agendaService.dSala = this.col;
     this.agendaService.dCliente = this.nCli;
+    for(let j of this.clienteService.clientes){
+      if(j.nome == this.nCli){
+        this.agendaService.dIdCliente = j.id ? j.id : 0;
+        break;
+      }
+    }
     this.agendaService.setCelA(this.celAtual);
     console.log('Em cel-agenda:')
     console.log(this.celAtual)
   }
 
 ngOnInit(){
-  // this.subscription = this.agendaService.agendaA$.subscribe(
-  //   name => this.agendaA = name
-  // );
-  this.subscription0 = this.agendaService.ChangesA$.subscribe(
-    name => this.nChanges = name
-  )
+
+  this.subscription = this.agendaService.EtapaA$.subscribe(
+    name => {
+      if(name == 2){
+        this.ReCarregar(this.BuscaA);
+      }
+
+    });
+  // this.subscription0 = this.agendaService.ChangesA$.subscribe(
+  //   name => this.nChanges = name
+  // )
   this.subscription2 = this.agendaService.agendaG$.subscribe(
     name => {
       this.agendaG = name;
-      console.log('cel-agenda - entrando em ReCarregar')
-      this.ReCarregar(this.BuscaA);
+      //this.ReCarregar(this.BuscaA);
     }
 
   );
   this.subscription3 = this.agendaService.UnitA$.subscribe(
-    name => this.UnitA = name
+    name => {
+      // this.ReCarregar(this.BuscaA);
+      this.UnitA = name
+    }
   );
   this.subscription4 = this.agendaService.BuscaA$.subscribe(
     name => {
       this.BuscaA = name
-      this.ReCarregar(this.BuscaA);
+      //this.ReCarregar(this.BuscaA);
     }
+
   );
 
 
@@ -192,7 +206,8 @@ ReCarregar(x: string){
       this.corDeFundo = 'rgb(255, 255, 255)';
       this.linha2 = '';
       this.linha1 = '';
-      for(let i of this.agendaG){
+      const agendaG = this.agendaService.getagendaG();
+      for(let i of agendaG){
         if(i.sala == this.col &&
             i.unidade == unit &&
             i.horario == this.listaHorarios[this.lin].horario
@@ -244,6 +259,10 @@ ReCarregar(x: string){
             this.celAtual.idCliente = i.idCliente ? i.idCliente : 0;
             if(i.idCliente == 0){
               this.linha1 = this.nomeProvisorio;
+              if(this.nomeProvisorio.length > 18){
+                this.linha1 = this.nomeProvisorio.substring(0, 15) + '...'
+              }
+              //this.linha1 = this.nomeProvisorio.length > 18 ? this.nomeProvisorio.substring(0, 15) + '...' : this.nomeProvisorio;
               this.nCli = this.nomeProvisorio;
             }else{
               for(let j of this.clienteService.clientes){

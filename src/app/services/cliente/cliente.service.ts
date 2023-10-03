@@ -78,9 +78,9 @@ export class ClienteService {
   // public ClienteN: number = 0;
 
  private apiurl = `${environment.ApiUrl}/Cliente`
-  GetClientes() : Observable<Response<Cliente[]>>{
-    return this.http.get<Response<Cliente[]>>(this.apiurl);
-  }
+ GetClientes(): Promise<any> {
+  return this.http.get<any>(`${this.apiurl}`).toPromise();
+}
   CreateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.post<Response<Cliente[]>>(`${this.apiurl}` , cliente);
   }
@@ -127,25 +127,32 @@ export class ClienteService {
     this.clientes = [];
     this.clientesG = [];
 
-    this.GetClientes().subscribe(data => {
-      const dados = data.dados;
-      dados.map((item) => {
-        item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toLocaleDateString('pt-BR') : '---'
-        item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toLocaleDateString('pt-BR') : '---'
-        item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toLocaleDateString('pt-BR') : '---'
-      })
+      try {
+        const data = await this.GetClientes();
 
-      this.clientesG = data.dados;
-      this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
-      this.clientes = data.dados;
-      this.success = data.sucesso;
+        const dados = data.dados;
+        dados.map((item: { clienteDesde: string | number | Date | null; dtInclusao: string | number | Date | null; dtNascim: string | number | Date | null; }) => {
+          item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toLocaleDateString('pt-BR') : '---'
+          item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toLocaleDateString('pt-BR') : '---'
+          item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toLocaleDateString('pt-BR') : '---'
+           });
 
-    });
+        this.clientesG = data.dados;
+        this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
+        this.clientes = data.dados;
+        this.success = data.sucesso;
+        this.success = await this.Dados1();
+        console.log('Clientes Sucesso? ' + this.success);
 
-    this.success = await this.Dados1();
-    console.log('Sucesso? ' + this.success)
-    this.Carregar();
-  }
+        await this.Carregar();
+
+        return true;
+      } catch (error) {
+        console.error('Erro ao buscar clientes:', error);
+        return false;
+      }
+    }
+
 
   async Dados1(): Promise<boolean> {
     console.log('Entrando em Dados1 - cliente')
@@ -157,7 +164,7 @@ export class ClienteService {
         } else {
           setTimeout(() => {
             verificarSucesso1();
-          }, 300);
+          }, 100);
         }
       };
 

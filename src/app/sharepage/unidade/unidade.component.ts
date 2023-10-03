@@ -19,6 +19,7 @@ ngOnInit(){
   this.subscription = this.agendaService.diaA$.subscribe(
     name => this.dia = name
   )
+
 }
 constructor(private agendaService: AgendaService) {
 
@@ -28,14 +29,18 @@ constructor(private agendaService: AgendaService) {
 
 ToggleUnit(){
   this.x = !this.x;
+  const xdia = this.dia;
   if(this.x == true){
+    this.agendaService.setBuscaA(xdia + '%1');
     this.agendaService.setUnitAtual(1);
-    this.agendaService.recarregar(this.dia,1);
+    console.log('Unidade 1')
   }else{
+    this.agendaService.setBuscaA(xdia + '%2');
     this.agendaService.setUnitAtual(2);
-    this.agendaService.recarregar(this.dia,2);
+    console.log('Unidade 2')
   }
 
+  //this.agendaService.recarregar();
 }
 
 }

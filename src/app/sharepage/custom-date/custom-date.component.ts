@@ -20,6 +20,7 @@ export class CustomDateComponent implements OnInit {
 
 
   constructor(public agendaService: AgendaService){}
+
   onDateChange(newDate: Date) {
     var diaDaSemana = newDate.getDay();
     var diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
@@ -28,30 +29,41 @@ export class CustomDateComponent implements OnInit {
     const novoDia = new Date(newDate).toISOString().split('T')[0]
     this.agendaService.setDiaAtual(novoDia)
     this.agendaService.setChangesA(false);
-    // this.agendaService.BuscaAgenda(novoDia);
-    // this.ctrl = this.Dados1();
-    this.agendaService.recarregar(novoDia,this.Unit);
+    this.agendaService.setEtapaA(1);
   }
 
-  Dados1(): boolean {
-    if (this.changes !== true) {
-      setTimeout(() => {
-        this.Dados1();
-      }, 300);
-    } else {
-      return true;
-    }
-    return false;
+  onDivClick(newDate: Date) {
+    console.log("Clicou!");
+
+    //this.onDateChange(dia);
+    var diaDaSemana = newDate.getDay();
+    var diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    this.diaSemana = diasDaSemana[diaDaSemana];
+    this.dia = newDate.toISOString();
+    const novoDia = new Date(newDate).toISOString().split('T')[0]
+    this.agendaService.setDiaAtual(novoDia)
+    //this.agendaService.setChangesA(false);
+    console.log(newDate);
+    //this.agendaService.setEtapaA(1);
   }
+
 
 
   ngOnInit(): void {
     this.subscription = this.agendaService.UnitA$.subscribe(
       name => this.Unit = name
     )
-    this.subscription = this.agendaService.ChangesA$.subscribe(
-      name => this.changes = name
-    )
+    // this.subscription = this.agendaService.ChangesA$.subscribe(
+    //   name => this.changes = name
+    // )
+  //   this.subscription = this.agendaService.EtapaA$.subscribe(
+  //     name => {
+  //       // if(name ==1){
+  //       //   //this.agendaService.recarregar();
+  //       // }
+
+  //     }
+  //   )
   }
 
 }

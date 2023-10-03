@@ -26,13 +26,6 @@ export class DetalhesComponent {
 
   ngOnInit(): void {
     console.log('Em detalhes - buscaCliente')
-    this.clienteService.BuscaClientes()
-    console.log('Em detalhes, buscaAgenda')
-    this.agendaService.BuscaAgenda(new Date().toISOString().split('T')[0])
-    this.agendaService.dHora = '';
-    this.agendaService.dSala = 0;
-    this.agendaService.dCliente = '';
-
     this.subscription = this.agendaService.CelA$.subscribe(
       name => {
         this.CelAtual = name
@@ -84,7 +77,12 @@ export class DetalhesComponent {
     const dataAtual = new Date();
     const horas = dataAtual.getHours();
     const minutos = dataAtual.getMinutes();
-
+    for (let i of this.clienteService.clientes){
+      if(this.agendaService.dCliente == i.nome){
+        this.CelAtual.idCliente = i.id;
+        break;
+      }
+    }
     const horaFormatada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
     this.Usr = this.userService.getUserA().getValue();
     if(this.CelAtual.idCliente == 0 || this.CelAtual.idCliente == undefined){
@@ -131,9 +129,9 @@ export class DetalhesComponent {
   updateAgenda(id: number, texto: Agenda) {
     this.agendaService.UpdateAgenda(id, texto).subscribe(
       (data) => {
-        this.delay(300);
+        this.delay(100);
         alert('Sessão atualizada!');
-        this.delay(300);
+        this.delay(100);
         location.reload();
       },
       (error) => {
@@ -145,9 +143,9 @@ export class DetalhesComponent {
   salvaAgenda(texto: Agenda) {
     this.agendaService.CreateAgenda(texto).subscribe(
       (data) => {
-        this.delay(300);
+        this.delay(100);
         alert('Sessão gravada!');
-        this.delay(300);
+        this.delay(100);
         location.reload();
       },
       (error) => {
