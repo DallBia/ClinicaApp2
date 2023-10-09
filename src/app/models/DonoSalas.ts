@@ -1,13 +1,14 @@
 export interface DonoSala{
 
-  Id?: number;
-  Unidade?: number;
-  Sala?: number;
-  IdProfissional?: number;
-  DiaSemana?: string;
-  DataInicio?: string;
-  DataFim?: string;
-  Periodo?: string;
+  id?: number;
+  unidade?: number;
+  sala?: number;
+  idProfissional?: number;
+  area?: string;
+  diaSemana?: string;
+  dataInicio: string;
+  dataFim?: string;
+  periodo?: string;
 
 
 }

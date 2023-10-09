@@ -72,24 +72,3 @@ DefinirUsuario(n: User){
 }
 }
 
-
-
-// login(email: string, password: string) {
-//   this.colab.GetColaboradorbyEmail(email, password).subscribe((data) => {
-//     const dados = data.dados;
-//     // console.log(dados)
-
-//     this.colab.colaboradores = data.dados;
-//     this.colab.colaboradorG.sort((a, b) => a.Nome.localeCompare(b.Nome));
-//     // console.log(this.colab.colaboradores);
-//   });
-// }
-// }
-
-
-
-
-/*  login(email: string, password: string) {
-    this.authService.login(email,password);
-  }
-*/

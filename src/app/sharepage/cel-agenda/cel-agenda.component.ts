@@ -1,9 +1,11 @@
+import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
 
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Agenda } from 'src/app/models/Agendas';
 import { AgendaService } from 'src/app/services/agenda/agenda.service';
 import { ClienteService } from 'src/app/services/cliente/cliente.service';
+import { DonoSalaService } from 'src/app/services/donoSala/dono-sala.service';
 @Component({
   selector: 'app-cel-agenda',
   templateUrl: './cel-agenda.component.html',
@@ -32,11 +34,13 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
     public UnitA: number = 0;
     public idCli: number = 0;
     public nomeProvisorio = '';
+    public diaSemana: string = '';
+    public nSemana: string = '';
 
     public nCli: string = '';
     public corDeFundo: string =  "rgb(255, 255, 255)";
     public nVezes: number = 0;
-    public celAtual: Agenda = {
+    public Vazia: Agenda = {
       id: 0,
       idCliente:0,
       idFuncAlt:0,
@@ -50,6 +54,9 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
       diaDaSemana:'',
       dia:'',
     };
+
+    public celAtual: Agenda = this.Vazia;
+
 
   public sala: any = [
     {n: 0, dono: 'Amélia', area: 'Arteterapia'},
@@ -86,14 +93,14 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
   ]
 
   public listaHorarios: any = [
-    {n: 0, horario: '-'},
+    {n: 0, horario: 'manhã'},
     {n: 1, horario: '08:00'},
     {n: 2, horario: '08:50'},
     {n: 3, horario: '09:40'},
     {n: 4, horario: '10:30'},
     {n: 5, horario: '11:20'},
     {n: 6, horario: '12:00'},
-    {n: 7, horario: '-'},
+    {n: 7, horario: 'tarde'},
     {n: 8, horario: '13:10'},
     {n: 9, horario: '14:00'},
     {n: 10, horario: '14:50'},
@@ -109,7 +116,10 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
   public dados: any;
 
 constructor(private agendaService: AgendaService,
-            private clienteService: ClienteService) {
+            private clienteService: ClienteService,
+            private donoSalaService: DonoSalaService,
+            private colaboradorService: ColaboradorService,
+             ){
 
 
 
@@ -129,6 +139,8 @@ MudarSala(l:number, c:number){
   AltHorario(l:number, c:number){
     const hor = this.listaHorarios[l].horario;
     console.log(this.celAtual)
+    this.agendaService.setCelAnt(this.celAtual);
+    this.clienteService.setListaCliente(this.clienteService.clientesG);
     console.log('Vou alterar a consulta da sala ' + c + ' no horário ' + hor)
     this.agendaService.dCliente = '';
     this.agendaService.dHora = this.listaHorarios[this.lin].horario;
@@ -141,8 +153,7 @@ MudarSala(l:number, c:number){
       }
     }
     this.agendaService.setCelA(this.celAtual);
-    console.log('Em cel-agenda:')
-    console.log(this.celAtual)
+
   }
 
 ngOnInit(){
@@ -150,60 +161,84 @@ ngOnInit(){
   this.subscription = this.agendaService.EtapaA$.subscribe(
     name => {
       if(name == 2){
+        this.agendaService.dCliente = '';
+        this.celAtual = this.Vazia;
+        this.nCli = '';
+        this.agendaService.setCelA(this.Vazia);
         this.ReCarregar(this.BuscaA);
       }
 
     });
-  // this.subscription0 = this.agendaService.ChangesA$.subscribe(
-  //   name => this.nChanges = name
-  // )
+
   this.subscription2 = this.agendaService.agendaG$.subscribe(
     name => {
       this.agendaG = name;
       //this.ReCarregar(this.BuscaA);
-    }
+    });
 
-  );
   this.subscription3 = this.agendaService.UnitA$.subscribe(
     name => {
-      // this.ReCarregar(this.BuscaA);
+
       this.UnitA = name
-    }
-  );
+      this.agendaService.dCliente = '';
+    });
+
   this.subscription4 = this.agendaService.BuscaA$.subscribe(
     name => {
       this.BuscaA = name
-      //this.ReCarregar(this.BuscaA);
-    }
-
-  );
-
+      this.agendaService.dCliente = '';
+        this.ReCarregar(this.BuscaA);
+    });
 
 
 }
 
 ReCarregar(x: string){
+
+  this.celAtual = {
+    id: 0,
+      idCliente:0,
+      idFuncAlt:0,
+      sala:0,
+      dtAlt:'',
+      status:'',
+      repeticao:'',
+      obs:'',
+      horario:'',
+      historico:'',
+      diaDaSemana:'',
+      dia:'',
+  }
   const xpar = x.split('%');
   const dia = xpar[0] == '' ? new Date().toISOString().split('T')[0] : xpar[0];
   const unit = parseInt(xpar[1]) == 0 ? this.UnitA : parseInt(xpar[1]);
-  this.agendaService.dCliente = '';
-  this.agendaService.dHora = '';
-  this.agendaService.dSala = 0;
+
+  const dono = this.donoSalaService.getDonoAtual;
   this.dados = this.parametro.split('%');
   this.lin = parseInt(this.dados[0]);
   this.col = parseInt(this.dados[1]);
+  this.celAtual.unidade = unit;
+
+// calcular o dia da semana:
+  const hoje = new Date();
+  const diaAgenda = new Date(dia);
+
+
+
+
 
   if (this.col == 0){
     this.linha1 = this.listaHorarios[this.lin].horario.substring(0, 15);
     this.c1 = true;
     this.l1 = true;
     }else{
-    if(this.lin == 0 || this.lin == 7){
-      this.linha1 = this.sala[this.col].dono.length > 18 ? this.sala[this.col].dono.substring(0, 15) + '...' : this.sala[this.col].dono;
-      this.linha2 = this.sala[this.col].area.length > 18 ? this.sala[this.col].area.substring(0, 15) + '...' : this.sala[this.col].area;
-      this.l1 = true;
-    }else{
-      this.corDeFundo = 'rgb(255, 255, 255)';
+      if(this.lin == 0 || this.lin == 7){
+
+        this.l1 = true;
+      }else{
+
+        this.corDeFundo = 'rgb(255, 255, 255)';
+      }
       this.linha2 = '';
       this.linha1 = '';
       const agendaG = this.agendaService.getagendaG();
@@ -213,10 +248,13 @@ ReCarregar(x: string){
             i.horario == this.listaHorarios[this.lin].horario
           ){
             switch  (i.repeticao){
-              case 'Sessão_Única':
+              case 'Unica':
                 this.celAtual.repeticao = 'Sessão única';
                 break;
-              case 'Semanal':
+              case 'Diaria':
+                this.celAtual.repeticao = 'Diária';
+                break;
+                case 'Semanal':
                 this.celAtual.repeticao = 'Semanal';
                 break;
               case 'Quinzenal':
@@ -225,7 +263,7 @@ ReCarregar(x: string){
               case 'Mensal':
                 this.celAtual.repeticao = 'Mensal';
                 break;
-              case 'Terminar_Repetições':
+              case 'Cancelar':
                 this.celAtual.repeticao = 'Cancelar Repetição';
                 break;
               default:
@@ -239,8 +277,8 @@ ReCarregar(x: string){
             this.celAtual.diaDaSemana = i.diaDaSemana ? i.diaDaSemana : '';
             this.celAtual.dtAlt = i.dtAlt ? i.dtAlt : '';
             //this.celAtual.historico = i.historico ? i.historico : '';
-
-            const dHist = i.historico?.split('֍') !== undefined? i.historico?.split('֍') : '';
+            const hist = i.historico !== undefined && i.historico !== null ? i.historico : '';
+            const dHist = hist.split('֍') !== undefined ? hist.split('֍') : '';
             if(dHist[1]){
               this.nomeProvisorio = dHist[0];
               i.historico = dHist[1];
@@ -265,13 +303,25 @@ ReCarregar(x: string){
               //this.linha1 = this.nomeProvisorio.length > 18 ? this.nomeProvisorio.substring(0, 15) + '...' : this.nomeProvisorio;
               this.nCli = this.nomeProvisorio;
             }else{
-              for(let j of this.clienteService.clientes){
+              if(this.lin == 0 || this.lin == 7){
+                for(let j of this.colaboradorService.colaboradorsG){
+                  if(j.id == i.idCliente){
+                    this.idCli = j.id ? j.id : 0;
+                    this.nCli = j.nome;
+                    this.linha1 = j.nome.length > 18 ? j.nome.substring(0, 15) + '...' : j.nome
+                  }
+                }
+              }else{
+                for(let j of this.clienteService.clientes){
                 if(j.id == i.idCliente){
                   this.idCli = j.id ? j.id : 0;
                   this.nCli = j.nome;
                   this.linha1 = j.nome.length > 18 ? j.nome.substring(0, 15) + '...' : j.nome
                 }
               }
+              }
+
+
             }
             const Lin2 = i.subtitulo ? i.subtitulo : '';
             this.linha2 = Lin2.length > 18 ? Lin2.substring(0, 15) + '...' : Lin2;
@@ -299,9 +349,8 @@ ReCarregar(x: string){
           }
         }
       }
-
-    }
   }
+
 }
 
 get boxShadow(): string {
@@ -313,6 +362,12 @@ get boxShadow(): string {
     }
   }
 
+    diaDaSemana(newDate: Date){
+      var diaDaSemana = newDate.getDay();
+      var diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+      this.diaSemana = diasDaSemana[diaDaSemana];
+      //this.nSemana =
+    }
 
     ngOnDestroy(): void {
 

@@ -22,7 +22,7 @@ import { TabResult } from 'src/app/models/Tables/TabResult';
 
 
 export class FichaclienteComponent implements OnDestroy, OnInit {
-  // [x: string]: any; 
+  // [x: string]: any;
 
   @ViewChild(FormClienteComponent) formCliente!: FormClienteComponent;
   selectedName: string = '';
@@ -148,8 +148,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
         disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
     });
     dialogRef.afterClosed().subscribe(result => {
-      // // console.log('O modal foi fechado');
-      // Você pode adicionar mais lógicas aqui se necessário.
+
     });
   }
 
@@ -187,14 +186,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       if(TabForm.saiSozinho !== null || undefined){
         TabForm.saiSozinho == true ? SszT = true : SszT = false
       }
-// console.log('saiSozinho de TabForm:')
-// console.log(TabForm.saiSozinho)
-// console.log('saiSozinho de Atual:')
-// console.log(this.Atual.saiSozinho)
-// console.log('saiSozinho de SszT:')
-// console.log(SszT)
-// console.log('saiSozinho de Ssz:')
-// console.log(Ssz)
+
       let Dif = 0;
 
       this.Atual.nome !== TabForm.nome ?  Dif+=1 : null;
@@ -290,15 +282,12 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
           paiEndereco: TabForm.paiEndereco == null ? '-' : TabForm.paiEndereco,
         }
 
-// console.log('Tab')
-// console.log(Tab) 
+
         if(Tab.id==0){
-          // console.log(Tab.id + ' - indo para create')
-          // console.log(Tab)
+
           this.createCliente(Tab)
         }else{
-          // console.log(Tab.id + ' - indo para update')
-          // console.log(Tab)
+
           this.updateCliente(Tab)
         }
 
@@ -313,25 +302,21 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
 
     reDatas(dataO: string){
-      // console.log('reDatas: ' + dataO)
 
       const [dia, mes, ano] = dataO.split('/');
       if(dia.length == 2){
         const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
         const dataFormatada = data.toISOString();
-        // console.log('Formatada: ' + dataFormatada);
-        return (dataFormatada);
+         return (dataFormatada);
       }
       else{
-        // console.log('Original: ' + dataO);
-        return (dataO);
+         return (dataO);
       }
 
     }
 
   createCliente(cliente: Cliente){
     this.clienteService.CreateCliente(cliente).subscribe((data) => {
-      // console.log(data)
       this.delay(300)
       alert('Registro gravado!')
       location.reload()
@@ -342,9 +327,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
     updateCliente(cliente: Cliente){
       this.clienteService.UpdateCliente(cliente).subscribe((data) => {
-        // console.log('Este é o retorno:')
-        // console.log(data)
-        this.delay(300)
+         this.delay(300)
         alert('Registro atualizado!')
         location.reload()
       }, error => {

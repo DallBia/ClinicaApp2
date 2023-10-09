@@ -5,10 +5,10 @@
   height: 5vh;
   width: 10vw;
   display: flex;
-  background: linear-gradient(to right, var(--cor-clara) 0%,var(--cor-clara) 20%,#fddfed 21%, #fddfed 80%,var(--cor-clara) 81%,var(--cor-clara) 100%);
-  justify-content: center;
+  background: #fddfed;
+  /* justify-content: center; */
   align-items: center;
-  padding-top: 1vh;
+  padding: 2px;
   color:var(--cor-escura);
   font-weight: bold;
  }
@@ -16,7 +16,7 @@
   background-color: #f1aee4;
   color: #6e0459;
 }
-.date-text{
+/* .date-text{
   margin-right: 10px;
 }
 .date-dia-da-semana{
@@ -24,4 +24,23 @@
 }
 .date-calendario{
   margin-right: 10px;
+} */
+.sem{
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  border-radius: 1.2vh;
+  border: solid 1px var(--cor-media);
+  padding: 3px;
+}
+.dia{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  /* border-radius: 1.2vh;
+  border: solid 1px var(--cor-media); */
+  padding: 3px;
 }

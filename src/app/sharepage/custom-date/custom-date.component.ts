@@ -18,7 +18,6 @@ export class CustomDateComponent implements OnInit {
   changes: boolean = false;
   ctrl: boolean = false;
 
-
   constructor(public agendaService: AgendaService){}
 
   onDateChange(newDate: Date) {
@@ -42,9 +41,7 @@ export class CustomDateComponent implements OnInit {
     this.dia = newDate.toISOString();
     const novoDia = new Date(newDate).toISOString().split('T')[0]
     this.agendaService.setDiaAtual(novoDia)
-    //this.agendaService.setChangesA(false);
     console.log(newDate);
-    //this.agendaService.setEtapaA(1);
   }
 
 
@@ -53,17 +50,6 @@ export class CustomDateComponent implements OnInit {
     this.subscription = this.agendaService.UnitA$.subscribe(
       name => this.Unit = name
     )
-    // this.subscription = this.agendaService.ChangesA$.subscribe(
-    //   name => this.changes = name
-    // )
-  //   this.subscription = this.agendaService.EtapaA$.subscribe(
-  //     name => {
-  //       // if(name ==1){
-  //       //   //this.agendaService.recarregar();
-  //       // }
-
-  //     }
-  //   )
   }
 
 }

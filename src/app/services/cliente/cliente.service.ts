@@ -21,6 +21,7 @@ export class ClienteService {
   public Verifica: boolean = false;
   subscription!: Subscription;
   nChanges!: boolean;
+  nVezes: number = 0;
 
 
   public Vazia: TableData[] = [{
@@ -74,8 +75,6 @@ export class ClienteService {
   public success: boolean = false;
   public clientes: Cliente[] = [];
   public clientesG: Cliente[] = [];
-  // public ClienteAtual: Cliente[] = [];
-  // public ClienteN: number = 0;
 
  private apiurl = `${environment.ApiUrl}/Cliente`
  GetClientes(): Promise<any> {
@@ -88,21 +87,18 @@ export class ClienteService {
     return this.http.put<Response<Cliente[]>>(`${this.apiurl}/Editar` , cliente);
   }
 
-  // GetClienteById(id: number) : Observable<Response<Cliente>>{
-  //   return this.http.get<Response<Cliente>>(`${this.apiurl}/id`, id);
-  // }
 
 
   private ClienteAtual = new BehaviorSubject<TableData>(this.Vazia[0]);
   ClienteAtual$ = this.ClienteAtual.asObservable();
   setClienteAtual(name: TableData) {
-    // console.log('ClienteAtual ANTES')
-    // console.log(this.ClienteAtual)
     this.ClienteAtual.next(name);
-    // console.log('ClienteAtual ANTES')
-    // console.log(this.ClienteAtual)
-    // console.log('name (TableData)')
-    // console.log(name)
+  }
+
+  private ListaCliente = new BehaviorSubject<Cliente[]>([]);
+  ListaCliente$ = this.ListaCliente.asObservable();
+  setListaCliente(name: Cliente[]) {
+    this.ListaCliente.next(name);
   }
 
   private ClienteA = new BehaviorSubject<number>(0);
@@ -126,7 +122,8 @@ export class ClienteService {
 
     this.clientes = [];
     this.clientesG = [];
-
+    // this.nVezes += 1;
+    // console.log('Em clienteService: ' + this.nVezes)
       try {
         const data = await this.GetClientes();
 
@@ -140,9 +137,9 @@ export class ClienteService {
         this.clientesG = data.dados;
         this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
         this.clientes = data.dados;
+        this.setListaCliente(data.dados);
         this.success = data.sucesso;
         this.success = await this.Dados1();
-        console.log('Clientes Sucesso? ' + this.success);
 
         await this.Carregar();
 
@@ -155,11 +152,9 @@ export class ClienteService {
 
 
   async Dados1(): Promise<boolean> {
-    console.log('Entrando em Dados1 - cliente')
     return new Promise<boolean>((resolve) => {
       const verificarSucesso1 = () => {
         if (this.success === true) {
-          console.log('Sucesso/cliente:' + this.success);
           resolve(true);
         } else {
           setTimeout(() => {
@@ -175,13 +170,8 @@ export class ClienteService {
 
   async Carregar(){
 
-    console.log('Entrando em Carregar... ')
-    console.log(this.clientes)
     this.dataSource = [];
     for (let i of this.clientesG) {
-      // let aCelular: string = '---';
-      // let aComercial: string = '---';
-      // let aFixo: string = '---';
       let aSaiS: string = 'Não';
       let aRestM: string = 'Não';
       let aRestP: string = 'Não';
@@ -201,11 +191,10 @@ export class ClienteService {
         const aIdade1 = this.converterParaDate(i.dtNascim);
         const aIdade: string = this.calcularIdade(aIdade1) + ' anos';
         this.caminho = '../../assets/img/Clientes/' + aId + '.jpg';
-        const imagemValida = await this.verificarImagem(this.caminho);
-        //// console.log('imagem ' + this.Verifica)
-          if (imagemValida !== true) {
-            this.caminho = '../../assets/img/Clientes/0000.jpg';
-        }
+        // const imagemValida = await this.verificarImagem(this.caminho);
+        //   if (imagemValida !== true) {
+        //     this.caminho = '../../assets/img/Clientes/0000.jpg';
+        // }
         this.nLin =[{Foto: this.caminho,
           Ficha: aId,
           id: i.id,
@@ -250,7 +239,6 @@ export class ClienteService {
         this.dataSource = [...this.dataSource, ...this.nLin]
       }
     }
-    console.log('Saindo do cliente.s')
   }
 
   converterParaDate(dataString: string): Date {

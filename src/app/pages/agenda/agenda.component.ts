@@ -11,14 +11,15 @@ import { CelAgendaComponent } from 'src/app/sharepage/cel-agenda/cel-agenda.comp
   styleUrls: ['./agenda.component.css']
 })
 export class AgendaComponent implements OnInit, OnDestroy{
-
+  private nVezes: number = 0;
   valor: string = '';
   public colunas: number[] = [];
   public linhas: number[] = [];
   public OkCliente: any;
   public OkAgenda: any;
   subscription!: Subscription;
-  public novoDia!: string;
+  public NovoDia!: string;
+
 ngOnInit(){
 
   // this.subscription = this.agendaService.EtapaA$.subscribe(
@@ -30,18 +31,18 @@ ngOnInit(){
   //   });
     this.subscription = this.agendaService.diaA$.subscribe(
       async name => {
+        if(name !== this.NovoDia){
+          this.NovoDia = name;
           const result = await this.main(name);
-        console.log('rodou...')
+        }
 
       });
       this.subscription = this.agendaService.UnitA$.subscribe(
         async name => {
 
           const result = await this.montaGrade();
-          console.log('rodou...')
 
         });
-        console.log('Início...')
       this.agendaService.setDiaAtual(new Date().toISOString().split('T')[0])
       //this.main(this.novoDia);
 
@@ -59,9 +60,9 @@ ngOnInit(){
 
 async main(novoDia: string){
   try {
-    console.log('Entrando em main')
     const buscaConcluida = await this.agendaService.recarregar()
-
+    // this.nVezes += 1;
+    // console.log('Em agendaComp: ' + this.nVezes)
     if (buscaConcluida) {
       this.OkAgenda = await this.Dados1();
       this.OkCliente = await this.Dados2();
@@ -80,10 +81,9 @@ async main(novoDia: string){
 }
 
 montaGrade(){
-  console.log('Ufa... Agenda ' + this.OkAgenda +' e Clientes ' + this.OkCliente)
   this.colunas = [];
   this.linhas = [];
-  for (let i = 0; i <= 30; i++) {
+  for (let i = 0; i <= 20; i++) {
     this.colunas.push(i);
   }
   for (let j = 1; j <= 15; j++) {
@@ -93,11 +93,9 @@ montaGrade(){
 }
 
   async Dados1(): Promise<boolean> {
-    console.log('Entrando em Dados1 - Agenda')
     return new Promise<boolean>((resolve) => {
       const verificarSucesso1 = () => {
         if (this.agendaService.success === true) {
-          console.log('Sucesso/Agenda:' + this.agendaService.success);
           resolve(true);
         } else {
           setTimeout(() => {
@@ -110,11 +108,9 @@ montaGrade(){
     });
   }
   async Dados2(): Promise<boolean> {
-    console.log('Entrando em Dados2 - Agenda')
     return new Promise<boolean>((resolve) => {
       const verificarSucesso2 = () => {
         if (this.clienteService.clientes.length !== 0) {
-          console.log('Sucesso/Clientes:' + this.clienteService.clientes);
           resolve(true);
         } else {
           setTimeout(() => {

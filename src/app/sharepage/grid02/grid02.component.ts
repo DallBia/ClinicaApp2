@@ -26,12 +26,6 @@ subscription: Subscription;
     }
 
 
-
-
-
-
-
-
   destacarLinha(l:any, Ficha:string){
     this.nChanges = false;
     this.colaboradorService.setChangesA(false);
@@ -42,21 +36,20 @@ subscription: Subscription;
     for(let i of this.colaboradorService.dataSource){
       i.selecionada = false;
     }
-    // this.colaboradorService.dataSource.forEach(i => i.selecionada = false);// Desmarcar todas as outras linhas
+
     this.colaboradorService.setEquipeA(numero);
- 
-    // const Vazia1 = this.dataSource.find(cliente => cliente.Id === numero)
+
+
     let a: any;
-    // this.colaboradorService.setEquipeAtual(this.colaboradorService.dataSource.find(user => parseInt(user.Ficha, 10) === numero) || a);
+
     this.colaboradorService.setProfAtual(this.colaboradorService.dataSource.find(user => parseInt(user.ficha, 10) === numero) || a);
-   
-    l.selecionada = true;// Marcar a linha clicada
+
+    l.selecionada = true;
 
     this.nChanges = true;
     setTimeout(() => {
       this.colaboradorService.setChangesA(true);
     }, 10)
-    // console.log(l)
   }
   constructor(public colaboradorService: ColaboradorService, private userService: UserService, private formacaoService: FormacaoService) {
 
@@ -64,9 +57,6 @@ subscription: Subscription;
     this.subscription = this.colaboradorService.ChangesA$.subscribe(
       name => this.nChanges = name
     )
-    // this.subscription = this.userService.ChangesA$.subscribe(
-    //   name => this.nChanges = name
-    // )
 
   }
 

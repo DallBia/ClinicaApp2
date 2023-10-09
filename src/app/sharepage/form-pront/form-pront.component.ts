@@ -129,8 +129,6 @@ export class FormProntComponent implements OnInit {
           this.tipo = ''
           break;
       }
-      // console.log('Meu link é:' + this.linkA)
-      // console.log('Meu tipo é: '+ this.tipo)
       if(this.tipo !== ''){
       for (let i of this.prontuarioService.prontuarioG){
         if(i.idCliente == this.nCliente && i.tipo == this.tipo){

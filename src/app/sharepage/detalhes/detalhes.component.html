@@ -9,20 +9,24 @@
    </div>
 </div>
 <div class="inferior" *ngIf="this.agendaService.dSala !== 0">
-  <div *ngIf="this.agendaService.dHora !== '-'">
+  <div *ngIf="this.agendaService.dHora !== 'manhã' && this.agendaService.dHora !== 'tarde'">
     <label class="fLabel" for="cliente-select">Cliente:</label>
     <input type="text" id="cliente-select" list="valores" class="fCampo" [(ngModel)]="this.agendaService.dCliente">
-    <datalist id="valores" *ngFor="let i of this.clienteService.dataSource">
-      <option>{{i.nome}}</option>
-    </datalist>
+<datalist id="valores">
+  <!-- As opções serão dinamicamente adicionadas aqui pelo TypeScript -->
+</datalist>
   </div>
-  <div *ngIf="this.agendaService.dHora == '-'">
+
+
+  <div *ngIf="this.agendaService.dHora == 'manhã' || this.agendaService.dHora == 'tarde'">
     <label class="fLabel" for="colab-select">Colaborador:</label>
-    <input type="text" id="colab-select" list="valores" class="fCampo" [(ngModel)]="this.agendaService.dCliente">
-    <datalist id="valores" *ngFor="let i of this.clienteService.dataSource">
-      <option>{{i.nome}}</option>
+    <input type="text" id="colab-select" list="valores1" class="fCampo" [(ngModel)]="this.agendaService.dCliente">
+    <datalist id="valores1">
+
     </datalist>
   </div>
+
+
   <div>
     <label class="fLabel" for="sessao-select">Sessão:</label>
     <input type="text" id="sessao-select" list="valores2" class="fCampo" [(ngModel)]="this.CelAtual.subtitulo">
@@ -44,17 +48,23 @@
       <option value="Reforço escolar"></option>
     </datalist>
   </div>
+  <div>
+    <label class="fLabel" for="valor">Valor:</label>
+    <input type="number" id="moeda">
+
+  </div>
   <div class="repetition">
     <label class="fLabel" for="Repet">Repetição:</label>
     <select id="Repet" class="fCampo" [(ngModel)]="this.CelAtual.repeticao">
       <option>Sessão única</option>
+      <option>Diária</option>
       <option>Semanal</option>
       <option>Quinzenal</option>
       <option>Mensal</option>
       <option>Cancelar Repetição</option>
     </select>
   </div>
-  <div class="seletores" *ngIf="this.agendaService.dHora !== '-'" >
+  <div class="seletores" *ngIf="this.agendaService.dHora !== 'manhã' && this.agendaService.dHora !== 'tarde'">
     <div class="tags" (click)="setStatus('Realizado')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Realizado' ? true : false}" style="background-color: lawngreen;">Realizada</div>
     <div class="tags" (click)="setStatus('Desmarcado')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Desmarcado' ? true : false}" style="background-color: rgb(238, 200, 103);">Desmarcada</div>
     <div class="tags" (click)="setStatus('Falta')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Falta' ? true : false}" style="background-color:rgb(231, 84, 113);">Falta</div>
@@ -63,8 +73,8 @@
     <div class="tags" (click)="setStatus('Vago')" [ngClass]="{'tagsSelect': this.CelAtual.status == 'Vago' || '' ? true : false}" style="background-color:white;">Limpar Hora</div>
   </div>
   <div>
-    <span class="fLabel" *ngIf="this.agendaService.dHora !== '-'">Observações:</span>
-    <div class="Obs1" id="Obs" *ngIf="this.agendaService.dHora !== '-'">
+    <span class="fLabel">Observações:</span>
+    <div class="Obs1" id="Obs">
       <textarea #obsTextarea [(ngModel)]="this.CelAtual.obs"
       placeholder="Digite aqui..." class="box-Obs1"
       ></textarea>

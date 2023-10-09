@@ -36,16 +36,13 @@ export class RequestInterceptor implements HttpInterceptor{
       }
       else if(error.status == 0)
       {
-          // console.log('erro = 0!');
-          // console.log(error);
-          this.userService.logout();
+             this.userService.logout();
           this.tokenService.removeToken();
           this.router.navigate(['/']);
       }
       else
       {
-          // console.log('Erro não tratado no interceptor');
-          // console.log(error);
+
       }
 
     })) as Observable<HttpEvent<any>>;

@@ -13,7 +13,7 @@ import { Formacao } from 'src/app/models/Formacaos';
 })
 export class ColaboradorService {
   constructor(private http: HttpClient, private formacaoService: FormacaoService) { }
-  
+
   private apiurl = `${environment.ApiUrl}/User`
   public Vazia: TableProf[] = [{
     foto: '',
@@ -34,7 +34,7 @@ export class ColaboradorService {
     perfil : '',
     formacao : undefined
   }]
-  
+
   pLin: TableProf[] = [];
   dataSource: TableProf[] = [];
 
@@ -52,7 +52,7 @@ export class ColaboradorService {
   private control!:any;
   private ctrl1: boolean = false;
   private ctrl2: boolean = false;
-
+  public colaboradors: Colaborador[]=[]
   public V: Colaborador[]=[]
   public colaboradorsG: Colaborador[] = [];
   private colaboradors$!: Observable<Colaborador[]>;
@@ -75,8 +75,8 @@ export class ColaboradorService {
             item.dtNasc !== null ? (item.dtNasc = new Date(item.dtNasc!).toLocaleDateString('pt-BR')) : '---';
           });
           this.colaboradorsG = data.dados;
+          this.colaboradors = data.dados;
           this.colaboradorsG.sort((a, b) => a.nome.localeCompare(b.nome));
-
           return this.colaboradorsG; // Retorna o array
         }),
         switchMap((colaboradores) => of(colaboradores)) // Converte o array em um observable
@@ -147,7 +147,7 @@ export class ColaboradorService {
       currentProf.ativo = name.ativo;
       currentProf.perfil = name.perfil;
       currentProf.formacao = name.formacao;
-    
+
       this.ProfAtual.next(currentProf);
     }
 

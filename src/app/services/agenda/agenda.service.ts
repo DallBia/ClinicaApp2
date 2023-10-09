@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { Response } from '../../models/Response';
 import { TableData } from 'src/app/models/Tables/TableData';
 import { ClienteService } from '../cliente/cliente.service';
+import { ColaboradorService } from '../colaborador/colaborador.service';
+import { DonoSalaService } from '../donoSala/dono-sala.service';
 
 
 
@@ -73,7 +75,10 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
 //   return this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}` , agenda);
 // }
   constructor(private http: HttpClient,
-              private clienteService: ClienteService) {
+              private clienteService: ClienteService,
+              private colaboradorService: ColaboradorService,
+              private donoSalaService: DonoSalaService,
+              ) {
 
 
    }
@@ -126,19 +131,23 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
      setCelA(name: Agenda) {
        this.CelA.next(name);
      }
+     private CelAnt = new BehaviorSubject<Agenda>(this.Vazia);
+     CelAnt$ = this.CelAnt.asObservable();
+     setCelAnt(name: Agenda) {
+       this.CelAnt.next(name);
+     }
+     getCelAnt() {
+      return this.CelAnt.value;
+     }
 
      async BuscaAgenda(dia: string): Promise<boolean> {
-      console.log('Chamando getAgenda - Ag.S');
       this.agendas = [];
       const data: Response<Agenda[]> = await this.getAgendaByDate(dia);
       this.agendas = data.dados;
       this.success = data.sucesso;
       const Chng = await this.Dados1();
-      console.log('saindo de Chg - dados1');
       //this.setChangesA(Chng);
       this.setagendaG(this.agendas);
-      console.log('Em agendaService:');
-      console.log(this.agendas);
       return true;
     }
 
@@ -154,7 +163,6 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
           }, 100);
         }
       };
-
       verificarSucesso();
     });
   }
@@ -162,15 +170,21 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
 
 
   async recarregar(): Promise<boolean> {
-    console.log('Entrando em async recarregar (Ag.S)');
     const xdia = this.diaA.value;
     const xUnit = this.UnitA.value;
     const valor = xdia + '%' + xUnit;
-
+        if(this.colaboradorService.colaboradorsG.length == 0){
+          console.log('puxando Colaboradores')
+          this.colaboradorService.GetCol();
+          console.log(this.colaboradorService.colaboradors)
+        }else{
+          console.log(this.colaboradorService.colaboradors)
+        }
+        //aqui vou puxar os donos das salas
+        const buscaDonoConcluida = await this.donoSalaService.BuscaDonos();
     try {
-      const buscaConcluida = await this.BuscaAgenda(xdia);
-
-      if (buscaConcluida) {
+      const buscaAgeConcluida = await this.BuscaAgenda(xdia);
+      if (buscaAgeConcluida) {
         this.val = await this.Dados1();
         //this.setBuscaA(valor);
         try {

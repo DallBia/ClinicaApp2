@@ -7,7 +7,6 @@
   background: linear-gradient(to right,var(--cor-escura) 0%,var(--cor-escura) 75%,var(--cor-clara) 76%, var(--cor-clara) 100%);
   justify-content: center;
   align-items: center;
-  padding-top: 1vh;
   color: white;
 
 }
@@ -19,7 +18,9 @@
   height: 100%;
   width: 25%;
   text-align: center;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .unitL{
   font-size:medium;
@@ -28,7 +29,9 @@
   height: 100%;
   width: 50%;
   text-align: center;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .doisL{
   font-size: medium;
@@ -37,7 +40,9 @@
   height: 100%;
   width: 25%;
   text-align: center;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .unidadeD{
   border: solid 2px var(--cor-media);
@@ -48,7 +53,6 @@
   background: linear-gradient(to right,var(--cor-escura) 0%,var(--cor-escura) 25%,var(--cor-clara) 26%, var(--cor-clara) 100%);
   justify-content: center;
   align-items: center;
-  padding-top: 1vh;
   color: white;
 }
 .umD{
@@ -58,7 +62,9 @@
   height: 100%;
   width: 25%;
   text-align: center;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .unitD{
   font-size:medium;
@@ -67,7 +73,9 @@
   height: 100%;
   width: 50%;
   text-align: center;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .doisD{
   font-size: x-large;
@@ -76,5 +84,7 @@
   height: 100%;
   width: 25%;
   text-align: center;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

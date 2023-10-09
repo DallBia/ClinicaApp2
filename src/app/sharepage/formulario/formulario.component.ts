@@ -22,12 +22,9 @@ export class FormularioComponent implements OnInit {
 
   AttParam(valor: any){
   this.formD = valor;
-  //// console.log(this.formD);
   }
 
   onSubmit() {
-    // Lógica para lidar com a submissão do formulário
     this.formD = this.myForm.value;
-    // console.log(this.formD); // Exemplo de saída dos dados do formulário
   }
 }

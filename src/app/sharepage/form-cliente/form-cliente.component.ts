@@ -32,7 +32,7 @@ export class FormClienteComponent implements OnInit, OnChanges {
 
 
   constructor(private http: HttpClient, private clienteService: ClienteService, private can: CanDeactivateGuard){}
-  
+
   canDeactivate(): boolean {
     if (this.can.Alteracoes == true) {
       return window.confirm(
@@ -51,12 +51,6 @@ export class FormClienteComponent implements OnInit, OnChanges {
 
     this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
       this.Atual = clienteAtual;
-      // console.log('Este é o clientesG:')
-      // console.log(this.clienteService.clientesG)
-      // console.log('Este é o ATUAL!')
-      // console.log(this.Atual)
-      // console.log('Celular Pai:')
-      // console.log(this.Atual.paiCelular)
     });
     this.clienteService.ClienteA$.subscribe(clienteA => {
       this.nCliente = clienteA;
@@ -66,8 +60,6 @@ export class FormClienteComponent implements OnInit, OnChanges {
 
     this.clienteform.valueChanges.subscribe(novosValores => {
       this.can.Alteracoes = true;
-      // console.log('Valores do formulário alterados:', novosValores);
-      // Você pode realizar ações com base nas mudanças de valor aqui.
     });
   }
 
@@ -131,7 +123,6 @@ export class FormClienteComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes[this.nCliente]) {
-      // console.log('Opa! alguma coisa mudou por aqui!')
 
       this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
         this.Atual = clienteAtual;
@@ -139,7 +130,7 @@ export class FormClienteComponent implements OnInit, OnChanges {
       this.clienteService.ClienteA$.subscribe(clienteA => {
         this.nCliente = clienteA;
       });
-      
+
     }
     const Tab = this.clienteform.valueChanges;
     console.log(Tab);

@@ -34,7 +34,7 @@ interface FormField {
   psicomotr:boolean,
   neurofeedback:boolean,
   reforcoesc:boolean,
-  
+
 }
 @Component({
   selector: 'app-forms',
@@ -55,7 +55,7 @@ export class FormsComponent implements OnDestroy, OnInit {
   @Output() submitForm: EventEmitter<any> = new EventEmitter<any>();
   formFields: FormField[] = [];
   formField!: FormField
- 
+
   // ========================================================
   constructor(private http: HttpClient,
       private colaboradorService: ColaboradorService,
@@ -66,7 +66,7 @@ export class FormsComponent implements OnDestroy, OnInit {
       ){
 
   }
-  
+
   submitE(){
     this.submitForm.emit(this.equipeform.value);
   }
@@ -131,10 +131,10 @@ export class FormsComponent implements OnDestroy, OnInit {
       desde:new FormControl(this.Atual.desde),
       ativo:new FormControl(this.Atual.ativo),
     });
-    
-    
+
+
     if (this.Atual.formacao !== undefined){
-      
+
       for (let k of this.Atual.formacao) {
         //let formControl: any = {}; // Inicialize um objeto de controle para este objeto k
         let fG = new FormGroup({
@@ -149,7 +149,7 @@ export class FormsComponent implements OnDestroy, OnInit {
         });
         const linha: string = '' + k.areasRelacionadas;
         const areasRelacionadasArray = linha.split(',').map(area => area.trim());
-        
+
         let valorPsicologia = false;
         let valorFisioPadovan = false;
         let valorPsicopedagogia = false;
@@ -159,7 +159,7 @@ export class FormsComponent implements OnDestroy, OnInit {
         let valorArteterapia = false;
         let valorNeurofeedback = false;
         let valorReforcoEsc = false;
-        
+
         for (const area of areasRelacionadasArray) {
           if(area == 'Psicologia'){
             valorPsicologia = true;
@@ -218,12 +218,12 @@ export class FormsComponent implements OnDestroy, OnInit {
         }
         this.formFields.push(this.formField)
         // Adicione os elementos de k ao objeto de controle
-        
+
         this.formform.push(fG);
-      }  
-    } 
+      }
+    }
   }
- 
+
   getObjectKeys(obj: any): string[] {
     return Object.keys(obj || {});
   }
@@ -241,53 +241,7 @@ export class FormsComponent implements OnDestroy, OnInit {
         disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-     
+
     });
   }
-
-
-
-//====================================================
-
-// selecionarImagem() {
-//   this.fileInput.nativeElement.click();
-// }
-
-// onFileSelected(event:any) {
-//   const file: File = event.target.files[0];
-// const stringFormatada =  this.nUsr.toString().padStart(4, '0') + '.jpg';
-// // this.caminho = '"../../../assets/img/Clientes/';
-// // this.NovaImagem = this.caminho + this.stringFormatada;
-// // this.semFoto ='"../../../assets/img/Clientes/0000.jpg';
-// //// console.log(this.stringFormatada)
-//   if (file) {
-//       this.uploadFile(file, stringFormatada);
-//   }
-// }
-
-// uploadFile(file: File, nome: string) {
-
-
-//   const formData = new FormData();
-//   formData.append('file', file, file.name);
-//   formData.append('nome', nome);
-
-//   this.http.post('https://localhost:7298/api/Image/', formData)
-//       .subscribe(response => {
-//           // console.log('Upload feito com sucesso', response);
-//           this.delayAndRefresh();
-//       }, error => {
-//           console.error('Erro no upload', error);
-//       });
-
-//     }
-
-//     delayAndRefresh() {
-//       setTimeout(() => {
-//         // this.Grid01Service.destacarLinha(this.nL,this.nFicha)
-//       }, 300);
-
-//     }
-
-//
 }

@@ -77,7 +77,6 @@ export class ProtadmComponent implements OnInit, OnDestroy{
       }else{
       this.Ficha = 'FICHA';
       this.NomeCliente = '';
-       // console.log(this.idFoto)
     }
     this.newInfo(this.MostraInfo);
   }
