@@ -13,7 +13,7 @@ export class NotLoggedGuard implements CanActivate {
 
     if(!this.userService.isLogged())
     {
-      this.router.navigate(['']);
+      this.router.navigate(['/login']);
       return false;
     }
     else

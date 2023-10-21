@@ -40,12 +40,12 @@ export class PerfilService {
 
     private PerfilAtual = new BehaviorSubject<Perfil>(this.Vazia[0]);
     PerfilAtual$ = this.PerfilAtual.asObservable();
-  setPerfilAtual(name: Perfil) {
-    this.PerfilAtual.next(name);
-  }
+    setPerfilAtual(name: Perfil) {
+      this.PerfilAtual.next(name);
+    }
     private Ajuda = new BehaviorSubject<string>('');
-    Ajuda$ = this.Ajuda.asObservable();
-  setAjuda(name: string) {
-    this.Ajuda.next(name);
-}
+      Ajuda$ = this.Ajuda.asObservable();
+      setAjuda(name: string) {
+        this.Ajuda.next(name);
+    }
 }

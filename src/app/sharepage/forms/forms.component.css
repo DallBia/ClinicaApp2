@@ -73,8 +73,8 @@ border-right: solid 1px rgb(253, 236, 236);
 }
 .fMeioLabel {
   height: 30px;
-  width: 15%;
-  margin-right: 2px;
+  width: 10%;
+  margin: 2px;
   margin-top: 10px;
   margin-bottom: 10px;
   }
@@ -83,6 +83,7 @@ border-right: solid 1px rgb(253, 236, 236);
   width: 30%;
   margin-top: 10px;
   margin-bottom: 10px;
+
   border-radius: 6px;
   border-top: solid 1px rosybrown;
   border-bottom: solid 1px rosybrown;

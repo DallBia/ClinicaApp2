@@ -11,6 +11,7 @@ export interface TableProf {
   desde: any;
   proxses?: any;
   celular?: string;
+  telFixo?: string;
   identidade? : string;
   cpf? : string;
   endereco? : string;

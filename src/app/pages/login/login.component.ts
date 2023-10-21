@@ -5,6 +5,9 @@ import { ColaboradorService } from 'src/app/services/colaborador/colaborador.ser
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { UserService } from '../../services/user.service'; // Importe o UserService aqui
 import { User } from '../../models/user'; // Importe a classe User aqui
+import { ModalSenhaProvComponent } from './modal-senha-prov/modal-senha-prov.component';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-login',
@@ -17,6 +20,9 @@ export class LoginComponent implements OnInit {
   public UsrLogA: any;
   public nUser!: number;
   private subscription!: Subscription;
+  private userData!: User | null;
+  private resposta: boolean | undefined = undefined;
+  private UnserN: number = 0;
 
 
 
@@ -24,14 +30,52 @@ export class LoginComponent implements OnInit {
               private authService: AuthService,
               private router: Router,
               public userService: UserService,
+              public dialog: MatDialog,
 
-    ) {}
+    ) {
+      this.userService.EquipeA$.subscribe(resposta => {
+        this.UnserN = resposta;
+        // if(this.UnserN > 0){
+        //   if(user.deslig == '' && user.valid !== 'True'){
+        //     return true;
+        //   }else{
+        //     return false;
+        //   }
+        // }
+      });
+
+    }
+    Validar(user: User | null){
+      if (user !== null){
+        if(user.deslig == '' && user.valid == 'True'){
+          return true;
+        }else{
+          return false;
+        }
+      }else{
+        return true;
+      }
+
+    }
+
 
   login(email: string, password: string) {
     this.authService.authenticate(email, password).subscribe(
       (success) => {
         if (success) {
-          this.router.navigate(['/inicio']);
+          const user = this.userService.getUserA().getValue();
+          this.resposta = this.Validar(user)
+          if (this.resposta == true){
+            this.router.navigate(['/inicio']);
+          }else{
+            const dialogRef = this.dialog.open(ModalSenhaProvComponent, {
+              disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
+          });
+          dialogRef.afterClosed().subscribe((result: any) => {
+
+          });
+          }
+
         } else {
           alert('OOoOOOooOOoPs! Não foi possível fazer o Login... :(');
         }
@@ -42,12 +86,44 @@ export class LoginComponent implements OnInit {
     );
   }
 
+
+
+
+  async Dados1(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      const verificarSucesso = () => {
+        if (this.resposta !== undefined) {
+          resolve(this.resposta);
+        } else {
+          setTimeout(() => {
+            verificarSucesso();
+          }, 100);
+        }
+      };
+      verificarSucesso();
+    });
+  }
+
+  openModal(): void {
+    this.dialog.open(ModalSenhaProvComponent);
+  }
+
   ngOnInit(): void {
-    this.UsrLogA=this.userService.getUser();
+    this.UsrLogA = this.userService.getUser();
     if(this.UsrLogA != null){
       this.nUser = this.UsrLogA.id;
       this.UsrLog = this.DefinirUsuario(this.UsrLogA)
     };
+    this.userService.getUser().subscribe(
+      data => {
+        this.userData = data;
+      },
+      error => {
+        console.error(error); // Trate qualquer erro que possa ocorrer durante a obtenção dos dados
+      }
+    );
+
+
 
   }
 
@@ -68,7 +144,7 @@ DefinirUsuario(n: User){
       this.Perf = 'Equipe Clínica';
     }
   }
-  return n.name + ' (' + this.Perf + ')'
+  return n.name + ' *(' + this.Perf + ')'
 }
 }
 

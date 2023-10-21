@@ -48,7 +48,23 @@ export class CadprofComponent implements OnDestroy, OnInit {
     pLin: TableProf[] = [];
     dataSource: TableProf[] = [];
     ColAt!: TableProf;
-
+    ProfVazio: Colaborador = {
+      id: 0,
+      nome: '',
+      dtNasc: '1900-01-01',
+      rg: '',
+      cpf: '',
+      endereco: '',
+      telFixo: '',
+      celular: '',
+      email: '',
+      dtAdmis: '1900-01-01',
+      dtDeslig: '1900-01-01',
+      idPerfil: 0,
+      ativo: true,
+      areaSession: '',
+      senhaHash: '',
+    }
     nProf = 1;
     EAtual!: Colaborador; // guarda o usuário atual
     nEquipe: number = 0;
@@ -89,7 +105,9 @@ export class CadprofComponent implements OnDestroy, OnInit {
     this.colaboradorService.ChangesA$.subscribe(chng => {
       this.nChanges = chng;
     });
-    
+    this.colaboradorService.EquipeAtual$.subscribe(eat => {
+      this.EAtual = eat;
+    });
 
   }
 
@@ -98,15 +116,133 @@ export class CadprofComponent implements OnDestroy, OnInit {
 
   }
 
+  gerarSenha() {
+    const caracteresMaiusculos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const caracteresMinusculos = 'abcdefghijklmnopqrstuvwxyz';
+    const numeros = '0123456789';
+    const caracteresEspeciais = '!@#$%^&*()-_+=<>?';
+
+    const todosCaracteres = caracteresMaiusculos + caracteresMinusculos + numeros + caracteresEspeciais;
+
+    let senha = '';
+    senha += caracteresMaiusculos[Math.floor(Math.random() * caracteresMaiusculos.length)];
+    senha += caracteresMinusculos[Math.floor(Math.random() * caracteresMinusculos.length)];
+    senha += numeros[Math.floor(Math.random() * numeros.length)];
+    senha += caracteresEspeciais[Math.floor(Math.random() * caracteresEspeciais.length)];
+
+    for (let i = 4; i < 8; i++) {
+        senha += todosCaracteres[Math.floor(Math.random() * todosCaracteres.length)];
+    }
+
+    // Embaralhe a senha para garantir aleatoriedade
+    senha = senha.split('').sort(() => Math.random() - 0.5).join('');
+
+    return senha;
+}
+
+abrirModal(){
+
+}
+
+Salvar(){
+  const Dados = this.formProf.submitE()
+  console.log(Dados)
+  //let ProfAlt: Colaborador = this.colaboradorService.getEquipeAtual();
+  let ProfAlt = this.ProfVazio;
+  if (ProfAlt !== null){
+    ProfAlt.ativo = Dados.ativo;
+    if (ProfAlt.ativo === true){
+      ProfAlt.dtDeslig = '1900-01-01';
+    }else{
+      if (ProfAlt.dtDeslig == ''){
+        ProfAlt.dtDeslig = new Date().toISOString().split('T')[0];
+      }
+    }
+
+    ProfAlt.id = Dados.id;
+    ProfAlt.celular = Dados.celular;
+    ProfAlt.telFixo = Dados.telFixo;
+    ProfAlt.cpf = Dados.cpf;
+    ProfAlt.dtAdmis = this.reDatas(Dados.desde);
+    ProfAlt.email = Dados.email;
+    ProfAlt.endereco = Dados.endereco;
+    ProfAlt.rg = Dados.identidade;
+    ProfAlt.dtNasc =  this.reDatas(Dados.nascimento);
+    ProfAlt.nome = Dados.nome;
+    switch (Dados.perfil){
+      case 'Diretoria':
+        ProfAlt.idPerfil = 0;
+        break;
+      case 'Secretaria':
+        ProfAlt.idPerfil = 1;
+        break;
+      case 'Coordenação':
+        ProfAlt.idPerfil = 2;
+        break;
+        case 'Equipe Clínica':
+        ProfAlt.idPerfil = 3;
+        break;
+      default:
+      ProfAlt.idPerfil = 3;
+    }
+    ProfAlt.senhaHash = '';
+    console.log(ProfAlt)
+    if (ProfAlt !== null){
+      //this.AtualizarProf(this.ProfAlt)
+      this.colaboradorService.UpdateEquipe(ProfAlt).subscribe((data) => {
+       this.delay(300)
+       const dados = this.colaboradorService.GetCol();
+       console.log(dados)
+      alert('Registro atualizado!')
+      location.reload()
+    }, error => {
+      console.error('Erro no upload', error);
+    });
+    }
+  }
+}
 
   CliqueNovo(){
     const dialogRef = this.dialog.open(EquipeModalComponent, {
       disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
   });
   dialogRef.afterClosed().subscribe((result: any) => {
-   
+
   });
+//   const senhaGerada = this.gerarSenha();
+// console.log(senhaGerada);
+// alert(senhaGerada)
   }
 
+  AtualizarProf(dado: Colaborador){
+    this.colaboradorService.UpdateEquipe(dado).subscribe((data) => {
+       this.delay(300)
+       const dados = this.colaboradorService.GetCol();
+       console.log(dados)
+      alert('Registro atualizado!')
+      location.reload()
+    }, error => {
+      console.error('Erro no upload', error);
+    });
+  }
+  reDatas(dataO: string){
+
+    const [dia, mes, ano] = dataO.split('/');
+    if(dia.length == 2){
+      const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+      const dataFormatada = data.toISOString().split('T')[0];
+       return (dataFormatada);
+    }
+    else{
+       return (dataO);
+    }
+
+  }
+
+  delay(time:number) {
+    setTimeout(() => {
+
+    }, time);
+  }
 
 }

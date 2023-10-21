@@ -12,6 +12,8 @@ export class PerfilTabComponent implements OnInit{
   public perfil: Perfil[] = [];
   public nLin: Perfil[] = [];
   public Atual!: Perfil[];
+
+
     constructor(private perfilService: PerfilService) {}
 
   ngOnInit(): void {
@@ -24,7 +26,6 @@ export class PerfilTabComponent implements OnInit{
       })
       this.perfilService.perfils = data.dados;
       this.perfilService.perfils.sort((a, b) => a.id - b.id);
-
       this.perfil = this.perfilService.perfils;
     });
 

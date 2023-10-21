@@ -5,19 +5,19 @@
   </div>
   <div class="acampos">
     <div class="acamposI">
-      <textarea #avisosTextarea 
-      placeholder="Digite seus avisos aqui..." class="box-avisos" 
-      [(ngModel)]="textoAvisos" 
+      <textarea #avisosTextarea
+      placeholder="Digite seus avisos aqui..." class="box-avisos"
+      [(ngModel)]="textoAvisos"
       [ngStyle]="{'height': mostrarBotaoSalvar ? '80%' : '95%'}"
       (keyup)="onEnter($event)"
-      (keyup.enter)="addBullet($event)" 
+      (keyup.enter)="addBullet($event)"
       (blur)="onBlur()"
       ></textarea>
       <div>
         <button *ngIf="mostrarBotaoSalvar" class="rosa">Salvar</button>
       </div>
     </div>
-    <div class="acamposI"><label class="text-aniversario"></label></div>
+    <div class="acamposI"><label class="text-aniversario" [innerHTML]="textoNiver"></label></div>
   </div>
 </div>
 <div class="button-container">

@@ -52,6 +52,9 @@ import { FormProntComponent } from './sharepage/form-pront/form-pront.component'
 import { ModalComponent } from './sharepage/forms/modal/modal.component';
 import { EquipeModalComponent } from './pages/cadprof/equipe-modal/equipe-modal.component';
 import { DetalhesComponent } from './sharepage/detalhes/detalhes.component';
+import { FiltroComponent } from './sharepage/filtro/filtro.component';
+import { ModalSenhaProvComponent } from './pages/login/modal-senha-prov/modal-senha-prov.component';
+import { NavbarService } from './sharepage/navbar/navbar.service';
 
 registerLocaleData(localePt);
 
@@ -94,6 +97,8 @@ export function tokenGetter() {
     ModalComponent,
     EquipeModalComponent,
     DetalhesComponent,
+    FiltroComponent,
+    ModalSenhaProvComponent,
   ],
 
 
@@ -131,4 +136,6 @@ imports: [
     ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+ }

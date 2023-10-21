@@ -69,6 +69,7 @@ export class FormsComponent implements OnDestroy, OnInit {
 
   submitE(){
     this.submitForm.emit(this.equipeform.value);
+    return this.equipeform.value;
   }
   submitF(){
     this.submitForm.emit(this.formacaoform.value);
@@ -124,6 +125,7 @@ export class FormsComponent implements OnDestroy, OnInit {
       nome:new FormControl(this.Atual.nome),
       nascimento:new FormControl(this.Atual.nascimento),
       celular:new FormControl(this.Atual.celular),
+      telFixo:new FormControl(this.Atual.telFixo),
       identidade:new FormControl(this.Atual.identidade),
       cpf:new FormControl(this.Atual.cpf),
       endereco:new FormControl(this.Atual.endereco),

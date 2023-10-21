@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
 import { Colaborador } from 'src/app/models/Colaboradors';
 import { environment } from 'src/environments/environment';
 import { Response } from '../../models/Response';
 import { TableProf } from 'src/app/models/Tables/TableProf';
 import { FormacaoService } from '../formacao/formacao.service';
 import { Formacao } from 'src/app/models/Formacaos';
+import { User } from 'src/app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class ColaboradorService {
     desde: '',
     proxses: '',
     celular: '',
+    telFixo: '',
     identidade :'',
     cpf : '',
     endereco : '',
@@ -46,6 +48,7 @@ export class ColaboradorService {
   nUsr:number = 0;
 
   nChanges: boolean = false;
+  nChangesL: boolean = false;
   Selecionada: string = '';
   ListaEquipe: any;
   ListaFormacaos: any;
@@ -70,9 +73,19 @@ export class ColaboradorService {
         map((data) => {
           const dados = data.dados;
           dados.map((item) => {
-            item.dtAdmis !== null ? (item.dtAdmis = new Date(item.dtAdmis!).toLocaleDateString('pt-BR')) : '---';
-            item.dtDeslig !== null ? (item.dtDeslig = new Date(item.dtDeslig!).toLocaleDateString('pt-BR')) : '---';
-            item.dtNasc !== null ? (item.dtNasc = new Date(item.dtNasc!).toLocaleDateString('pt-BR')) : '---';
+
+            item.dtAdmis !== null ? item.dtAdmis = new Date(item.dtAdmis!).toISOString().split('T')[0] : '---'
+            item.dtDeslig !== null ? item.dtDeslig = new Date(item.dtDeslig!).toISOString().split('T')[0] : '---'
+            item.dtNasc !== null ? item.dtNasc = new Date(item.dtNasc!).toISOString().split('T')[0] : '---'
+
+            const dtAdmis = item.dtAdmis !== null ? item.dtAdmis.split('-') : '*-*-*';
+            item.dtAdmis = dtAdmis[2] + '/'+ dtAdmis[1] + '/'+ dtAdmis[0];
+            const dtDeslig = item.dtDeslig !== null ? item.dtDeslig.split('-') : '*-*-*';
+            item.dtDeslig = dtDeslig[2] + '/'+ dtDeslig[1] + '/'+ dtDeslig[0];
+            const dtNasc = item.dtNasc !== null ? item.dtNasc.split('-') : '*-*-*';
+            item.dtNasc = dtNasc[2] + '/'+ dtNasc[1] + '/'+ dtNasc[0];
+
+
           });
           this.colaboradorsG = data.dados;
           this.colaboradors = data.dados;
@@ -85,8 +98,6 @@ export class ColaboradorService {
 
 
 
-
-
     GetColaborador(): Observable<Response<Colaborador[]>> {
       const apiurllogin = `${environment.ApiUrl}/User`;
       return this.http.get<Response<Colaborador[]>>(apiurllogin);
@@ -95,24 +106,53 @@ export class ColaboradorService {
 
 
     CreateColaborador(prof: Colaborador) : Observable<Response<Colaborador[]>>{
-      const apiurllogin = `${environment.ApiUrl}/User`;
-      return this.http.post<Response<Colaborador[]>>(apiurllogin , prof);
+      const apiurllogin = `${environment.ApiUrl}/Colaborador`;
+      return this.http.post<Response<Colaborador[]>>(apiurllogin, prof);
     }
+
     UpdateColaborador(prof: Colaborador) : Observable<Response<Colaborador[]>>{
-      const apiurllogin = `${environment.ApiUrl}/User/Editar`;
-      return this.http.put<Response<Colaborador[]>>(apiurllogin , prof);
+      const apiurllogin = `${environment.ApiUrl}/Colaborador/Editar`;
+      return this.http.put<Response<Colaborador[]>>(apiurllogin, prof);
     }
+
+
+
 
 
     GetEquipe() : Observable<Response<Colaborador[]>>{
       return this.http.get<Response<Colaborador[]>>(this.apiurl);
     }
     CreateEquipe(Equipe: Colaborador) : Observable<Response<Colaborador[]>>{
-      return this.http.post<Response<Colaborador[]>>(`${this.apiurl}/Novo` , Equipe);
+      const apiurl = `${environment.ApiUrl}/Colaborador`;
+      return this.http.post<Response<Colaborador[]>>(apiurl , Equipe);
     }
+
+    AlteraSenha(userName: string, password: string)  : Observable<Response<string>>{
+
+      const body = {
+        Usuario: userName,
+        Senha: password
+      };
+      const apiurl = `${environment.ApiUrl}/Colaborador/AltSen`;
+      console.log(apiurl)
+      return this.http.post<Response<string>>(apiurl, body);
+
+      }
+
+
+
     UpdateEquipe(Equipe: Colaborador) : Observable<Response<Colaborador[]>>{
-      return this.http.put<Response<Colaborador[]>>(`${this.apiurl}/Editar` , Equipe);
+      const apiurllogin = `${environment.ApiUrl}/Colaborador/Editar`;
+      return this.http.put<Response<Colaborador[]>>(apiurllogin, Equipe);
     }
+
+
+
+    // EnviarEmail(dado: any) : Observable<Response<string>>{
+
+    //   const apiurllogin = `${environment.ApiUrl}/Email`;
+    //   return this.http.put<Response<string>>(apiurllogin, dado);
+    // }
 
     private EquipeAtual = new BehaviorSubject<Colaborador>(this.V[0]);
     EquipeAtual$ = this.EquipeAtual.asObservable();
@@ -124,6 +164,23 @@ export class ColaboradorService {
     EquipeA$ = this.EquipeA.asObservable();
     setEquipeA(name: number) {
       this.EquipeA.next(name);
+    }
+
+    getEquipeId(id: number){
+      let resp = null;
+      for(let i of this.colaboradorsG){
+        if (i.id == id){
+          resp = i;
+        }
+      }
+      if (resp == null){
+        for(let i of this.colaboradorsG){
+          if (i.id == this.EquipeA.getValue()){
+            resp = i;
+          }
+        }
+      }
+      return resp;
     }
 
     private ProfAtual = new BehaviorSubject<TableProf>(this.Vazia[0]);
@@ -140,6 +197,7 @@ export class ColaboradorService {
       currentProf.desde = name.desde;
       currentProf.proxses = name.proxses;
       currentProf.celular = name.celular;
+      currentProf.telFixo = name.telFixo;
       currentProf.identidade = name.identidade;
       currentProf.cpf = name.cpf;
       currentProf.endereco = name.endereco;
@@ -165,6 +223,11 @@ export class ColaboradorService {
     ChangesA$ = this.ChangesA.asObservable();
     setChangesA(name: boolean) {
       this.ChangesA.next(name);
+    }
+    private ChangesL = new BehaviorSubject<boolean>(false);
+    ChangesL$ = this.ChangesL.asObservable();
+    setChangesL(name: boolean) {
+      this.ChangesL.next(name);
     }
 
 
@@ -251,7 +314,8 @@ inicio(){
           selecionada: false,
           desde: i.dtAdmis,
           proxses: '',
-          celular: i.celular + " | " + i.telFixo,
+          celular: i.celular,
+          telFixo: i.telFixo,
           identidade: i.rg,
           cpf : i.cpf,
           endereco : i.endereco,

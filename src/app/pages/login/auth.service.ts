@@ -35,7 +35,9 @@ import{NavbarComponent } from '../../sharepage/navbar/navbar.component'
           const authToken = res.body as any;
           this.userService.setToken(authToken.token);
           this.userService.setUser(authToken);
+          this.userService.decodeAndNotify()
        }))
+
     }
 
 

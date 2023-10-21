@@ -1,6 +1,12 @@
+import { Subscription } from 'rxjs';
 import { Component, ViewChild, ElementRef, OnInit  } from '@angular/core';
 import { HeaderService } from '../../sharepage/navbar/header.service';
 import { ClienteService } from 'src/app/services/cliente/cliente.service';
+import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
+import { PerfilService } from 'src/app/services/perfil/perfil.service';
+import { Perfil } from 'src/app/models/Perfils';
+import { UserService } from 'src/app/services';
+import { User } from 'src/app/models';
 
 @Component({
   selector: 'app-home',
@@ -9,19 +15,116 @@ import { ClienteService } from 'src/app/services/cliente/cliente.service';
 })
 export class HomeComponent implements OnInit {
   textoAvisos: string = '';
+  textoNiver: string = '';
+  subscription!: Subscription;
+  UsrAtual!: User
+  public ps: Perfil[] = []
+  public pAtual: any;
+  buttons = [
+    { text: 'FICHAS DE CLIENTES', param: 'parametro1', route: '/fichacliente'},
+    { text: 'CADASTRO DA EQUIPE', param: 'parametro2', route: '/cadprof'},
+    { text: 'AGENDA', param: 'parametro3', route: '/agenda' },
+    { text: 'PRONTUÁRIO CLÍNICO', param: 'parametro4', route: '/protclin'},
+    { text: 'PRONTUÁRIO ADMINISTRATIVO', param: 'parametro5', route: '/protadm'},
+    { text: 'CONTROLE FINANCEIRO', param: 'parametro6', route: '/controleFinaceiro'}
+  ];
 
   @ViewChild('avisosTextarea') avisosTextarea!: ElementRef;
   public textoPreDefinido: string = '';
   getCursorPosition(): number {
     return this.avisosTextarea.nativeElement.selectionStart;
   }
+  constructor(private headerService: HeaderService,
+    private clienteService: ClienteService,
+    private perfilService: PerfilService,
+    private userService: UserService,
+    private colaboradorService: ColaboradorService) {
+
+      if(this.UsrAtual){
+        for (let def in this.ps){
+          if(this.UsrAtual.perfil?.toString() == '0'){
+
+          }
+        }
+      }
+
+
+    }
+
+
+
 
   ngOnInit(): void {
 
-    this.clienteService.BuscaClientes();
-    this.clienteService.setClienteA(0);
+    this.userService.UsrA$.subscribe(Atual => {
+      this.UsrAtual = Atual;
+    });
+
+
+
+    this.Carregar();
+    this.perfilService.GetPerfil().subscribe(data => {
+      const dados = data.dados;
+      dados.map((item) => {
+        item.dir !== null ? item.dir = item.dir : item.dir = false;
+        item.secr !== null ? item.secr = item.secr : item.secr = false;
+        item.coord !== null ? item.coord = item.coord : item.coord = false;
+      })
+      this.ps = data.dados;
+     this.ps.sort((a, b) => a.id - b.id);
+     console.log(this.ps)
+    });
 
   }
+
+async Carregar(){
+
+  try {
+        const r1 = await this.clienteService.BuscaClientes();
+        this.clienteService.setClienteA(0);
+        const r2 = this.colaboradorService.GetCol();
+        const dataAtual = new Date();
+        const dia = dataAtual.getDate(); // Obtém o dia (1-31)
+        const mes = dataAtual.getMonth() + 1; // Obtém o mês (0-11, então somamos 1 para obter 1-12)
+
+        // Formata o dia e o mês com zero à esquerda se for menor que 10
+        const diaFormatado = dia < 10 ? `0${dia}` : dia;
+        const mesFormatado = mes < 10 ? `0${mes}` : mes;
+
+        const hoje = `${diaFormatado}/${mesFormatado}`;
+
+
+        for (let i of this.clienteService.clientesG){
+          const dataNiv = i.dtNascim.split('/');
+          const niver = dataNiv[0] + '/' + dataNiv[1];
+          if (niver == hoje){
+            const aIdade1 = this.converterParaDate(i.dtNascim);
+            this.textoNiver = this.textoNiver + i.nome + ' (cliente, ' + this.calcularIdade(aIdade1) + ' anos)<br>';
+
+          }
+        }
+        for (let i of this.colaboradorService.colaboradorsG){
+          const nasc = i.dtNasc ? i.dtNasc : '00/00';
+          const dataNiv = nasc.split('/');
+          const niver = dataNiv[0] + '/' + dataNiv[1];
+          if (niver == hoje){
+            const aIdade1 = this.converterParaDate(nasc);
+            this.textoNiver = this.textoNiver + i.nome + ' (equipe, ' + this.calcularIdade(aIdade1) + ' anos)<br>';
+
+          }
+        }
+        if (this.textoNiver.length == 0){
+          this.textoNiver = 'Sem aniversariantes por hoje...'
+        }
+        return true;
+      }
+      catch (error) {
+        console.error('Erro ao buscar clientes:', error);
+        return false;
+      }
+
+
+}
 
   mostrarBotaoSalvar = false;
 
@@ -63,18 +166,29 @@ export class HomeComponent implements OnInit {
       this.avisosTextarea.nativeElement.selectionEnd = cursorPosition + 2;
     });
   }
-  buttons = [
-    { text: 'FICHAS DE CLIENTES', param: 'parametro1', route: '/fichacliente'},
-    { text: 'CADASTRO DA EQUIPE', param: 'parametro2', route: '/cadprof'},
-    { text: 'AGENDA', param: 'parametro3', route: '/agenda' },
-    { text: 'PRONTUÁRIO CLÍNICO', param: 'parametro4', route: '/protclin'},
-    { text: 'PRONTUÁRIO ADMINISTRATIVO', param: 'parametro5', route: '/protadm'},
-    { text: 'CONTROLE FINANCEIRO', param: 'parametro6', route: '/controleFinaceiro'}
-  ];
 
-  constructor(private headerService: HeaderService, private clienteService: ClienteService) {}
+
 
   atualizarHeader(texto: string): void {
     this.headerService.linkAtivo = texto;
+  }
+
+
+  converterParaDate(dataString: string): Date {
+    const [dia, mes, ano] = dataString.split('/').map(Number);
+    return new Date(ano, mes - 1, dia);
+  }
+
+  calcularIdade(dataNascimento: Date): string {
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+
+    // Ajuste para caso o aniversário ainda não tenha ocorrido este ano
+    const m = hoje.getMonth() - dataNascimento.getMonth();
+    if (m < 0 || (m === 0 && hoje.getDate() < dataNascimento.getDate())) {
+        idade--;
+    }
+
+    return idade.toString();
   }
 }

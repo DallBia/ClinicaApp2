@@ -1,6 +1,6 @@
 .modal-inteiro {
     width: 60vw;
-    height: 60vh;
+    height: 70vh;
     background-color: rgb(255, 240, 248);
     padding: 5vh;
 }
@@ -85,6 +85,4 @@
     align-items: stretch;
     align-content: space-between;
 }
-.boxinterno{
-    
-}
+

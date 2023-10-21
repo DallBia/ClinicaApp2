@@ -10,6 +10,7 @@ import { ColaboradorService } from 'src/app/services/colaborador/colaborador.ser
 import { ProntuarioService } from 'src/app/services/prontuario/prontuario.service';
 import { BlocoNotasComponent } from 'src/app/sharepage/bloco-notas/bloco-notas.component';
 import { LoginComponent } from '../login/login.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-controle-finaceiro',
@@ -38,6 +39,7 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
   constructor(private colaboradorService: ColaboradorService,
     private clienteService: ClienteService,
     private prontuarioService: ProntuarioService,
+    private router: Router,
     private userService: UserService) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.nCliente = nameC

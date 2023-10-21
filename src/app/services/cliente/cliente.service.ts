@@ -83,6 +83,7 @@ export class ClienteService {
   CreateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.post<Response<Cliente[]>>(`${this.apiurl}` , cliente);
   }
+
   UpdateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.put<Response<Cliente[]>>(`${this.apiurl}/Editar` , cliente);
   }
@@ -129,9 +130,17 @@ export class ClienteService {
 
         const dados = data.dados;
         dados.map((item: { clienteDesde: string | number | Date | null; dtInclusao: string | number | Date | null; dtNascim: string | number | Date | null; }) => {
-          item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toLocaleDateString('pt-BR') : '---'
-          item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toLocaleDateString('pt-BR') : '---'
-          item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toLocaleDateString('pt-BR') : '---'
+          item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toISOString().split('T')[0] : '---'
+          item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toISOString().split('T')[0] : '---'
+          item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toISOString().split('T')[0] : '---'
+
+          const dtNascim = item.dtNascim !== null ? item.dtNascim.split('-') : '*-*-*';
+          item.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
+          const clienteDesde = item.clienteDesde !== null ? item.clienteDesde.split('-') : '*-*-*';
+          item.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
+          const dtInclusao = item.dtInclusao !== null ? item.dtInclusao.split('-') : '*-*-*';
+          item.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
+
            });
 
         this.clientesG = data.dados;

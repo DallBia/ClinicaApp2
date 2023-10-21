@@ -11,11 +11,11 @@
         <tbody class="tabb">
           <tr *ngFor="let i of this.perfil" class="tabb">
             <td class="c1"(mouseenter)="exibirHelp(i.help)">{{i.id}}-{{i.descricao}}</td>
-            <td class="c2"><input type="checkbox" [id]="i.id + 'D'" [checked]="i.dir"></td>
-            <td class="c2"><input type="checkbox" [id]="i.id + 'S'" [checked]="i.secr"></td>
-            <td class="c2"><input type="checkbox" [id]="i.id + 'C'" [checked]="i.coord"></td>
-            <td class="c2"><input type="checkbox" [id]="i.id + 'E'" [checked]="i.equipe"></td>
-            <td class="c2"><input type="checkbox" [id]="i.id + 'P'" [checked]="i.siMesmo"></td>
+            <td class="c2"><input type="checkbox" [(ngModel)]="i.dir" [id]="i.id + 'D'" [checked]="i.dir"></td>
+            <td class="c2"><input type="checkbox" [(ngModel)]="i.secr" [id]="i.id + 'S'" [checked]="i.secr"></td>
+            <td class="c2"><input type="checkbox" [(ngModel)]="i.coord" [id]="i.id + 'C'" [checked]="i.coord"></td>
+            <td class="c2"><input type="checkbox" [(ngModel)]="i.equipe" [id]="i.id + 'E'" [checked]="i.equipe"></td>
+            <td class="c2"><input type="checkbox" [(ngModel)]="i.siMesmo" [id]="i.id + 'P'" [checked]="i.siMesmo"></td>
         </tr>
         </tbody>
       </table>

@@ -32,6 +32,8 @@
       <input type="text"  class="fMeioCampo" formControlName="email" required>
       <label class="fMeioLabel">Celular:</label>
       <input type="text"  class="fMeioCampo" formControlName="celular" placeholder="(apenas números)" required>
+      <label class="fMeioLabel">Tel. Fixo:</label>
+      <input type="text"  class="fMeioCampo" formControlName="telFixo" placeholder="(apenas números)" required>
     </div>
     <div style="vertical-align: middle; display: flex; justify-content: space-between;">
       <label class="fLabel2">DADOS PROFISSIONAIS</label>
@@ -49,7 +51,7 @@
         <option>Coordenação</option>
         <option>Secretaria</option>
         <option>Equipe Clínica</option>
-      </select>        
+      </select>
       <input type="checkbox"  class="fCheck" style="margin-right:4px;" formControlName="ativo">
       <label>Funcionário Ativo</label>
     </div>
@@ -90,30 +92,29 @@
         <div class="boxes">
           <div class="boxinterno">
               <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.terapiaocup" name="terapiaocup">
-              <label>Terapia Ocupacional</label> 
+              <label>Terapia Ocupacional</label>
                   <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.fisiopadovan" name="fisiopadovan">
-              <label>Fisioterapia Padovan</label> 
+              <label>Fisioterapia Padovan</label>
               <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.reforcoesc" name="reforcoesc">
-              <label>Reforço Escolar</label> 
+              <label>Reforço Escolar</label>
               <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.neurofeedback" name="neurofeedback">
               <label>Neurofeedback</label>
           </div>
           <div class="boxinterno">
               <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.psicopedagogia" name="psicopedagogia">
-              <label>Psicopedagogia</label> 
+              <label>Psicopedagogia</label>
                   <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.fono" name="fono">
-              <label>Fonoaudiologia</label> 
+              <label>Fonoaudiologia</label>
               <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.arteterapia" name="arteterapia">
-              <label>Arteterapia</label> 
+              <label>Arteterapia</label>
               <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.psicologia" name="psicologia">
-              <label>Psicologia</label> 
+              <label>Psicologia</label>
               <input type="checkbox"  class="fCheck" style="margin-right:4px;" [(ngModel)]="field.psicomotr" name="psicomotr">
-              <label>Psicomotricidade</label>   
+              <label>Psicomotricidade</label>
           </div>
-      </div> 
+      </div>
         <hr>
       </ng-container>
     </div>
   <button class="rosa" (click)="abrirModal()">INSERIR NOVA FORMAÇÃO PROFISSIONAL</button>
   </div>
-  

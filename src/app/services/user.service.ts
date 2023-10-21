@@ -11,7 +11,8 @@ import { environment } from 'src/environments/environment';
 import { Response } from '../models/Response';
 import { HttpClient } from '@angular/common/http';
 import { TableProf } from '../models/Tables/TableProf';
-
+import { ModalSenhaProvComponent } from '../pages/login/modal-senha-prov/modal-senha-prov.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Injectable({
@@ -24,6 +25,15 @@ export class UserService {
     this.usuario.next(name);
   }
 
+
+  public ValidarUsr = new BehaviorSubject<boolean|undefined>(undefined);
+  ValidarUsr$ = this.ValidarUsr.asObservable();
+  setValidarUsr(name: boolean) {
+    this.ValidarUsr.next(name);
+  }
+  getValidarUsr(){
+    return this.ValidarUsr.value
+  }
 
   public UsrLogA = new BehaviorSubject<string>('new User');
   UsrLogA$ = this.UsrLogA.asObservable();
@@ -38,7 +48,10 @@ export class UserService {
   private userLogged = new BehaviorSubject<boolean>(false);
 
 
-  constructor(private tokenService: TokenService, private router: Router, private http: HttpClient){
+  constructor(private tokenService: TokenService,
+    private router: Router,
+    public dialog: MatDialog,
+    private http: HttpClient){
 
     if(this.tokenService.hasToken())
       this.decodeAndNotify();
@@ -60,7 +73,8 @@ export class UserService {
     return this.userSubject.asObservable();
   }
 
-  private decodeAndNotify() {
+  public decodeAndNotify() {
+    //this.router.navigate(['/login']);
     const token: string = this.tokenService.getToken();
     const user = jwt_decode(token) as User;
     this.userSubject.next(user);
@@ -68,7 +82,25 @@ export class UserService {
     this.setUserA(user)
     const Uid = user.userid !== undefined ? Number(user.userid) || 0 : 0;
     this.setEquipeA(Uid)
+
   }
+
+  // NovoUsuario(user: User){
+  //   const Valid = this.Validar(user);
+  //   if(Valid == true){
+  //     this.router.navigate(['/home']);
+  //   }else{
+  //       const dialogRef = this.dialog.open(ModalSenhaProvComponent, {
+  //         disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
+  //     });
+  //     dialogRef.afterClosed().subscribe((result: any) => {
+  //     });
+  //     //this.router.navigate(['/login']);
+  //   }
+  // }
+
+
+
 
 
 
@@ -101,6 +133,9 @@ export class UserService {
   setEquipeA(name: number) {
     this.EquipeA.next(name);
   }
+  getEquipeA(){
+    return this.EquipeA
+  }
 
 
   // setUserA(UsrLog: any): Observable<string | null> {
@@ -125,7 +160,6 @@ export class UserService {
         }
         this.setUsuario(UsrName + ' (' + Perf + ')');
         return of(UsrName + ' (' + Perf + ')');
-
       }
       else{
         return of("(usuário)")
@@ -144,6 +178,7 @@ export class UserService {
     this.userLogged.next(false);
     this.router.navigate(['']);
 
+
   }
 
   isLogged() {
@@ -153,5 +188,7 @@ export class UserService {
   get isLoggedIn() {
     return this.userLogged.asObservable();
   }
+
+
 
 }
