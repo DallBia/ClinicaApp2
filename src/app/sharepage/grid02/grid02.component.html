@@ -9,7 +9,7 @@
       </thead>
       <tbody>
           <tr *ngFor="let l of this.colaboradorService.dataSource" [class.linhaDestacada]="l.selecionada">
-              <td class="t001" (click)="destacarLinha(l, l.ficha)">{{l.foto}}</td>
+              <td class="t001" (click)="destacarLinha(l, l.ficha)"><img [src]=l.foto alt="Imagem" style="height: 5vh; width: auto"></td>
               <td class="t002" (click)="destacarLinha(l, l.ficha)"> {{l.ficha}}</td>
               <td class="t003" (click)="destacarLinha(l, l.ficha)"> {{l.nome}}</td>
             <td class="t004" (click)="destacarLinha(l, l.ficha)"> {{l.celular}} | {{l.telFixo}}</td>

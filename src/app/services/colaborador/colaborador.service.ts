@@ -305,7 +305,7 @@ inicio(){
           }
         }
         this.pLin = [{
-          foto:'(img)',
+          foto:'https://drive.google.com/uc?export=view&id=1IFS7L3CGfUjpAVdEyulTBrMzcWOgcmvf',
           ficha: i.id !== undefined ? i.id.toString().padStart(4, '0') : '0',
           id: i.id,
           nome: i.nome,

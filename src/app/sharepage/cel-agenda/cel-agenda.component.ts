@@ -58,40 +58,6 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
     public celAtual: Agenda = this.Vazia;
 
 
-  public sala: any = [
-    {n: 0, dono: 'Amélia', area: 'Arteterapia'},
-    {n: 1, dono: 'Amélia', area: 'Arteterapia'},
-    {n: 2, dono: 'Solange', area: 'Fisioterapia Padovan'},
-    {n: 3, dono: 'Sílvia', area: 'Psicopedagogia'},
-    {n: 4, dono: 'Jussara', area: 'Fonoaudiologia'},
-    {n: 5, dono: 'Vanessa', area: 'Fonoaudiologia'},
-    {n: 6, dono: 'Cecília', area: 'Psicomotricidade'},
-    {n: 7, dono: 'Amélia', area: 'Neurofeedback'},
-    {n: 8, dono: 'Angélica', area: 'Psicomotricidade'},
-    {n: 9, dono: 'Mariana', area: 'Neurofeedback'},
-    {n: 10, dono: 'Júlia', area: 'Fisioterapia Padovan'},
-    {n: 11, dono: 'Beatriz', area: 'Arteterapia'},
-    {n: 12, dono: 'Amélia', area: 'Arteterapia'},
-    {n: 13, dono: 'Angélica', area: 'Psicologia'},
-    {n: 14, dono: 'Cecília', area: 'Arteterapia'},
-    {n: 15, dono: 'Jussara', area: 'Fonoaudiologia'},
-    {n: 16, dono: 'Mariana', area: 'Terapia Ocupacional'},
-    {n: 17, dono: 'Beatriz', area: 'Neurofeedback'},
-    {n: 18, dono: 'Angélica', area: 'Arteterapia'},
-    {n: 19, dono: 'Vanessa', area: 'Psicomotricidade'},
-    {n: 20, dono: 'Cláudia', area: 'Psicologia'},
-    {n: 21, dono: 'Cristiane', area: 'Fisioterapia Padovan'},
-    {n: 22, dono: 'Sílvia', area: 'Psicopedagogia'},
-    {n: 23, dono: 'Amélia', area: 'Neurofeedback'},
-    {n: 24, dono: 'Sílvia', area: 'Psicomotricidade'},
-    {n: 25, dono: 'Amélia', area: 'Terapia Ocupacional'},
-    {n: 26, dono: 'Cristiane', area: 'Neurofeedback'},
-    {n: 27, dono: 'Amélia', area: 'Psicologia'},
-    {n: 28, dono: 'Vanessa', area: 'Fonoaudiologia'},
-    {n: 29, dono: 'Joana', area: 'Fonoaudiologia'},
-    {n: 30, dono: 'Angélica', area: 'Psicopedagogia'},
-  ]
-
   public listaHorarios: any = [
     {n: 0, horario: 'manhã'},
     {n: 1, horario: '08:00'},

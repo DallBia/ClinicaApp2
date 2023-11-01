@@ -51,7 +51,7 @@ export class FormsComponent implements OnDestroy, OnInit {
   public xFormacao!: Formacao[];
   nColab:number = 0;
   public Atual!: TableProf;
-
+  public caminho: string = 'https://drive.google.com/uc?export=view&id=1IFS7L3CGfUjpAVdEyulTBrMzcWOgcmvf';
   @Output() submitForm: EventEmitter<any> = new EventEmitter<any>();
   formFields: FormField[] = [];
   formField!: FormField
@@ -101,8 +101,10 @@ export class FormsComponent implements OnDestroy, OnInit {
   };
 
   CarregaForm(){
-
-
+    if (this.Atual.foto == '(img)' ){
+      this.Atual.foto = 'https://drive.google.com/uc?export=view&id=1IFS7L3CGfUjpAVdEyulTBrMzcWOgcmvf'
+      console.log(this.Atual.foto)
+    }
     this.formulario = {
       nomeFormacao: '',
       instituicao: '',
@@ -194,11 +196,9 @@ export class FormsComponent implements OnDestroy, OnInit {
         const data = '' + k.dtConclusao;
         const datarray = data.split('-').map(area => area.trim());
         if(datarray[0].length == 4){
-          console.log(datarray);
           k.dtConclusao = datarray[2] + '/' + datarray[1] + '/' + datarray[0]
-          console.log('alterado: ' + k.dtConclusao);
         }
-        console.log(k.dtConclusao);
+
         this.formField = {
           id: k.id !== undefined ? k.id : 0,
           idFuncionario: k.idFuncionario,

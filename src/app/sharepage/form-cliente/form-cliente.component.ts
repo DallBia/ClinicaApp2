@@ -2,7 +2,6 @@ import { Grid01Component } from 'src/app/sharepage/grid01/grid01.component';
 import { Component, ViewChild, ElementRef, Input , SimpleChanges, OnChanges, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClienteService } from 'src/app/services/cliente/cliente.service';
-import { SharedService } from 'src/app/shared/shared.service';
 import { TableData } from 'src/app/models/Tables/TableData';
 import { of } from 'rxjs';
 import { HttpClientModule, HttpClient } from '@angular/common/http';

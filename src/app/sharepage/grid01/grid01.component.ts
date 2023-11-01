@@ -51,7 +51,7 @@ export class Grid01Component {
 
 
 
-  constructor(private fileService: FileService, private sharedService: SharedService, public clienteService: ClienteService) {
+  constructor(private sharedService: SharedService, public clienteService: ClienteService) {
 
     this.subscription = this.clienteService.ChangesA$.subscribe(
       name => this.nChanges = name

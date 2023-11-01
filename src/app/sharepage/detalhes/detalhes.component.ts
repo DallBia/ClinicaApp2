@@ -207,13 +207,24 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
       default:
         sessao = 'Unica';
     }
-    Dados.repeticao =  sessao;
-    Dados.idCliente = this.CelAtual.idCliente;
-    Dados.subtitulo = this.CelAtual.subtitulo;
-    Dados.id = this.CelAtual.id;
+    if(Dados.status !== 'Vago') {
+      Dados.repeticao =  sessao;
+      Dados.idCliente = this.CelAtual.idCliente;
+      Dados.subtitulo = this.CelAtual.subtitulo;
+      Dados.id = this.CelAtual.id;
+      Dados.obs = this.CelAtual.obs;
+      Dados.diaDaSemana = this.CelAtual.diaDaSemana;
+    }else{
+      Dados.historico = Dados.historico + 'Sessão anterior Excluída.'
+      Dados.historico += '\n' +new Date().toLocaleDateString('pt-BR') + ' - ' +  horaFormatada + ':\n' + texto  + '\npor: ' + this.Usr?.name + '\nꟷꚚꟷ\n';
+      Dados.repeticao = 'Cancelar';
+      Dados.idCliente = 0;
+      Dados.subtitulo = '';
+      Dados.obs = this.CelAtual.obs;
+      Dados.diaDaSemana = this.CelAtual.diaDaSemana;
+      Dados.id = this.CelAtual.id;
+    }
 
-    Dados.obs = this.CelAtual.obs;
-    Dados.diaDaSemana = this.CelAtual.diaDaSemana;
 
     if(Dados.id == 0 || Dados.id == undefined){
       this.salvaAgenda(Dados)
