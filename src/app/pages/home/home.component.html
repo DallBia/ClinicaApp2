@@ -14,7 +14,7 @@
       (blur)="onBlur()"
       ></textarea>
       <div>
-        <button *ngIf="mostrarBotaoSalvar" class="rosa">Salvar</button>
+        <button *ngIf="mostrarBotaoSalvar" (click)="saveAviso()" class="rosa">Salvar</button>
       </div>
     </div>
     <div class="acamposI"><label class="text-aniversario" [innerHTML]="textoNiver"></label></div>

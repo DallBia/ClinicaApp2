@@ -11,6 +11,7 @@ import { FormacaoService } from 'src/app/services/formacao/formacao.service';
 import { TableProf } from 'src/app/models/Tables/TableProf';
 import { ModalComponent } from './modal/modal.component';
 import { MatDialog } from "@angular/material/dialog";
+import { SharedService } from 'src/app/shared/shared.service';
 
 
 
@@ -62,7 +63,8 @@ export class FormsComponent implements OnDestroy, OnInit {
       private formacaoService: FormacaoService,
       private userService: UserService,
       public dialog: MatDialog,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      public shared: SharedService,
       ){
 
   }
@@ -102,7 +104,7 @@ export class FormsComponent implements OnDestroy, OnInit {
 
   CarregaForm(){
     if (this.Atual.foto == '(img)' ){
-      this.Atual.foto = 'https://drive.google.com/uc?export=view&id=1IFS7L3CGfUjpAVdEyulTBrMzcWOgcmvf'
+      this.Atual.foto = this.colaboradorService.semFoto
       console.log(this.Atual.foto)
     }
     this.formulario = {
@@ -125,6 +127,7 @@ export class FormsComponent implements OnDestroy, OnInit {
       id:new FormControl(this.Atual.id),
       perfil:new FormControl(this.Atual.perfil),
       nome:new FormControl(this.Atual.nome),
+      foto:new FormControl(this.Atual.foto),
       nascimento:new FormControl(this.Atual.nascimento),
       celular:new FormControl(this.Atual.celular),
       telFixo:new FormControl(this.Atual.telFixo),
@@ -238,6 +241,13 @@ export class FormsComponent implements OnDestroy, OnInit {
 
   }
 
+  openFileInput() {
+    document.getElementById('file-input')?.click();
+  }
+
+
+
+
   abrirModal() {
     const dialogRef = this.dialog.open(ModalComponent, {
         disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
@@ -245,5 +255,42 @@ export class FormsComponent implements OnDestroy, OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
 
     });
+  }
+
+
+
+  base64ImageData: string = '';
+
+  selectFile(): void {
+    // Simula um clique no elemento de input de arquivo escondido
+    const inputElement: HTMLInputElement | null = document.querySelector('#inputFile');
+
+  // Verifica se o elemento foi encontrado
+  if (inputElement) {
+    // Simula um clique no elemento de input de arquivo escondido
+    inputElement.click();
+  } else {
+    console.error('Elemento de input de arquivo não encontrado.');
+  }
+  }
+
+  onFileSelected(event: Event): void {
+    const inputElement: HTMLInputElement = event.target as HTMLInputElement;
+    const arquivo: File = (inputElement.files as FileList)[0];
+
+    // Verifica se um arquivo foi selecionado
+    if (arquivo) {
+      const leitor: FileReader = new FileReader();
+
+      // Define o evento onload para o leitor
+      leitor.onload = () => {
+        this.base64ImageData = leitor.result as string;
+        this.Atual.foto = this.base64ImageData;
+        this.colaboradorService.fotoAtual = this.base64ImageData;
+      };
+
+      // Lê o conteúdo do arquivo como uma URL de dados (Base64)
+      leitor.readAsDataURL(arquivo);
+    }
   }
 }

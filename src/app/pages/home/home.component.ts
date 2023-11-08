@@ -7,6 +7,9 @@ import { PerfilService } from 'src/app/services/perfil/perfil.service';
 import { Perfil } from 'src/app/models/Perfils';
 import { UserService } from 'src/app/services';
 import { User } from 'src/app/models';
+import { SharedService } from 'src/app/shared/shared.service';
+import {Info} from '../../models/Infos'
+
 
 @Component({
   selector: 'app-home',
@@ -15,6 +18,7 @@ import { User } from 'src/app/models';
 })
 export class HomeComponent implements OnInit {
   textoAvisos: string = '';
+  ctrlSalva: boolean = false;
   textoNiver: string = '';
   subscription!: Subscription;
   UsrAtual!: User
@@ -38,7 +42,9 @@ export class HomeComponent implements OnInit {
     private clienteService: ClienteService,
     private perfilService: PerfilService,
     private userService: UserService,
-    private colaboradorService: ColaboradorService) {
+    private colaboradorService: ColaboradorService,
+    private shared: SharedService,
+    ) {
 
       if(this.UsrAtual){
         for (let def in this.ps){
@@ -60,7 +66,10 @@ export class HomeComponent implements OnInit {
       this.UsrAtual = Atual;
     });
 
-
+    this.shared.GetInfoById(1).subscribe(data => {
+      const dados = data.dados;
+      this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
+    });
 
     this.Carregar();
     this.perfilService.GetPerfil().subscribe(data => {
@@ -73,7 +82,10 @@ export class HomeComponent implements OnInit {
       this.ps = data.dados;
      this.ps.sort((a, b) => a.id - b.id);
      console.log(this.ps)
+
     });
+
+
 
   }
 
@@ -128,13 +140,37 @@ async Carregar(){
 
   mostrarBotaoSalvar = false;
 
+  saveAviso(){
+    const UsrId = this.UsrAtual.userid !== undefined ? parseInt(this.UsrAtual.userid) : 0;
+    const Aviso: Info = {
+      id: 1,
+      idFuncAlt: UsrId,
+      nomeInfo: this.textoAvisos,
+      subtitulo: '',
+      dtInicio: new Date().toISOString().split('T')[0],
+      dtFim: new Date().toISOString().split('T')[0],
+      tipoInfo: "Aviso",
+      destinat: "Todos",
+    }
+    this.shared.UpdateInfo(Aviso).subscribe(data => {
+      //const dados = data.dados;
+      //this.textoAvisos = dados.nomeInfo !== undefined ? dados.nomeInfo : '';
+    });
+
+      this.ctrlSalva == false;
+      this.mostrarBotaoSalvar = false;
+  }
+
+
   onEnter(event: KeyboardEvent): void {
     this.mostrarBotaoSalvar = true;
-
+    this.ctrlSalva = true;
   }
 
   onBlur(): void {
-    this.mostrarBotaoSalvar = false;
+    if(this.ctrlSalva == false){
+      this.mostrarBotaoSalvar = false;
+    }
   }
 
   addBullet(event: any) {

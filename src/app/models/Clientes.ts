@@ -1,6 +1,7 @@
 export interface Cliente{
   id?: number; //
   nome: string; //
+  foto?: string;
   saiSozinho: boolean; //
   dtInclusao?: any;
   clienteDesde?: any;

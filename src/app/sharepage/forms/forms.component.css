@@ -21,7 +21,8 @@ width: auto;
 }
 .EspacoDoctos {
 width:60%;
-padding:2%;
+padding: 2%;
+margin-left: 15px;
 border-radius: 6px;
 border-top: solid 1px rosybrown;
 border-bottom: solid 1px rosybrown;

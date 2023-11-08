@@ -26,7 +26,7 @@ export class CadprofComponent implements OnDestroy, OnInit {
   @ViewChild(FormsComponent) formProf!: FormsComponent;
 
     Atual: TableProf = {
-      foto: 'string',
+      foto: '',
       ficha: 'string',
       id: 0,
       nome: 'string',
@@ -50,6 +50,7 @@ export class CadprofComponent implements OnDestroy, OnInit {
     ColAt!: TableProf;
     ProfVazio: Colaborador = {
       id: 0,
+      foto: '',
       nome: '',
       dtNasc: '1900-01-01',
       rg: '',
@@ -146,8 +147,6 @@ abrirModal(){
 
 Salvar(){
   const Dados = this.formProf.submitE()
-  console.log(Dados)
-  //let ProfAlt: Colaborador = this.colaboradorService.getEquipeAtual();
   let ProfAlt = this.ProfVazio;
   if (ProfAlt !== null){
     ProfAlt.ativo = Dados.ativo;
@@ -158,7 +157,7 @@ Salvar(){
         ProfAlt.dtDeslig = new Date().toISOString().split('T')[0];
       }
     }
-
+    ProfAlt.foto = this.colaboradorService.fotoAtual;
     ProfAlt.id = Dados.id;
     ProfAlt.celular = Dados.celular;
     ProfAlt.telFixo = Dados.telFixo;
@@ -186,7 +185,6 @@ Salvar(){
       ProfAlt.idPerfil = 3;
     }
     ProfAlt.senhaHash = '';
-    console.log(ProfAlt)
     if (ProfAlt !== null){
       //this.AtualizarProf(this.ProfAlt)
       this.colaboradorService.UpdateEquipe(ProfAlt).subscribe((data) => {
