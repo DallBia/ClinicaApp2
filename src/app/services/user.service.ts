@@ -47,6 +47,7 @@ export class UserService {
 
   private userLogged = new BehaviorSubject<boolean>(false);
 
+  public alertas = false;
 
   constructor(private tokenService: TokenService,
     private router: Router,

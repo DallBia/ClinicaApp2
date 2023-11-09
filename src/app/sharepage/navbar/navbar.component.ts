@@ -47,8 +47,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
-
     this.hoje = new Date().toLocaleDateString('pt-BR');
     const aHj = this.hoje.split('/');
     const mes = parseInt(aHj[1], 10) - 1;
@@ -91,11 +89,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   }
 
-  onBeforeUnload(event: any): void {
-    // Limpa os dados do localStorage ou sessionStorage, se necessário
-    // Exemplo de limpar o localStorage
-    localStorage.clear();
-  }
 
   atualizarLinkAtivo(): void {
     const child = this.activatedRoute.firstChild;
@@ -110,7 +103,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
 
-      window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
 
   }
 

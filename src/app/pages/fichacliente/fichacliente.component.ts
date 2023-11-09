@@ -13,6 +13,7 @@ import { first } from 'rxjs/operators';
 import { Grid01Component } from 'src/app/sharepage/grid01/grid01.component';
 import { TabResult } from 'src/app/models/Tables/TabResult';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
+import { UserService } from 'src/app/services';
 
 
 @Component({
@@ -75,7 +76,9 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   constructor(private sharedService: SharedService,
     public dialog: MatDialog,
     private perfilService: PerfilService,
-    private clienteService: ClienteService){
+    private clienteService: ClienteService,
+    private userService: UserService,
+    ){
 
     this.subscription = this.sharedService.selectedName$.subscribe(
       name => this.selectedName = name
@@ -100,6 +103,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
 
   CliqueNovo(){
+
     this.clienteService.setChangesA(false);
     this.clienteService.setClienteAtual(this.clienteService.Vazia[0]);
     this.clienteService.setClienteA(-1);
@@ -117,13 +121,24 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
         this.nChanges = chng;
       });
       this.vNovo = this.perfilService.validaPerfil(0, 1)
+      if(this.userService.alertas !== true){
+        window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
+      }
     }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-
+    console.log('Em fichaCliente:' + this.userService.alertas)
+    if(this.userService.alertas !== true){
+      window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
+    }
   }
 
+
+  onBeforeUnload(event: any): void {
+    // localStorage.clear();
+    // sessionStorage.clear();
+  }
 
   converterParaDate(dataString: string): Date {
     const [dia, mes, ano] = dataString.split('/').map(Number);
@@ -157,6 +172,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
 
   buscarAlteracoes(event:any){
+    this.userService.alertas = true;
     let TabNas: string = new Date().toISOString().split('T')[0];
       const TabForm = this.formCliente.clienteform.value
       let RestM = false;
@@ -285,7 +301,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
           paiEndereco: TabForm.paiEndereco == null ? '-' : TabForm.paiEndereco,
         }
 
-
+        this.userService.alertas = true;
         if(Tab.id==0){
 
           this.createCliente(Tab)
@@ -321,19 +337,24 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   createCliente(cliente: Cliente){
     this.clienteService.CreateCliente(cliente).subscribe((data) => {
       this.delay(300)
+      this.userService.alertas = true;
       alert('Registro gravado!')
       location.reload()
     }, error => {
+      this.userService.alertas = true;
       console.error('Erro no upload', error);
     });
   }
 
     updateCliente(cliente: Cliente){
+      this.userService.alertas = true;
       this.clienteService.UpdateCliente(cliente).subscribe((data) => {
          this.delay(300)
+         this.userService.alertas = true;
         alert('Registro atualizado!')
         location.reload()
       }, error => {
+        this.userService.alertas = true;
         console.error('Erro no upload', error);
       });
     }

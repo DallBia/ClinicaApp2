@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/models';
+import { UserService } from 'src/app/services';
 import { AgendaService } from 'src/app/services/agenda/agenda.service';
 import { ClienteService } from 'src/app/services/cliente/cliente.service';
 import { CelAgendaComponent } from 'src/app/sharepage/cel-agenda/cel-agenda.component';
@@ -27,7 +29,7 @@ ngOnInit(){
   //     if(name == 1){
   //       const result = await this.main();
   //     }
-  window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
+  this.userService.alertas = false;
 
   //   });
     this.subscription = this.agendaService.diaA$.subscribe(
@@ -52,16 +54,14 @@ ngOnInit(){
 }
 
 
-  constructor(private agendaService: AgendaService,
-              private clienteService: ClienteService) {
+  constructor (private agendaService: AgendaService,
+              private clienteService: ClienteService,
+              private userService: UserService,
+              ) {
 
   }
 
-  onBeforeUnload(event: any): void {
-    // Limpa os dados do localStorage ou sessionStorage, se necessário
-    // Exemplo de limpar o localStorage
-    localStorage.clear();
-  }
+
 
 async main(novoDia: string){
   try {
@@ -134,8 +134,7 @@ montaGrade(){
 
     this.colunas = [];
     this.linhas = [];
-      this.subscription.unsubscribe();
-      window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
+    this.subscription.unsubscribe();
 
   }
 

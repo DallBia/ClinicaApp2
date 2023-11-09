@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Colaborador } from 'src/app/models/Colaboradors';
+import { UserService } from 'src/app/services';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
 
 @Component({
@@ -35,12 +36,13 @@ formulario: any = {
   constructor(
     public dialogRef: MatDialogRef<EquipeModalComponent>,
     private colaboradorService: ColaboradorService,
+    private userService: UserService,
 
   ) {}
 
   ngOnInit(){
-
-
+    this.userService.alertas = true;
+    console.log(this.userService.alertas)
   }
 
   async salvar(){

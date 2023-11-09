@@ -104,6 +104,8 @@ export class CadprofComponent implements OnDestroy, OnInit {
   ngOnInit(){
     this.colaboradorService.dataSource = [];
     this.colaboradorService.inicio();
+    this.userService.alertas = false;
+    console.log(this.userService.alertas)
 
     this.colaboradorService.ProfAtual$.subscribe(EquipeAtual => {
       this.ColAt = EquipeAtual;
@@ -208,6 +210,7 @@ Salvar(){
 }
 
   CliqueNovo(){
+    this.userService.alertas = true;
     const dialogRef = this.dialog.open(EquipeModalComponent, {
       disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
   });
