@@ -27,6 +27,7 @@ ngOnInit(){
   //     if(name == 1){
   //       const result = await this.main();
   //     }
+  window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
 
   //   });
     this.subscription = this.agendaService.diaA$.subscribe(
@@ -56,7 +57,11 @@ ngOnInit(){
 
   }
 
-
+  onBeforeUnload(event: any): void {
+    // Limpa os dados do localStorage ou sessionStorage, se necessário
+    // Exemplo de limpar o localStorage
+    localStorage.clear();
+  }
 
 async main(novoDia: string){
   try {
@@ -125,10 +130,13 @@ montaGrade(){
 
 
 
-  ngOnDestroy(){
+  ngOnDestroy(): void {
 
     this.colunas = [];
     this.linhas = [];
+      this.subscription.unsubscribe();
+      window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
+
   }
 
 

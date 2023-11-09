@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { User } from './../../models/user';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { HeaderService } from './header.service';
@@ -21,7 +21,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 `,
 styles: []
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   imageLogo = 'assets/img/CasagrandeLogo.png'; // Caminho relativo à pasta de ativos
   imageNot= 'assets/img/bell-fill.svg';
   dataAtual = new Date;
@@ -46,6 +46,9 @@ export class NavbarComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
+
     this.hoje = new Date().toLocaleDateString('pt-BR');
     const aHj = this.hoje.split('/');
     const mes = parseInt(aHj[1], 10) - 1;
@@ -88,6 +91,11 @@ export class NavbarComponent implements OnInit {
 
   }
 
+  onBeforeUnload(event: any): void {
+    // Limpa os dados do localStorage ou sessionStorage, se necessário
+    // Exemplo de limpar o localStorage
+    localStorage.clear();
+  }
 
   atualizarLinkAtivo(): void {
     const child = this.activatedRoute.firstChild;
@@ -99,4 +107,11 @@ export class NavbarComponent implements OnInit {
       }
     }
   }
+
+  ngOnDestroy(): void {
+
+      window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
+
+  }
+
 }

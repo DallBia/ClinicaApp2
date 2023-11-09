@@ -41,7 +41,7 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscription.unsubscribe;
   }
 
-  atualizarListaClientes(clientes: any[]): void {
+  atualizarListaClientes(clientes: Cliente[]): void {
     // Atualize a lista de clientes para o datalist
     const datalist = document.getElementById('valores');
       if(datalist){
@@ -56,7 +56,6 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   atualizarListaColabs(colabs: any[]): void {
-    // Atualize a lista de clientes para o datalist
     const datalist = document.getElementById('valores1');
       if(datalist){
     datalist.innerHTML = '';
@@ -95,13 +94,17 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscription = this.clienteService.ChangesA$.subscribe(
       name => this.nChanges = name
     )
-  }
-  ngAfterViewInit(): void {
+
     this.subscription = this.clienteService.ListaCliente$.subscribe(
       nameC => {
         this.ListaCliente = nameC
         this.atualizarListaClientes(nameC);
       });
+  }
+  ngAfterViewInit(): void {
+
+        this.ListaCliente = this.clienteService.clientes
+        this.atualizarListaClientes(this.ListaCliente);
 
       this.ListaColab = this.colaboradorService.colaboradors;
       this.atualizarListaColabs(this.ListaColab);

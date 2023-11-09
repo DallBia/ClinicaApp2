@@ -164,7 +164,7 @@ export class UserService {
     this.userSubject.next(null);
     this.userLogged.next(false);
     this.router.navigate(['']);
-
+    localStorage.clear();
 
   }
 

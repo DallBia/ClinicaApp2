@@ -1,6 +1,6 @@
 <div class="linha01">
   <div class="ti-botao">
-      <button class="Rosa" (click)="CliqueNovo()" [disabled]="!this.vNovo">
+      <button class="Rosa" (click)="CliqueNovo()" [disabled]="!this.vNovo"> <!--[disabled]="!this.vNovo"-->
           <!-- {{this.selectedFicha}} -->
           NOVO
       </button>
@@ -41,7 +41,7 @@
               </button>
           </div>
           <div class="btnSalvar">
-              <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  <!-- (click)="this.formProf.submitE()" -->
+              <button class="Rosa" id="Salvar" (click)="Salvar()">  <!-- <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  -->
                   Salvar
               </button>
           </div>
