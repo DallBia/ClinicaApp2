@@ -8,7 +8,7 @@
   overflow-wrap: break-word;
   word-wrap: break-word;
   white-space: pre-wrap;
-  
+
 }
 .fim{
   color: var(--cor-media);
@@ -20,4 +20,8 @@
   height:fit-content;
   overflow-wrap: break-word;
   word-wrap: break-word;
+}
+
+.tabela {
+  width: 100%;
 }

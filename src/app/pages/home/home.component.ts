@@ -81,7 +81,8 @@ export class HomeComponent implements OnInit {
       })
       this.ps = data.dados;
      this.ps.sort((a, b) => a.id - b.id);
-     console.log(this.ps)
+     //console.log(this.ps)
+     this.perfilService.perfils = this.ps;
 
     });
 

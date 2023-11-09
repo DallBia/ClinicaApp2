@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
   private userData!: User | null;
   private resposta: boolean | undefined = undefined;
   private UnserN: number = 0;
-
+  public btnSalvar = false;
+  public txtSalvar = "Entrar";
 
 
   constructor(private colab: ColaboradorService,
@@ -60,6 +61,8 @@ export class LoginComponent implements OnInit {
 
 
   login(email: string, password: string) {
+    this.txtSalvar = 'Aguarde...'
+    this.btnSalvar = true
     this.authService.authenticate(email, password).subscribe(
       (success) => {
         if (success) {
@@ -84,6 +87,8 @@ export class LoginComponent implements OnInit {
         console.error(err);
       }
     );
+    this.txtSalvar = 'Login...'
+    this.btnSalvar = false
   }
 
 

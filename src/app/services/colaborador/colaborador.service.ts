@@ -60,6 +60,8 @@ export class ColaboradorService {
   public V: Colaborador[]=[]
   public colaboradorsG: Colaborador[] = [];
   private colaboradors$!: Observable<Colaborador[]>;
+  public ColAt!: Colaborador;
+  public vSalvar: boolean = true;
 
   public ProfN: number = 0;
 
@@ -149,16 +151,12 @@ export class ColaboradorService {
 
 
 
-    // EnviarEmail(dado: any) : Observable<Response<string>>{
-
-    //   const apiurllogin = `${environment.ApiUrl}/Email`;
-    //   return this.http.put<Response<string>>(apiurllogin, dado);
-    // }
 
     private EquipeAtual = new BehaviorSubject<Colaborador>(this.V[0]);
     EquipeAtual$ = this.EquipeAtual.asObservable();
     setEquipeAtual(name: Colaborador) {
       this.EquipeAtual.next(name);
+      this.ColAt = name;
     }
 
     private EquipeA = new BehaviorSubject<number>(0);

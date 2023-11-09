@@ -1,1 +1,28 @@
-<p>filtro works!</p>
+<div class="interna">
+  <div class="ti-controles">
+      <div class="ti-select">
+        <div class="lin">
+          <span class="labelfrm">Selecione:</span>
+          <select id="selectedOpcao" class="ctrlformulario" (change)="AttParam($event)">
+            <option value=""></option>
+            <option *ngFor="let opcao of opcoes" [value]="opcao">{{ opcao }}</option>
+          </select>
+        </div>
+        <div *ngIf="this.formD !== ''">
+          <span class="labelfrm">Parâmetro:</span>
+          <input id="parametro" class="ctrlformulario">
+        </div>
+      </div>
+  </div>
+  <div class="ti-check">
+    <div>
+      <input type="checkbox">
+      <span style="margin-left: 5px;">Ativos</span>
+    </div>
+    <div>
+      <input type="checkbox">
+      <span style="margin-left: 5px;">Inativos</span>
+    </div>
+  </div>
+  <div class="ti-img"><i class="material-icons" id="funil" >filter_alt</i></div>
+</div>

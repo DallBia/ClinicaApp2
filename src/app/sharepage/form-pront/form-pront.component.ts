@@ -201,6 +201,8 @@ export class FormProntComponent implements OnInit {
       console.log(this.ListaEquipe);
     }
 
+    Edita(){
 
+    }
 }
 

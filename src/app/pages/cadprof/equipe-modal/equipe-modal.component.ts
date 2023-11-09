@@ -29,6 +29,9 @@ formulario: any = {
     areaSession:  '',
     senhaHash:  '',
 }
+
+  public btn = false;
+  public txt = 'SALVAR'
   constructor(
     public dialogRef: MatDialogRef<EquipeModalComponent>,
     private colaboradorService: ColaboradorService,
@@ -41,7 +44,8 @@ formulario: any = {
   }
 
   async salvar(){
-
+    this.txt = 'Aguarde...'
+    this.btn = true;
   const nomeX = this.formulario.nome;
   const destinatarioX: string = this.formulario.email;
   const assuntoX: string = 'Cadastro de novo funcionário';
@@ -121,16 +125,23 @@ formulario: any = {
           + this.formulario.nome + ' receberá a senha provisória, no e-mail '
           + this.formulario.email + '.\nA senha deverá ser trocada no primeiro login.\n'
           +'\nSomente após o usuário entrar no sistema e alterar a senha é que ele aparecerá como ATIVO no cadastro.')
+          this.txt = 'Salvar'
+          this.btn = true
           location.reload()
       }, error => {
        console.error('Erro no salvamento do usuário', error);
+       this.txt = 'Salvar'
+       this.btn = true
       });
 
 
   }
   else{
     alert('Há informações em branco.')
+    this.txt = 'Salvar'
+    this.btn = true
   }
+
 }
 
 

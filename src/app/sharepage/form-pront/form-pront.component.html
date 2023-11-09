@@ -1,8 +1,22 @@
-<div class="tabela" *ngFor="let i of ListaPront" style="overflow-wrap: break-word;word-wrap: break-word;">
+<!-- <div class="tabela" *ngFor="let i of ListaPront" style="overflow-wrap: break-word;word-wrap: break-word;">
     <label class="inicio">{{i.dtInsercao}} - {{i.nomeCliente}}</label><br>
-    <!-- <label class="corpo" [innerHTML]="i.texto"></label><br> -->
     <label class="corpo" >{{i.texto}}</label><br>
     <label class="fim">informação postada por: {{i.nomeColab}}</label><br>
 <hr>
-</div>
-<!-- [innerHTML]="i.texto" -->
+</div> -->
+
+<table class="tabela">
+<tbody>
+  <tr class="tabela" *ngFor="let i of ListaPront">
+    <td style="width:5%; vertical-align: top; align-content: center;">
+      <input type="checkbox">
+    </td>
+    <td style="overflow-wrap: break-word;word-wrap: break-word; width:95%;" (click)="Edita()">
+      <label class="inicio">{{i.dtInsercao}} - {{i.nomeCliente}}</label><br>
+      <label class="corpo" >{{i.texto}}</label><br>
+      <label class="fim">informação postada por: {{i.nomeColab}}</label><br>
+      <hr>
+    </td>
+  </tr>
+</tbody>
+</table>

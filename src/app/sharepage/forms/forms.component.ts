@@ -12,6 +12,8 @@ import { TableProf } from 'src/app/models/Tables/TableProf';
 import { ModalComponent } from './modal/modal.component';
 import { MatDialog } from "@angular/material/dialog";
 import { SharedService } from 'src/app/shared/shared.service';
+import { Perfil } from 'src/app/models/Perfils';
+import { PerfilService } from 'src/app/services/perfil/perfil.service';
 
 
 
@@ -65,6 +67,7 @@ export class FormsComponent implements OnDestroy, OnInit {
       public dialog: MatDialog,
       private formBuilder: FormBuilder,
       public shared: SharedService,
+      public perfilService: PerfilService,
       ){
 
   }
@@ -105,8 +108,8 @@ export class FormsComponent implements OnDestroy, OnInit {
   CarregaForm(){
     if (this.Atual.foto == '(img)' ){
       this.Atual.foto = this.colaboradorService.semFoto
-      console.log(this.Atual.foto)
     }
+
     this.formulario = {
       nomeFormacao: '',
       instituicao: '',
@@ -270,7 +273,7 @@ export class FormsComponent implements OnDestroy, OnInit {
     // Simula um clique no elemento de input de arquivo escondido
     inputElement.click();
   } else {
-    console.error('Elemento de input de arquivo não encontrado.');
+    console.error('arquivo não encontrado.');
   }
   }
 
@@ -280,7 +283,8 @@ export class FormsComponent implements OnDestroy, OnInit {
 
     // Verifica se um arquivo foi selecionado
     if (arquivo) {
-      const leitor: FileReader = new FileReader();
+      if (arquivo.size <500000){
+        const leitor: FileReader = new FileReader();
 
       // Define o evento onload para o leitor
       leitor.onload = () => {
@@ -291,6 +295,10 @@ export class FormsComponent implements OnDestroy, OnInit {
 
       // Lê o conteúdo do arquivo como uma URL de dados (Base64)
       leitor.readAsDataURL(arquivo);
+      }else{
+        alert('Escolha um arquivo menor. Este arquivo é muito grande.')
+      }
+
     }
   }
 }

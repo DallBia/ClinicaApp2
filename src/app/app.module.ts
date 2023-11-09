@@ -55,6 +55,7 @@ import { DetalhesComponent } from './sharepage/detalhes/detalhes.component';
 import { FiltroComponent } from './sharepage/filtro/filtro.component';
 import { ModalSenhaProvComponent } from './pages/login/modal-senha-prov/modal-senha-prov.component';
 import { NavbarService } from './sharepage/navbar/navbar.service';
+import { ArquivosComponent } from './sharepage/arquivos/arquivos.component';
 
 registerLocaleData(localePt);
 
@@ -99,6 +100,7 @@ export function tokenGetter() {
     DetalhesComponent,
     FiltroComponent,
     ModalSenhaProvComponent,
+    ArquivosComponent,
   ],
 
 

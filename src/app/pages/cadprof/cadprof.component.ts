@@ -11,6 +11,7 @@ import { FormsComponent } from "src/app/sharepage/forms/forms.component";
 import { ModalComponent } from "../../sharepage/forms/modal/modal.component";
 import { MatDialog } from "@angular/material/dialog";
 import { EquipeModalComponent } from "./equipe-modal/equipe-modal.component";
+import { PerfilService } from "src/app/services/perfil/perfil.service";
 
 
 @Component({
@@ -78,6 +79,9 @@ export class CadprofComponent implements OnDestroy, OnInit {
     Selecionada: string = '';
     ListaEquipe: any;
     ListaFormacaos: any;
+    vNovo: boolean = true;
+    vSalvar: boolean = true;
+
     private control!:any;
     private ctrl1: boolean = false;
     private ctrl2: boolean = false;
@@ -87,7 +91,8 @@ export class CadprofComponent implements OnDestroy, OnInit {
   constructor(private formacaoService: FormacaoService,
     private userService: UserService,
     public dialog: MatDialog,
-    private colaboradorService: ColaboradorService,
+    private perfilService: PerfilService,
+    public colaboradorService: ColaboradorService,
     ){
       this.subscription = this.colaboradorService.EquipeA$.subscribe(
         name => this.nEquipe = name
@@ -109,7 +114,9 @@ export class CadprofComponent implements OnDestroy, OnInit {
     this.colaboradorService.EquipeAtual$.subscribe(eat => {
       this.EAtual = eat;
     });
-
+    this.vNovo = this.perfilService.validaPerfil(0, 3)
+    const id = this.ColAt.id !== undefined ? this.ColAt.id : 0;
+    this.colaboradorService.vSalvar = this.perfilService.validaPerfil(id, 4)
   }
 
   ngOnDestroy() {

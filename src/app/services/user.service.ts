@@ -85,19 +85,6 @@ export class UserService {
 
   }
 
-  // NovoUsuario(user: User){
-  //   const Valid = this.Validar(user);
-  //   if(Valid == true){
-  //     this.router.navigate(['/home']);
-  //   }else{
-  //       const dialogRef = this.dialog.open(ModalSenhaProvComponent, {
-  //         disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
-  //     });
-  //     dialogRef.afterClosed().subscribe((result: any) => {
-  //     });
-  //     //this.router.navigate(['/login']);
-  //   }
-  // }
 
 
 

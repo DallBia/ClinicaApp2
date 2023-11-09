@@ -1,17 +1,12 @@
 <div class="linha01">
   <div class="ti-botao">
-      <button class="Rosa" (click)="CliqueNovo()">
+      <button class="Rosa" (click)="CliqueNovo()" [disabled]="!this.vNovo">
           <!-- {{this.selectedFicha}} -->
           NOVO
       </button>
   </div>
   <div class="ti-container">
-      <div class="ti-controles">
-          <div class="ti-select">
-              <app-formulario></app-formulario>
-          </div>
-      </div>
-      <div class="ti-img"><i class="material-icons" id="funil" >filter_alt</i></div>
+      <app-filtro style="width: 100%; height: 100%;"></app-filtro>
   </div>
   <div class="nome-area" margin-left="2vh">
       <div class="nome-selec"><label *ngIf="this.nProf!==0">Ficha Nº {{this.ColAt.ficha}} - {{this.ColAt.nome}}</label></div>
@@ -46,7 +41,7 @@
               </button>
           </div>
           <div class="btnSalvar">
-              <button class="Rosa" id="Salvar" (click)="Salvar()" >  <!-- (click)="this.formProf.submitE()" -->
+              <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  <!-- (click)="this.formProf.submitE()" -->
                   Salvar
               </button>
           </div>

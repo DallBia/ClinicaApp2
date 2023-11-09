@@ -12,6 +12,7 @@ import { MeuModalComponent } from './meu-modal/meu-modal.component';
 import { first } from 'rxjs/operators';
 import { Grid01Component } from 'src/app/sharepage/grid01/grid01.component';
 import { TabResult } from 'src/app/models/Tables/TabResult';
+import { PerfilService } from 'src/app/services/perfil/perfil.service';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   public idade: any;
   nChanges: boolean = false;
   minhaCondicao: boolean = false;
-
+  vNovo: boolean = true;
   // =================== VARIÁVEIS PARA CRIAR COMPONENTES ===============================================
 
                 novo = [
@@ -73,6 +74,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
   constructor(private sharedService: SharedService,
     public dialog: MatDialog,
+    private perfilService: PerfilService,
     private clienteService: ClienteService){
 
     this.subscription = this.sharedService.selectedName$.subscribe(
@@ -114,6 +116,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       this.clienteService.ChangesA$.subscribe(chng => {
         this.nChanges = chng;
       });
+      this.vNovo = this.perfilService.validaPerfil(0, 1)
     }
 
   ngOnDestroy() {
