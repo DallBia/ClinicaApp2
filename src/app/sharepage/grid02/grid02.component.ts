@@ -38,18 +38,13 @@ subscription: Subscription;
     }
 
     this.colaboradorService.setEquipeA(numero);
-
-
     let a: any;
-
     this.colaboradorService.setProfAtual(this.colaboradorService.dataSource.find(user => parseInt(user.ficha, 10) === numero) || a);
-
     l.selecionada = true;
-
     this.nChanges = true;
     setTimeout(() => {
       this.colaboradorService.setChangesA(true);
-    }, 10)
+    }, 100)
   }
   constructor(public colaboradorService: ColaboradorService, private userService: UserService, private formacaoService: FormacaoService) {
 

@@ -95,7 +95,7 @@ async Carregar(){
   try {
         const r1 = await this.clienteService.BuscaClientes();
         this.clienteService.setClienteA(0);
-        const r2 = this.colaboradorService.GetCol();
+        const r2 = await this.colaboradorService.GetCol();
         const dataAtual = new Date();
         const dia = dataAtual.getDate(); // Obtém o dia (1-31)
         const mes = dataAtual.getMonth() + 1; // Obtém o mês (0-11, então somamos 1 para obter 1-12)
@@ -130,11 +130,14 @@ async Carregar(){
           this.textoNiver = 'Sem aniversariantes por hoje...'
         }
         return true;
+
+
       }
       catch (error) {
         console.error('Erro ao buscar clientes:', error);
         return false;
       }
+
 
 
 }

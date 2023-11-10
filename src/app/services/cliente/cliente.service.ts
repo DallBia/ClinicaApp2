@@ -7,6 +7,7 @@ import { Response } from '../../models/Response';
 import { BehaviorSubject } from 'rxjs';
 import { TableData } from 'src/app/models/Tables/TableData';
 import { TabResult } from 'src/app/models/Tables/TabResult';
+import { FileService } from '../foto-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,10 +23,10 @@ export class ClienteService {
   subscription!: Subscription;
   nChanges!: boolean;
   nVezes: number = 0;
-
+  public fotoAtual: string='';
 
   public Vazia: TableData[] = [{
-  Foto: '(img)',
+  foto: this.fotoService.semFoto,
   Ficha: '',
   selecionada: false,
   Proxses:  '',
@@ -70,7 +71,8 @@ export class ClienteService {
 
     }];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private fotoService: FileService,) { }
 
   public success: boolean = false;
   public clientes: Cliente[] = [];
@@ -123,8 +125,6 @@ export class ClienteService {
 
     this.clientes = [];
     this.clientesG = [];
-    // this.nVezes += 1;
-    // console.log('Em clienteService: ' + this.nVezes)
       try {
         const data = await this.GetClientes();
 
@@ -199,12 +199,8 @@ export class ClienteService {
         const aId: string = i.id.toString().padStart(4, '0');
         const aIdade1 = this.converterParaDate(i.dtNascim);
         const aIdade: string = this.calcularIdade(aIdade1) + ' anos';
-        this.caminho = '../../assets/img/Clientes/' + aId + '.jpg';
-        // const imagemValida = await this.verificarImagem(this.caminho);
-        //   if (imagemValida !== true) {
-        //     this.caminho = '../../assets/img/Clientes/0000.jpg';
-        // }
-        this.nLin =[{Foto: this.caminho,
+
+        this.nLin =[{foto: i.foto !== undefined ? i.foto : this.fotoService.semFoto,
           Ficha: aId,
           id: i.id,
           nome: i.nome,

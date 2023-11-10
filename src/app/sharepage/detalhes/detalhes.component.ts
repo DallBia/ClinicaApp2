@@ -16,7 +16,7 @@ import { Colaborador } from 'src/app/models/Colaboradors';
   templateUrl: './detalhes.component.html',
   styleUrls: ['./detalhes.component.css']
 })
-export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
+export class DetalhesComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   subscription0: Subscription;
   nChanges!: boolean;
@@ -30,7 +30,45 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
   public ListaCliente: Cliente[] = [];
   public ListaColab: Colaborador[] = [];
   public nCliente: any
+  public foto = '';
+
+
+public dataCli: any;
+public dataCol: any;
+
+
   ngOnInit(): void {
+
+    this.Carregar()
+
+  }
+
+
+  async Carregar(){
+
+    try {
+
+    this.agendaService.visCol = true;
+    this.agendaService.visCli = true;
+
+   // const r1 = await this.clienteService.BuscaClientes();
+    //const r2 = await this.colaboradorService.GetCol();
+
+    this.ListaCliente = this.clienteService.clientes
+    this.ListaColab = this.colaboradorService.colaboradors;
+
+      // console.log(this.ListaColab)
+      // console.log(this.ListaCliente)
+      // console.log('-------')
+      // console.log(this.colaboradorService.colaboradors)
+      // console.log(this.clienteService.clientes)
+    return true;
+    }
+    catch (error) {
+      console.error('Erro ao buscar clientes:', error);
+      return false;
+    }
+
 
 
   }
@@ -41,32 +79,7 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscription.unsubscribe;
   }
 
-  atualizarListaClientes(clientes: Cliente[]): void {
-    // Atualize a lista de clientes para o datalist
-    const datalist = document.getElementById('valores');
-      if(datalist){
-    datalist.innerHTML = '';
 
-    clientes.forEach(cliente => {
-      const option = document.createElement('option');
-      option.textContent = cliente.nome;
-      datalist.appendChild(option);
-    });
-  }
-  }
-
-  atualizarListaColabs(colabs: any[]): void {
-    const datalist = document.getElementById('valores1');
-      if(datalist){
-    datalist.innerHTML = '';
-
-    colabs.forEach(colab => {
-      const option = document.createElement('option');
-      option.textContent = colab.nome;
-      datalist.appendChild(option);
-    });
-  }
-  }
 
   constructor(private userService: UserService,
     public agendaService: AgendaService,
@@ -98,23 +111,15 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscription = this.clienteService.ListaCliente$.subscribe(
       nameC => {
         this.ListaCliente = nameC
-        this.atualizarListaClientes(nameC);
       });
   }
-  ngAfterViewInit(): void {
 
-        this.ListaCliente = this.clienteService.clientes
-        this.atualizarListaClientes(this.ListaCliente);
-
-      this.ListaColab = this.colaboradorService.colaboradors;
-      this.atualizarListaColabs(this.ListaColab);
-  }
 
   setStatus(status: string){
     if(status == 'Bloqueado'){
-      console.log(this.agendaService.dCliente + '//' + this.CelAtual.subtitulo)
+      const StatAnt = this.CelAtual.status
       if (this.agendaService.dCliente !== ''
-          || this.CelAtual.subtitulo !== undefined){
+          || StatAnt !== 'Vago'){
             alert('Só é possível bloquear um horário vago. Por favor, limpe o horário antes de bloquear.');
       }else{
         this.CelAtual.status = status;
@@ -140,12 +145,15 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
     Dados.sala = this.agendaService.dSala;
     Dados.horario = this.agendaService.dHora;
     Dados.idFuncAlt = this.nUser;
+    Dados.nome = this.CelAtual.nome;
     Dados.status = this.CelAtual.status;
     const dataAtual = new Date();
     const horas = dataAtual.getHours();
     const minutos = dataAtual.getMinutes();
 
     if(this.agendaService.dHora == 'manhã' || this.agendaService.dHora == 'tarde'){
+      nomeCl = this.CelAtual.nome !== undefined ? this.CelAtual.nome : '';
+      this.CelAtual.idCliente = 0;
       for (let i of this.colaboradorService.colaboradors){
         if(this.agendaService.dCliente == i.nome){
           nomeCl = i.nome;
@@ -155,6 +163,8 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
       }
       Dados.status = "Sala";
     }else{
+      nomeCl = this.CelAtual.nome !== undefined ? this.CelAtual.nome : '';
+      this.CelAtual.idCliente = 0;
       for (let i of this.clienteService.clientes){
       if(this.agendaService.dCliente == i.nome){
         nomeCl = i.nome;
@@ -166,11 +176,7 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
 
     const horaFormatada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
     this.Usr = this.userService.getUserA().getValue();
-    if(this.CelAtual.idCliente == 0 || this.CelAtual.idCliente == undefined){
-      Dados.historico = this.agendaService.dCliente + '֍' + this.CelAtual.historico;
-    }else{
       Dados.historico = '֍' + this.CelAtual.historico;
-    }
     if (DadosA.dtAlt == ''){
       texto += 'Agendamento de ' + this.CelAtual.subtitulo + '. ';
     }else{
@@ -214,6 +220,7 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
       Dados.repeticao =  sessao;
       Dados.idCliente = this.CelAtual.idCliente;
       Dados.subtitulo = this.CelAtual.subtitulo;
+      Dados.nome = this.CelAtual.nome;
       Dados.id = this.CelAtual.id;
       Dados.obs = this.CelAtual.obs;
       Dados.diaDaSemana = this.CelAtual.diaDaSemana;
@@ -222,6 +229,7 @@ export class DetalhesComponent implements AfterViewInit, OnInit, OnDestroy {
       Dados.historico += '\n' +new Date().toLocaleDateString('pt-BR') + ' - ' +  horaFormatada + ':\n' + texto  + '\npor: ' + this.Usr?.name + '\nꟷꚚꟷ\n';
       Dados.repeticao = 'Cancelar';
       Dados.idCliente = 0;
+      Dados.nome = '';
       Dados.subtitulo = '';
       Dados.obs = this.CelAtual.obs;
       Dados.diaDaSemana = this.CelAtual.diaDaSemana;

@@ -14,6 +14,7 @@ import { Grid01Component } from 'src/app/sharepage/grid01/grid01.component';
 import { TabResult } from 'src/app/models/Tables/TabResult';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
 import { UserService } from 'src/app/services';
+import { FileService } from 'src/app/services/foto-service.service';
 
 
 @Component({
@@ -78,6 +79,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
     private perfilService: PerfilService,
     private clienteService: ClienteService,
     private userService: UserService,
+    private fotoService: FileService,
     ){
 
     this.subscription = this.sharedService.selectedName$.subscribe(
@@ -261,6 +263,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
      if(Dif>0){
         let Tab = {
           id: this.Atual.id == null ? 0 : this.Atual.id,
+          foto: this.Atual.foto !== undefined ? this.Atual.foto : this.fotoService.semFoto,
           nome: TabForm.nome == null ? '0' : TabForm.nome,
           dtInclusao: this.Atual.dtInclusao == null ? new Date().toISOString() : this.reDatas(this.Atual.dtInclusao),
           saiSozinho: SszT,

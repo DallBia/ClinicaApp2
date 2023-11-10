@@ -35,7 +35,7 @@ export class ProtclinComponent implements OnInit, OnDestroy{
 
 
   constructor(private colaboradorService: ColaboradorService,
-    private clienteService: ClienteService,
+    public clienteService: ClienteService,
     private prontuarioService: ProntuarioService,
     private userService: UserService) {
     this.subscription = this.clienteService.ClienteA$.subscribe(

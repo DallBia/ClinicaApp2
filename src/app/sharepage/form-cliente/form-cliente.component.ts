@@ -140,4 +140,46 @@ export class FormClienteComponent implements OnInit, OnChanges {
   ngOnDestroy(){
 
   }
+
+
+
+  base64ImageData: string = '';
+
+  selectFile(): void {
+    // Simula um clique no elemento de input de arquivo escondido
+    const inputElement: HTMLInputElement | null = document.querySelector('#inputFile');
+
+  // Verifica se o elemento foi encontrado
+  if (inputElement) {
+    // Simula um clique no elemento de input de arquivo escondido
+    inputElement.click();
+  } else {
+    console.error('arquivo não encontrado.');
+  }
+  }
+
+  onFileSelected(event: Event): void {
+    const inputElement: HTMLInputElement = event.target as HTMLInputElement;
+    const arquivo: File = (inputElement.files as FileList)[0];
+
+    // Verifica se um arquivo foi selecionado
+    if (arquivo) {
+      if (arquivo.size <500000){
+        const leitor: FileReader = new FileReader();
+
+      // Define o evento onload para o leitor
+      leitor.onload = () => {
+        this.base64ImageData = leitor.result as string;
+        this.Atual.foto = this.base64ImageData;
+        this.clienteService.fotoAtual = this.base64ImageData;
+      };
+
+      // Lê o conteúdo do arquivo como uma URL de dados (Base64)
+      leitor.readAsDataURL(arquivo);
+      }else{
+        alert('Escolha um arquivo menor. Este arquivo é muito grande.')
+      }
+
+    }
+  }
 }

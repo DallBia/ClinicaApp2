@@ -11,8 +11,6 @@ export class RequestInterceptor implements HttpInterceptor{
                private userService: UserService,
                private router: Router) {
 
-
-
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -36,7 +34,7 @@ export class RequestInterceptor implements HttpInterceptor{
       }
       else if(error.status == 0)
       {
-             this.userService.logout();
+          this.userService.logout();
           this.tokenService.removeToken();
           this.router.navigate(['/']);
       }

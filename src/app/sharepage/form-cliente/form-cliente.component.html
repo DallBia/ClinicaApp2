@@ -1,7 +1,8 @@
 <div Forml class="Interior">
   <div class="superior">
-    <div class="EspacoFoto">
-      <img [src]="this.Atual.Foto" id="minhaImagem" class="Foto">
+    <div class="EspacoFoto" >
+      <img [src]="this.Atual.foto" id="minhaImagem" class="Foto" (click)="fileInput.click()">
+      <input id="file-input" #fileInput type="file" style="display: none;" (change)="onFileSelected($event)">
     </div>
     <div class="EspacoDoctos">
     </div>

@@ -45,7 +45,9 @@ public Horarios = [
   public dCliente: string = '';
   public dIdCliente: number = 0;
   public val: boolean = false;
-
+  public visCli = true;
+  public visCol = true;
+  public foto = '';
 
 
 private apiUrl = `${environment.ApiUrl}/Agenda`;
@@ -82,7 +84,24 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
 
 
    }
-
+   public listaHorarios: any = [
+    {n: 0, horario: 'manhã'},
+    {n: 1, horario: '08:00'},
+    {n: 2, horario: '08:50'},
+    {n: 3, horario: '09:40'},
+    {n: 4, horario: '10:30'},
+    {n: 5, horario: '11:20'},
+    {n: 6, horario: '12:00'},
+    {n: 7, horario: 'tarde'},
+    {n: 8, horario: '13:10'},
+    {n: 9, horario: '14:00'},
+    {n: 10, horario: '14:50'},
+    {n: 11, horario: '15:40'},
+    {n: 12, horario: '16:30'},
+    {n: 13, horario: '17:20'},
+    {n: 14, horario: '18:10'},
+    {n: 15, horario: '19:00'},
+  ]
    private BuscaA = new BehaviorSubject<string>(this.buscaIni);
    BuscaA$ = this.BuscaA.asObservable();
      setBuscaA(name: string) {
@@ -173,9 +192,9 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
     const xdia = this.diaA.value;
     const xUnit = this.UnitA.value;
     const valor = xdia + '%' + xUnit;
-        if(this.colaboradorService.colaboradorsG.length == 0){
+        if(this.colaboradorService.colaboradors.length == 0){
           console.log('puxando Colaboradores')
-          this.colaboradorService.GetCol();
+          const r1 = await this.colaboradorService.GetCol();
           console.log(this.colaboradorService.colaboradors)
         }else{
           console.log(this.colaboradorService.colaboradors)
@@ -189,11 +208,10 @@ UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
         //this.setBuscaA(valor);
         try {
               const buscaCliConcluida = await this.clienteService.BuscaClientes();
-
-              if (buscaCliConcluida) {
+              const buscaColConcluida = await this.colaboradorService.GetCol();
+              if (buscaCliConcluida && buscaColConcluida) {
                 this.val = await this.Dados1();
                 this.setBuscaA(valor);
-
                 return true;
               } else {
                 console.error('Busca de agenda não foi concluída com sucesso.');

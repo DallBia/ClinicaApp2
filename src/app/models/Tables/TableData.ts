@@ -1,5 +1,5 @@
 export interface TableData {
-  Foto: string;
+  foto: string;
   Ficha: string;
   selecionada: boolean;
   Proxses?: any;

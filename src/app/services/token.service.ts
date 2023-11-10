@@ -12,12 +12,12 @@ export class TokenService {
     }
 
     setToken(token: string) {
-        window.localStorage.setItem(KEY, token);
+        window.sessionStorage.setItem(KEY, token);
     }
 
     getToken(): string {
 
-       let token = window.localStorage.getItem(KEY);
+       let token = window.sessionStorage.getItem(KEY);
        if(!token)
         return '';
       else
@@ -25,7 +25,7 @@ export class TokenService {
     }
 
     removeToken() {
-        window.localStorage.removeItem(KEY);
+        window.sessionStorage.removeItem(KEY);
     }
 
 }

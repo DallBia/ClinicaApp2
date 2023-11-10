@@ -11,7 +11,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let l of this.clienteService.dataSource" [class.linhaDestacada]="l.selecionada">
-                <td class="t001" (click)="destacarLinha(l, l.Ficha)">(img)</td>
+                <td class="t001" (click)="destacarLinha(l, l.Ficha)"><img [src]=l.foto alt="Imagem" style="height: 5vh; width: auto"></td>
                 <td class="t002" (click)="destacarLinha(l, l.Ficha)"> {{l.Ficha}}</td>
                 <td class="t003" (click)="destacarLinha(l, l.Ficha)"> {{l.nome}}</td>
                 <td class="t004" (click)="destacarLinha(l, l.Ficha)"> {{l.dtNascim}}</td>

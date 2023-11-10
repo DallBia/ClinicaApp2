@@ -97,6 +97,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
       if (snapshot.data && snapshot.data['title']) {
         this.headerService.linkAtivo = snapshot.data['title'];
         this.headerService.setLinkA(snapshot.data['title']);
+        if (snapshot.data['title'] == 'LOGIN'){
+          localStorage.clear();
+          sessionStorage.clear();
+        }
+
       }
     }
   }

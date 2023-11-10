@@ -43,6 +43,7 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
     public Vazia: Agenda = {
       id: 0,
       idCliente:0,
+      nome:'',
       idFuncAlt:0,
       sala:0,
       dtAlt:'',
@@ -58,24 +59,7 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
     public celAtual: Agenda = this.Vazia;
 
 
-  public listaHorarios: any = [
-    {n: 0, horario: 'manhã'},
-    {n: 1, horario: '08:00'},
-    {n: 2, horario: '08:50'},
-    {n: 3, horario: '09:40'},
-    {n: 4, horario: '10:30'},
-    {n: 5, horario: '11:20'},
-    {n: 6, horario: '12:00'},
-    {n: 7, horario: 'tarde'},
-    {n: 8, horario: '13:10'},
-    {n: 9, horario: '14:00'},
-    {n: 10, horario: '14:50'},
-    {n: 11, horario: '15:40'},
-    {n: 12, horario: '16:30'},
-    {n: 13, horario: '17:20'},
-    {n: 14, horario: '18:10'},
-    {n: 15, horario: '19:00'},
-  ]
+
 
 
   @Input()  parametro!: string;
@@ -94,22 +78,27 @@ constructor(private agendaService: AgendaService,
 MudarSala(l:number, c:number){
 
   const periodo = l == 0 ? 'manhã' : 'tarde';
-  console.log('Vou alterar o usuário da sala ' + c + ' para o período da ' + periodo)
-
-  this.agendaService.dHora = this.listaHorarios[this.lin].horario;
+  this.agendaService.dHora = this.agendaService.listaHorarios[this.lin].horario;
   this.agendaService.dSala = this.col;
   this.agendaService.dCliente = this.nCli;
   this.agendaService.setCelA(this.celAtual);
+  this.agendaService.foto = '';
+  for (let i of this.colaboradorService.dataSource){
+    if(i.id == this.celAtual.idCliente){
+      this.agendaService.foto = i.foto
+    }
+  }
+
+  this.agendaService.visCol = true;
+  this.agendaService.visCli = false;
   }
 
   AltHorario(l:number, c:number){
-    const hor = this.listaHorarios[l].horario;
-    console.log(this.celAtual)
+    const hor = this.agendaService.listaHorarios[l].horario;
     this.agendaService.setCelAnt(this.celAtual);
     this.clienteService.setListaCliente(this.clienteService.clientesG);
-    console.log('Vou alterar a consulta da sala ' + c + ' no horário ' + hor)
     this.agendaService.dCliente = '';
-    this.agendaService.dHora = this.listaHorarios[this.lin].horario;
+    this.agendaService.dHora = this.agendaService.listaHorarios[this.lin].horario;
     this.agendaService.dSala = this.col;
     this.agendaService.dCliente = this.nCli;
     for(let j of this.clienteService.clientes){
@@ -118,7 +107,16 @@ MudarSala(l:number, c:number){
         break;
       }
     }
+    this.agendaService.foto = '';
+
+  for (let i of this.clienteService.dataSource){
+    if(i.id == this.celAtual.idCliente){
+      this.agendaService.foto = i.foto
+    }
+  }
     this.agendaService.setCelA(this.celAtual);
+    this.agendaService.visCol = false;
+    this.agendaService.visCli = true;
 
   }
 
@@ -164,6 +162,7 @@ ReCarregar(x: string){
   this.celAtual = {
     id: 0,
       idCliente:0,
+      nome:'',
       idFuncAlt:0,
       sala:0,
       dtAlt:'',
@@ -189,12 +188,8 @@ ReCarregar(x: string){
   const hoje = new Date();
   const diaAgenda = new Date(dia);
 
-
-
-
-
   if (this.col == 0){
-    this.linha1 = this.listaHorarios[this.lin].horario.substring(0, 15);
+    this.linha1 = this.agendaService.listaHorarios[this.lin].horario.substring(0, 15);
     this.c1 = true;
     this.l1 = true;
     }else{
@@ -211,7 +206,7 @@ ReCarregar(x: string){
       for(let i of agendaG){
         if(i.sala == this.col &&
             i.unidade == unit &&
-            i.horario == this.listaHorarios[this.lin].horario
+            i.horario == this.agendaService.listaHorarios[this.lin].horario
           ){
             switch  (i.repeticao){
               case 'Unica':
@@ -242,15 +237,16 @@ ReCarregar(x: string){
             this.celAtual.dia = i.dia ? i.dia : '';
             this.celAtual.diaDaSemana = i.diaDaSemana ? i.diaDaSemana : '';
             this.celAtual.dtAlt = i.dtAlt ? i.dtAlt : '';
-            //this.celAtual.historico = i.historico ? i.historico : '';
-            const hist = i.historico !== undefined && i.historico !== null ? i.historico : '';
-            const dHist = hist.split('֍') !== undefined ? hist.split('֍') : '';
-            if(dHist[1]){
-              this.nomeProvisorio = dHist[0];
-              i.historico = dHist[1];
-            }
             this.celAtual.historico = i.historico ? i.historico : '';
+            // const hist = i.historico !== undefined && i.historico !== null ? i.historico : '';
+            // const dHist = hist.split('֍') !== undefined ? hist.split('֍') : '';
+            // if(dHist[1]){
+            //   this.nomeProvisorio = dHist[0];
+            //   i.historico = dHist[1];
+            // }
+            // this.celAtual.historico = i.historico ? i.historico : '';
             this.celAtual.horario = i.horario ? i.horario : '';
+            this.celAtual.nome = i.nome ? i.nome : '';
             this.celAtual.idFuncAlt = i.idFuncAlt ? i.idFuncAlt : 0;
             this.celAtual.obs = i.obs ? i.obs : '';
             //this.celAtual.repeticao = i.repeticao ? i.repeticao : '';
@@ -261,19 +257,23 @@ ReCarregar(x: string){
             }
             this.celAtual.subtitulo = i.subtitulo ? i.subtitulo : '';
             this.celAtual.idCliente = i.idCliente ? i.idCliente : 0;
+
             if(i.idCliente == 0){
-              this.linha1 = this.nomeProvisorio;
-              if(this.nomeProvisorio.length > 18){
-                this.linha1 = this.nomeProvisorio.substring(0, 15) + '...'
+              this.linha1 = i.nome !== undefined ? i.nome : '';
+              //this.linha1 = this.nomeProvisorio;
+              if(this.linha1.length > 18){
+                this.linha1 = this.linha1.substring(0, 15) + '...'
               }
               //this.linha1 = this.nomeProvisorio.length > 18 ? this.nomeProvisorio.substring(0, 15) + '...' : this.nomeProvisorio;
-              this.nCli = this.nomeProvisorio;
+              //this.nCli = this.nomeProvisorio;
+              this.nCli = i.nome !== undefined ? i.nome : '';
             }else{
               if(this.lin == 0 || this.lin == 7){
                 for(let j of this.colaboradorService.colaboradorsG){
                   if(j.id == i.idCliente){
                     this.idCli = j.id ? j.id : 0;
                     this.nCli = j.nome;
+                    i.nome = j.nome
                     this.linha1 = j.nome.length > 18 ? j.nome.substring(0, 15) + '...' : j.nome
                   }
                 }
@@ -282,12 +282,11 @@ ReCarregar(x: string){
                 if(j.id == i.idCliente){
                   this.idCli = j.id ? j.id : 0;
                   this.nCli = j.nome;
+                  i.nome = j.nome
                   this.linha1 = j.nome.length > 18 ? j.nome.substring(0, 15) + '...' : j.nome
                 }
               }
               }
-
-
             }
             const Lin2 = i.subtitulo ? i.subtitulo : '';
             this.linha2 = Lin2.length > 18 ? Lin2.substring(0, 15) + '...' : Lin2;
@@ -320,7 +319,7 @@ ReCarregar(x: string){
 }
 
 get boxShadow(): string {
-    const linha = this.listaHorarios[this.lin].horario.substring(0, 15);
+    const linha = this.agendaService.listaHorarios[this.lin].horario.substring(0, 15);
     if (linha === this.agendaService.dHora && this.col === this.agendaService.dSala) {
       return '0 0 10px rgba(0, 0, 0, 0.5)'; // Se as variáveis lin e col forem iguais, aplica o box-shadow
     } else {
@@ -336,7 +335,10 @@ get boxShadow(): string {
     }
 
     ngOnDestroy(): void {
-
+      this.subscription.unsubscribe;
+      this.subscription2.unsubscribe;
+      this.subscription3.unsubscribe;
+      this.subscription4.unsubscribe;
 
     }
 }

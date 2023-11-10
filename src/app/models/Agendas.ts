@@ -2,6 +2,7 @@ export interface Agenda{
 
   id?: number;
   idCliente?: number; //
+  nome?: string;
   idFuncAlt?: number; //
   dtAlt?: string; //
   horario?: string; //

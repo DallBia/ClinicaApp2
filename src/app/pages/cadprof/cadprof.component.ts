@@ -104,16 +104,14 @@ export class CadprofComponent implements OnDestroy, OnInit {
   ngOnInit(){
     this.colaboradorService.dataSource = [];
     this.colaboradorService.inicio();
-    this.userService.alertas = false;
-    console.log(this.userService.alertas)
 
-    this.colaboradorService.ProfAtual$.subscribe(EquipeAtual => {
+    this.subscription = this.colaboradorService.ProfAtual$.subscribe(EquipeAtual => {
       this.ColAt = EquipeAtual;
     });
-    this.colaboradorService.ChangesA$.subscribe(chng => {
+    this.subscription = this.colaboradorService.ChangesA$.subscribe(chng => {
       this.nChanges = chng;
     });
-    this.colaboradorService.EquipeAtual$.subscribe(eat => {
+    this.subscription = this.colaboradorService.EquipeAtual$.subscribe(eat => {
       this.EAtual = eat;
     });
     this.vNovo = this.perfilService.validaPerfil(0, 3)
@@ -123,7 +121,6 @@ export class CadprofComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-
   }
 
   gerarSenha() {

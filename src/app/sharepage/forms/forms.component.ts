@@ -14,6 +14,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { SharedService } from 'src/app/shared/shared.service';
 import { Perfil } from 'src/app/models/Perfils';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
+import { FileService } from 'src/app/services/foto-service.service';
 
 
 
@@ -68,6 +69,7 @@ export class FormsComponent implements OnDestroy, OnInit {
       private formBuilder: FormBuilder,
       public shared: SharedService,
       public perfilService: PerfilService,
+      private fotoService: FileService,
       ){
 
   }
@@ -107,7 +109,7 @@ export class FormsComponent implements OnDestroy, OnInit {
 
   CarregaForm(){
     if (this.Atual.foto == '(img)' ){
-      this.Atual.foto = this.colaboradorService.semFoto
+      this.Atual.foto = this.fotoService.semFoto
     }
 
     this.formulario = {
