@@ -1,5 +1,6 @@
 <div class="superior">
   <div class="foto" *ngIf="this.agendaService.foto !== ''"><img [src]="this.agendaService.foto" id="minhaImagem" class="id-Foto"></div>
+  <div class="foto" *ngIf="this.agendaService.foto == ''"><img [src]="this.fotoService.semfoto2" id="minhaImagem" class="id-Foto"></div>
   <div class="info">
     <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-custom-date></app-custom-date></div>
     <div class="unidade" style="align-items: center; justify-content: center;display: flex;"><app-unidade></app-unidade></div>

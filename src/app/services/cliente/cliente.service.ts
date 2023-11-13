@@ -104,7 +104,7 @@ export class ClienteService {
     this.ListaCliente.next(name);
   }
 
-  private ClienteA = new BehaviorSubject<number>(0);
+  public ClienteA = new BehaviorSubject<number>(0);
   ClienteA$ = this.ClienteA.asObservable();
   setClienteA(name: number) {
     this.ClienteA.next(name);

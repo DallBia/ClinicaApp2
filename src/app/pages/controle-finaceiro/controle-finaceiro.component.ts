@@ -11,6 +11,7 @@ import { ProntuarioService } from 'src/app/services/prontuario/prontuario.servic
 import { BlocoNotasComponent } from 'src/app/sharepage/bloco-notas/bloco-notas.component';
 import { LoginComponent } from '../login/login.component';
 import { Router } from '@angular/router';
+import { FileService } from 'src/app/services/foto-service.service';
 
 @Component({
   selector: 'app-controle-finaceiro',
@@ -37,7 +38,8 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
 
 
   constructor(private colaboradorService: ColaboradorService,
-    private clienteService: ClienteService,
+    public clienteService: ClienteService,
+    public fotoService: FileService,
     private prontuarioService: ProntuarioService,
     private router: Router,
     private userService: UserService) {

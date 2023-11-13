@@ -8,6 +8,7 @@ import { ColaboradorService } from "src/app/services/colaborador/colaborador.ser
 import { ProntuarioService } from "src/app/services/prontuario/prontuario.service";
 import { BlocoNotasComponent } from "src/app/sharepage/bloco-notas/bloco-notas.component";
 import { LoginComponent } from "../login/login.component";
+import { FileService } from "src/app/services/foto-service.service";
 
 
 @Component({
@@ -37,8 +38,9 @@ export class ProtadmComponent implements OnInit, OnDestroy{
 
 
   constructor(private colaboradorService: ColaboradorService,
-    private clienteService: ClienteService,
+    public clienteService: ClienteService,
     private prontuarioService: ProntuarioService,
+    public fotoService: FileService,
     private userService: UserService) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.nCliente = nameC

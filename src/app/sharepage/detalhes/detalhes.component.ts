@@ -10,6 +10,7 @@ import { Cliente } from 'src/app/models/Clientes';
 import { AfterViewInit } from '@angular/core';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
 import { Colaborador } from 'src/app/models/Colaboradors';
+import { FileService } from 'src/app/services/foto-service.service';
 
 @Component({
   selector: 'app-detalhes',
@@ -84,6 +85,7 @@ public dataCol: any;
   constructor(private userService: UserService,
     public agendaService: AgendaService,
     private colaboradorService: ColaboradorService,
+    public fotoService: FileService,
     public clienteService: ClienteService) {
     this.subscription = this.agendaService.CelA$.subscribe(
       name => {
@@ -146,28 +148,39 @@ public dataCol: any;
     Dados.horario = this.agendaService.dHora;
     Dados.idFuncAlt = this.nUser;
     Dados.nome = this.CelAtual.nome;
-    Dados.status = this.CelAtual.status;
+    if(this.CelAtual.status == undefined || this.CelAtual.status == '' || this.CelAtual.status == null){
+      this.CelAtual.status = 'Pendente'
+      Dados.status = 'Pendente';
+    }else{
+      Dados.status = this.CelAtual.status;
+    }
+
     const dataAtual = new Date();
     const horas = dataAtual.getHours();
     const minutos = dataAtual.getMinutes();
 
     if(this.agendaService.dHora == 'manhã' || this.agendaService.dHora == 'tarde'){
-      nomeCl = this.CelAtual.nome !== undefined ? this.CelAtual.nome : '';
+      nomeCl = this.agendaService.dCliente;
+      this.CelAtual.nome = nomeCl,
       this.CelAtual.idCliente = 0;
       for (let i of this.colaboradorService.colaboradors){
         if(this.agendaService.dCliente == i.nome){
           nomeCl = i.nome;
+          this.CelAtual.nome = nomeCl,
           this.CelAtual.idCliente = i.id;
           break;
         }
       }
+
       Dados.status = "Sala";
     }else{
-      nomeCl = this.CelAtual.nome !== undefined ? this.CelAtual.nome : '';
+      nomeCl = this.agendaService.dCliente;
+      this.CelAtual.nome = nomeCl,
       this.CelAtual.idCliente = 0;
       for (let i of this.clienteService.clientes){
       if(this.agendaService.dCliente == i.nome){
         nomeCl = i.nome;
+        this.CelAtual.nome = nomeCl,
         this.CelAtual.idCliente = i.id;
         break;
       }
@@ -236,7 +249,7 @@ public dataCol: any;
       Dados.id = this.CelAtual.id;
     }
 
-
+    console.log(Dados)
     if(Dados.id == 0 || Dados.id == undefined){
       this.salvaAgenda(Dados)
     }

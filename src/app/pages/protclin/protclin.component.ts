@@ -9,6 +9,7 @@ import { ProntuarioService } from 'src/app/services/prontuario/prontuario.servic
 import { BlocoNotasComponent } from 'src/app/sharepage/bloco-notas/bloco-notas.component';
 import { Prontuario } from 'src/app/models/Prontuarios';
 import { Colaborador } from 'src/app/models/Colaboradors';
+import { FileService } from 'src/app/services/foto-service.service';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   constructor(private colaboradorService: ColaboradorService,
     public clienteService: ClienteService,
     private prontuarioService: ProntuarioService,
+    public fotoService: FileService,
     private userService: UserService) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.nCliente = nameC
