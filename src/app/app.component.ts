@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SharedService } from './shared/shared.service';
+
 
 @Component({
   selector: 'app-root',
@@ -11,9 +13,11 @@ export class AppComponent implements OnInit, OnDestroy {
   showNavbar = true;
 
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private shared: SharedService) {
     this.router.events.subscribe(() => {
       this.showNavbar = !this.router.url.includes('login');
+      this.shared.pagina = this.router.url;
     });
 
   }

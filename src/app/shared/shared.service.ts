@@ -6,7 +6,8 @@ import { Colaborador } from '../models/Colaboradors';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Response } from '../models/Response';
 import { environment } from 'src/environments/environment';
-
+import { TableProntClin } from '../models/Tables/TableProntClin';
+import {Tipo} from '../models/Tipo';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class SharedService {
     this.selectedNascimentoSubject.next(name);
   }
 
+
   private selectedImageSource = new BehaviorSubject<string | null>(null);
 
   selectedImage$ = this.selectedImageSource.asObservable();
@@ -37,12 +39,22 @@ export class SharedService {
     this.selectedImageSource.next(imageUrl);
   }
 
+public ListaNomesC: Tipo[] = [];
 public ClienteAtual: number = 0;
 public ProfAtual: number = 0;
 public ListaClientes!: Cliente;
 public ListaProfs!: Colaborador;
+public pagina = '';
+public MostraInfo = false;
+public texto: string = '';
+public idTexto: number = 0;
+public valid: boolean=false;
+public validFiltro = false;
 
+//--- variável para ajudar no modal do Prontuário:
+public ListaPront: TableProntClin[] = [];
 
+//=============================================
 
 
   private selectedRowSource = new BehaviorSubject<any>(null);
@@ -68,8 +80,6 @@ public ListaProfs!: Colaborador;
     const params = new HttpParams().set('id', id);
     return this.http.get<Response<Info>>(`${this.apiurl}/id`, { params });
   }
-
-
 
 
 

@@ -9,6 +9,7 @@ import { ProntuarioService } from "src/app/services/prontuario/prontuario.servic
 import { BlocoNotasComponent } from "src/app/sharepage/bloco-notas/bloco-notas.component";
 import { LoginComponent } from "../login/login.component";
 import { FileService } from "src/app/services/foto-service.service";
+import { SharedService } from "src/app/shared/shared.service";
 
 
 @Component({
@@ -29,7 +30,7 @@ export class ProtadmComponent implements OnInit, OnDestroy{
   Atual!: TableData;
   public Ficha:string = 'FICHA';
   public NomeCliente: string = '';
-  public MostraInfo: boolean = true;
+  //public MostraInfo: boolean = true;
   public idFoto: string = '';
   public User!:Colaborador;
   public nUser!: number;
@@ -40,6 +41,7 @@ export class ProtadmComponent implements OnInit, OnDestroy{
   constructor(private colaboradorService: ColaboradorService,
     public clienteService: ClienteService,
     private prontuarioService: ProntuarioService,
+    public shared: SharedService,
     public fotoService: FileService,
     private userService: UserService) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
@@ -56,7 +58,8 @@ export class ProtadmComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
 
-
+    this.shared.MostraInfo = true;
+    console.log(this.shared.MostraInfo);
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.nCliente = nameC
     )
@@ -80,11 +83,11 @@ export class ProtadmComponent implements OnInit, OnDestroy{
       this.Ficha = 'FICHA';
       this.NomeCliente = '';
     }
-    this.newInfo(this.MostraInfo);
+    this.newInfo(this.shared.MostraInfo);
   }
 
   newInfo(opt: boolean){
-    this.MostraInfo = !opt;
+    this.shared.MostraInfo = !opt;
   }
 
   adicionarEspaco() {
@@ -118,36 +121,3 @@ export class ProtadmComponent implements OnInit, OnDestroy{
 }
 
 
-//   constructor(private sharedService: SharedService) {
-//     this.subscription = this.sharedService.selectedNascimento$.subscribe(
-//     name => this.selectedNascimento = name );
-//     this.idade1 = this.converterParaDate(this.selectedNascimento);
-//     this.idade = this.calcularIdade(this.idade1);
-
-//   }
-
-
-//   imageUrl = 'http://localhost:5000/wwwroot/003.jpg';
-
-
-//   ngOnDestroy(): void {
-//     this.subscription.unsubscribe();
-//   }
-
-//   converterParaDate(dataString: string): Date {
-//     const [dia, mes, ano] = dataString.split('/').map(Number);
-//     return new Date(ano, mes - 1, dia);
-// }
-//   calcularIdade(dataNascimento: Date): number {
-//     const hoje = new Date();
-//     let idade = hoje.getFullYear() - dataNascimento.getFullYear();
-
-//     // Ajuste para caso o aniversário ainda não tenha ocorrido este ano
-//     const m = hoje.getMonth() - dataNascimento.getMonth();
-//     if (m < 0 || (m === 0 && hoje.getDate() < dataNascimento.getDate())) {
-//         idade--;
-//     }
-
-//     return idade;
-//   }
-// }

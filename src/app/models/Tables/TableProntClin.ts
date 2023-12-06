@@ -6,4 +6,5 @@ export interface TableProntClin{
   nomeColab: string;
   dtInsercao?: any;
   texto?: string;
+  selecionada: boolean;
 }

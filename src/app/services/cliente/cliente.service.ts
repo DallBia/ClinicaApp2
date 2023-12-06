@@ -24,7 +24,7 @@ export class ClienteService {
   nChanges!: boolean;
   nVezes: number = 0;
   public fotoAtual: string='';
-
+public data: any;
   public Vazia: TableData[] = [{
   foto: this.fotoService.semFoto,
   Ficha: '',
@@ -90,7 +90,9 @@ export class ClienteService {
     return this.http.put<Response<Cliente[]>>(`${this.apiurl}/Editar` , cliente);
   }
 
-
+  GetClientesByAgenda(): Promise<any> {
+    return this.http.get<any>(`${this.apiurl}/Agenda`).toPromise();
+  }
 
   private ClienteAtual = new BehaviorSubject<TableData>(this.Vazia[0]);
   ClienteAtual$ = this.ClienteAtual.asObservable();
@@ -121,33 +123,23 @@ export class ClienteService {
 
   }
 
+  async BuscaAgenda(){
+
+
+        const data = await this.GetClientesByAgenda();
+        console.log(data.dados)
+
+    }
+
+
+
   async BuscaClientes(){
 
     this.clientes = [];
     this.clientesG = [];
       try {
-        const data = await this.GetClientes();
-
-        const dados = data.dados;
-        dados.map((item: { clienteDesde: string | number | Date | null; dtInclusao: string | number | Date | null; dtNascim: string | number | Date | null; }) => {
-          item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toISOString().split('T')[0] : '---'
-          item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toISOString().split('T')[0] : '---'
-          item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toISOString().split('T')[0] : '---'
-
-          const dtNascim = item.dtNascim !== null ? item.dtNascim.split('-') : '*-*-*';
-          item.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
-          const clienteDesde = item.clienteDesde !== null ? item.clienteDesde.split('-') : '*-*-*';
-          item.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
-          const dtInclusao = item.dtInclusao !== null ? item.dtInclusao.split('-') : '*-*-*';
-          item.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
-
-           });
-
-        this.clientesG = data.dados;
-        this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
-        this.clientes = data.dados;
-        this.setListaCliente(data.dados);
-        this.success = data.sucesso;
+        this.data = await this.GetClientes();
+        this.success = this.data.sucesso;
         this.success = await this.Dados1();
 
         await this.Carregar();
@@ -179,6 +171,25 @@ export class ClienteService {
 
   async Carregar(){
 
+    const dados = this.data.dados;
+        dados.map((item: { clienteDesde: string | number | Date | null; dtInclusao: string | number | Date | null; dtNascim: string | number | Date | null; }) => {
+          item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toISOString().split('T')[0] : '---'
+          item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toISOString().split('T')[0] : '---'
+          item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toISOString().split('T')[0] : '---'
+
+          const dtNascim = item.dtNascim !== null ? item.dtNascim.split('-') : '*-*-*';
+          item.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
+          const clienteDesde = item.clienteDesde !== null ? item.clienteDesde.split('-') : '*-*-*';
+          item.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
+          const dtInclusao = item.dtInclusao !== null ? item.dtInclusao.split('-') : '*-*-*';
+          item.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
+
+           });
+
+        this.clientesG = this.data.dados;
+        this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
+        this.clientes = this.data.dados;
+        this.setListaCliente(this.data.dados);
     this.dataSource = [];
     for (let i of this.clientesG) {
       let aSaiS: string = 'Não';

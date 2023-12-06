@@ -10,7 +10,10 @@ import { BlocoNotasComponent } from 'src/app/sharepage/bloco-notas/bloco-notas.c
 import { Prontuario } from 'src/app/models/Prontuarios';
 import { Colaborador } from 'src/app/models/Colaboradors';
 import { FileService } from 'src/app/services/foto-service.service';
-
+import { jsPDF } from "jspdf";
+import { SharedService } from 'src/app/shared/shared.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PdfModalComponent } from 'src/app/sharepage/form-pront/pdf-modal/pdf-modal.component';
 
 @Component({
   selector: 'app-protclin',
@@ -27,7 +30,7 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   Atual!: TableData;
   public Ficha:string = 'FICHA';
   public NomeCliente: string = '';
-  public MostraInfo: boolean = true;
+  //public MostraInfo: boolean = true;
   public idFoto: string = '';
   public User!:Colaborador;
   public nUser!: number;
@@ -38,7 +41,9 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   constructor(private colaboradorService: ColaboradorService,
     public clienteService: ClienteService,
     private prontuarioService: ProntuarioService,
+    public dialog: MatDialog,
     public fotoService: FileService,
+    public shared: SharedService,
     private userService: UserService) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.nCliente = nameC
@@ -54,7 +59,8 @@ export class ProtclinComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
 
-
+    this.shared.MostraInfo = true;
+    console.log(this.shared.MostraInfo);
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.nCliente = nameC
     )
@@ -78,11 +84,12 @@ export class ProtclinComponent implements OnInit, OnDestroy{
       this.Ficha = 'FICHA';
       this.NomeCliente = '';
     }
-    this.newInfo(this.MostraInfo);
+    this.newInfo(this.shared.MostraInfo);
   }
 
   newInfo(opt: boolean){
-    this.MostraInfo = !opt;
+    this.shared.MostraInfo = !opt;
+    this.shared.texto = '';
   }
 
   adicionarEspaco() {
@@ -113,4 +120,23 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   this.subscription.unsubscribe();
 }
 
+
+  Salva()
+  {
+    const r = this.clienteService.BuscaAgenda();
+
+
+  }
+
+
+
+  abrirModal() {
+
+    const dialogRef = this.dialog.open(PdfModalComponent, {
+        disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+
+    });
+  }
 }

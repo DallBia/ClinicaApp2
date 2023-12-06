@@ -2,19 +2,19 @@
     <div class="lado-esquerdo">
       <div class="superior-e">
         <div class="se-left">
-          <button class="Novo">{{this.Ficha}}</button>
+          <button class="Novo" (click)="this.Salva()">{{this.Ficha}} </button>
         </div>
         <div class="se-right" >
           <label class="Nome">{{this.NomeCliente}}</label>
         </div>
       </div>
       <div class="inferior-e">
-        <div class="bloco-antigo" [style.height]="MostraInfo ? '63%' : '100%'">
+        <div class="bloco-antigo" [style.height]="shared.MostraInfo ? '63%' : '100%'">
           <div class="listagem">
             <app-form-pront></app-form-pront>
           </div>
         </div>
-        <div class="bloco-input" *ngIf="MostraInfo">
+        <div class="bloco-input" *ngIf="shared.MostraInfo">
           <app-bloco-notas #blocoNotas></app-bloco-notas>
         </div>
       </div>
@@ -35,14 +35,14 @@
         <button class="btnBranco">
           Ver Documento
         </button>
-        <button class="btnBranco">
+        <button class="btnBranco" (click)="this.abrirModal()">
           Imprimir Relatório
         </button>
         <button class="btnBranco">
           Buscar neste Prontuário
         </button>
-        <button class="btnBranco" [style.color]="MostraInfo ? 'white' : 'black'" [style.background-color]="MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(MostraInfo)">
-          {{MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}
+        <button class="btnBranco" [style.color]="shared.MostraInfo ? 'white' : 'black'" [style.background-color]="shared.MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(shared.MostraInfo)">
+          {{shared.MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}
         </button>
         <button class="Salvar" (click)="this.blocoNotas.Enviar()">
           Salvar

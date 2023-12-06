@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./arquivos.component.css']
 })
 export class ArquivosComponent {
+  showModal: boolean = false;
+  constructor() {
+
+  }
 
 }

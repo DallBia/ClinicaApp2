@@ -54,6 +54,7 @@ export class CelAgendaComponent implements OnInit, OnDestroy{
       historico:'',
       diaDaSemana:'',
       dia:'',
+      valor: 0,
     };
 
     public celAtual: Agenda = this.Vazia;
@@ -173,6 +174,7 @@ ReCarregar(x: string){
       historico:'',
       diaDaSemana:'',
       dia:'',
+      valor: 0,
   }
   const xpar = x.split('%');
   const dia = xpar[0] == '' ? new Date().toISOString().split('T')[0] : xpar[0];

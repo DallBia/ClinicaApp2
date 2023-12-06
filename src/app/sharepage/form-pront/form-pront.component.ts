@@ -13,6 +13,10 @@ import { Colaborador } from 'src/app/models/Colaboradors';
 import { LoginComponent } from 'src/app/pages/login/login.component';
 import { Formacao } from 'src/app/models/Formacaos';
 import { FormacaoService } from 'src/app/services/formacao/formacao.service';
+import { jsPDF } from "jspdf";
+import { SharedService } from 'src/app/shared/shared.service';
+
+
 
 @Component({
   selector: 'app-form-pront',
@@ -22,7 +26,7 @@ import { FormacaoService } from 'src/app/services/formacao/formacao.service';
 export class FormProntComponent implements OnInit {
   @ViewChild(LoginComponent) login!: LoginComponent;
 
-    public ListaPront: TableProntClin[] = [];
+    //public ListaPront: TableProntClin[] = [];
     public ListaLin: TableProntClin[] = [];
     public ListaEquipe: TableProf[] = [];
     public ListaLinEq: TableProf[] = [];
@@ -58,6 +62,7 @@ export class FormProntComponent implements OnInit {
   constructor(private headerService: HeaderService,
     private colaboradorService: ColaboradorService,
     private userService:UserService,
+    public shared: SharedService,
     private clienteService: ClienteService,
     private formacaoService: FormacaoService,
     private prontuarioService: ProntuarioService) {
@@ -114,7 +119,7 @@ export class FormProntComponent implements OnInit {
   }
 
    Carregar(){
-
+    this.shared.ListaPront = [];
       switch (this.linkA) {
         case "PRONTUÁRIO CLÍNICO":
           this.tipo = 'clínico'
@@ -146,12 +151,11 @@ export class FormProntComponent implements OnInit {
             nomeCliente: this.Atual.nome,
             dtInsercao: new Date(i.dtInsercao).toLocaleDateString('pt-BR'),
             texto: i.texto,
+            selecionada: false,
           }]
-          this.ListaPront = [...this.ListaPront, ...this.ListaLin]
+          this.shared.ListaPront = [...this.shared.ListaPront, ...this.ListaLin]
         }
       }
-      console.log('Lista carregada:')
-      console.log(this.ListaPront);
     }
     }
 
@@ -197,12 +201,38 @@ export class FormProntComponent implements OnInit {
           }]
           this.ListaEquipe = [...this.ListaEquipe, ...this.ListaLinEq]
       }
-      console.log('Funcionário carregado:')
-      console.log(this.ListaEquipe);
     }
 
-    Edita(){
+    Edita(texto: string | undefined, colab: string | undefined, cliente: string | undefined, dia: string | undefined, id: number){
+      this.shared.MostraInfo = !this.shared.MostraInfo;
+      if(this.shared.MostraInfo == false){
+        this.shared.texto = '';
+        this.shared.idTexto = 0;
+      }else{
 
+      const xtexto = texto !== undefined ? texto : '';
+      const xcolab = colab !== undefined ? colab : '';
+      const xcliente = cliente !== undefined ? cliente : '';
+      const xdia = dia !== undefined ? dia : '';
+
+      const txt = xtexto + '\n(informação original de ' + xdia + ', por ' + xcolab + ')'
+      this.shared.texto = txt;
+      this.shared.idTexto = id;
+      }
     }
+
+    Selec(i: any, event: any){
+      let A = null;
+      let B = null;
+      for (let a of this.shared.ListaPront){
+        if (a.id == i.id){
+          a.selecionada = !i.selecionada
+          A = a.selecionada;
+          B = a.id;
+          break;
+        }
+      }
+    }
+
 }
 

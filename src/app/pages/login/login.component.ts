@@ -77,6 +77,9 @@ export class LoginComponent implements OnInit {
           dialogRef.afterClosed().subscribe((result: any) => {
 
           });
+          alert('OOoOOOooOOoPs! Não foi possível fazer o Login... :(');
+          this.txtSalvar = 'Entrar'
+          this.btnSalvar = false
           }
 
         } else {
@@ -85,6 +88,9 @@ export class LoginComponent implements OnInit {
       },
       (err) => {
         console.error(err);
+        alert('OOoOOOooOOoPs! Não foi possível fazer o Login... :(');
+          this.txtSalvar = 'Entrar'
+          this.btnSalvar = false
       }
     );
     this.txtSalvar = 'Login...'

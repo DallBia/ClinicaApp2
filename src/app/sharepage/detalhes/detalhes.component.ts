@@ -11,12 +11,18 @@ import { AfterViewInit } from '@angular/core';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
 import { Colaborador } from 'src/app/models/Colaboradors';
 import { FileService } from 'src/app/services/foto-service.service';
+import { CurrencyPipe } from '@angular/common';
+import { CurrencyInputDirective } from '../../currency-input.directive';
+
+providers: [CurrencyPipe]
 
 @Component({
   selector: 'app-detalhes',
   templateUrl: './detalhes.component.html',
   styleUrls: ['./detalhes.component.css']
 })
+
+
 export class DetalhesComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   subscription0: Subscription;
@@ -115,6 +121,7 @@ public dataCol: any;
         this.ListaCliente = nameC
       });
   }
+
 
 
   setStatus(status: string){

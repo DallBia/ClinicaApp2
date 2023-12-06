@@ -56,6 +56,8 @@ import { FiltroComponent } from './sharepage/filtro/filtro.component';
 import { ModalSenhaProvComponent } from './pages/login/modal-senha-prov/modal-senha-prov.component';
 import { NavbarService } from './sharepage/navbar/navbar.service';
 import { ArquivosComponent } from './sharepage/arquivos/arquivos.component';
+import { CurrencyInputDirective } from './currency-input.directive';
+import { PdfModalComponent } from './sharepage/form-pront/pdf-modal/pdf-modal.component';
 
 registerLocaleData(localePt);
 
@@ -101,6 +103,8 @@ export function tokenGetter() {
     FiltroComponent,
     ModalSenhaProvComponent,
     ArquivosComponent,
+    CurrencyInputDirective,
+    PdfModalComponent,
   ],
 
 
@@ -135,8 +139,10 @@ imports: [
           useClass: RequestInterceptor,
           multi: true
       },
+
     ],
   bootstrap: [AppComponent]
+
 })
 export class AppModule {
 

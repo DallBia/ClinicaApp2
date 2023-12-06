@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, ViewChild, ElementRef, EventEmitter, Output, OnInit } from '@angular/core';
 import { HeaderService } from '../../sharepage/navbar/header.service';
 import { ProtclinComponent } from 'src/app/pages/protclin/protclin.component';
 import { LoginComponent } from 'src/app/pages/login/login.component';
@@ -10,13 +10,14 @@ import { ClienteService } from 'src/app/services/cliente/cliente.service';
 import { ProntuarioService } from 'src/app/services/prontuario/prontuario.service';
 import { UserService } from 'src/app/services';
 import { Prontuario } from 'src/app/models/Prontuarios';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-bloco-notas',
   templateUrl: './bloco-notas.component.html',
   styleUrls: ['./bloco-notas.component.css']
 })
-export class BlocoNotasComponent {
+export class BlocoNotasComponent implements OnInit {
   text: string = '';
   processedText: string = '';
   @Output() onSubmit = new EventEmitter<string>();
@@ -71,6 +72,7 @@ onKeydown(event: KeyboardEvent): void {
 }
   constructor(private clienteService: ClienteService,
   private headerService: HeaderService,
+  public shared: SharedService,
   private prontuarioService: ProntuarioService,
   private userService: UserService) { }
 
@@ -88,6 +90,9 @@ onKeydown(event: KeyboardEvent): void {
       this.headerService.LinkA$.subscribe(link => {
         this.linkA = link;
       });
+
+      console.log(this.shared.texto)
+      this.processedText = this.shared.texto;
 }
 
 
@@ -109,14 +114,19 @@ Insere (processedText: string) {
         break;
     }
     const texto: Prontuario = {
-      id: 0,
+      id: this.shared.idTexto,
       idCliente: this.nCliente,
       idColab: this.nUser !== undefined ? this.nUser : 0,
       tipo: tipo,
       dtInsercao: new Date(),
       texto: processedText,
     };
-    this.createProntuario(texto);
+    if(this.shared.idTexto == 0){
+      this.createProntuario(texto);
+    }else{
+      this.updateProntuario(this.shared.idTexto, texto);
+    }
+
   }
 }
 
@@ -138,5 +148,20 @@ delay(time:number) {
 
   }, time);
 }
+
+updateProntuario(id: number, texto: Prontuario) {
+  this.prontuarioService.UpdateProntuario(texto).subscribe(
+    (data) => {
+      this.delay(300);
+      alert('Registro atualizado!');
+      this.delay(300);
+      location.reload();
+    },
+    (error) => {
+      console.error('Erro no upload', error);
+    }
+  );
+}
+
 
 }
