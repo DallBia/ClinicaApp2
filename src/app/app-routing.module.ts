@@ -9,12 +9,14 @@ import { ProtclinComponent } from './pages/protclin/protclin.component';
 import { ControleFinaceiroComponent } from './pages/controle-finaceiro/controle-finaceiro.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DefinitionsComponent } from './pages/definitions/definitions.component';
+import { Agenda2Component } from './pages/agenda2/agenda2.component';
 
 const routes: Routes = [
   {path: 'inicio', component: HomeComponent, data: { title: 'PAINEL DE CONTROLE' }},
   {path: 'cadprof', component: CadprofComponent, data: { title: 'CADASTRO DA EQUIPE' }},
   {path: 'fichacliente', component: FichaclienteComponent, data: { title: 'FICHAS DE CLIENTES' }},
-  {path: 'agenda', component: AgendaComponent, data: { title: 'AGENDA' }},
+  {path: 'agenda', component: Agenda2Component, data: { title: 'AGENDA' }},
+  // {path: 'agenda', component: AgendaComponent, data: { title: 'AGENDA' }},
   {path: 'protadm', component: ProtadmComponent, data: { title: 'PRONTUÁRIO ADMINISTRATIVO' }},
   {path: 'protclin', component: ProtclinComponent, data: { title: 'PRONTUÁRIO CLÍNICO' }},
   {path: 'controleFinaceiro', component: ControleFinaceiroComponent, data: { title: 'CONTROLE FINANCEIRO' }},
@@ -22,7 +24,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'definitions', component: DefinitionsComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  
+
 ];
 
 @NgModule({

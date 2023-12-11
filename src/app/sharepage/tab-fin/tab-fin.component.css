@@ -1,0 +1,33 @@
+.cabeçalho {
+  font-size: large;
+  color:rgb(106, 0, 94);
+  background-color: pink;
+}
+
+.linha{
+border-bottom: solid 1px  pink;
+}
+
+.t01{
+  width: 55%;
+}
+.t02 {
+  width: 10%;
+  text-align: end;
+}
+.t04{
+  width: 10%;
+  text-align: end;
+}
+.t03 {
+  width: 2.5%;
+}
+.corpo {
+  font-size: large;
+  color:rgb(82, 12, 74);
+}
+
+.linhaDestacada {
+  font-weight: bold;
+  color:rgb(139, 0, 100)
+}

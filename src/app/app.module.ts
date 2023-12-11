@@ -35,7 +35,7 @@ import { Grid01Component } from './sharepage/grid01/grid01.component';
 import { FormClienteComponent } from './sharepage/form-cliente/form-cliente.component';
 import { FormsComponent } from './sharepage/forms/forms.component';
 import { ContainerFormsComponent } from './sharepage/container-forms/container-forms.component';
-
+import { DateMaskDirective } from './date-mask.directive';
 import { BlocoNotasComponent } from './sharepage/bloco-notas/bloco-notas.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -58,6 +58,12 @@ import { NavbarService } from './sharepage/navbar/navbar.service';
 import { ArquivosComponent } from './sharepage/arquivos/arquivos.component';
 import { CurrencyInputDirective } from './currency-input.directive';
 import { PdfModalComponent } from './sharepage/form-pront/pdf-modal/pdf-modal.component';
+import { TabFinComponent } from './sharepage/tab-fin/tab-fin.component';
+import { TabValoresComponent } from './sharepage/tab-valores/tab-valores.component';
+import { Agenda2Component } from './pages/agenda2/agenda2.component';
+import { AgendaCellComponent } from './sharepage/agenda-cell/agenda-cell.component';
+import { AgendaMenuComponent } from './sharepage/agenda-menu/agenda-menu.component';
+
 
 registerLocaleData(localePt);
 
@@ -68,6 +74,7 @@ export function tokenGetter() {
 
 @NgModule({
   declarations: [
+
     AppComponent,
     NavbarComponent,
     HomeComponent,
@@ -105,6 +112,12 @@ export function tokenGetter() {
     ArquivosComponent,
     CurrencyInputDirective,
     PdfModalComponent,
+    DateMaskDirective,
+    TabFinComponent,
+    TabValoresComponent,
+    Agenda2Component,
+    AgendaCellComponent,
+    AgendaMenuComponent,
   ],
 
 

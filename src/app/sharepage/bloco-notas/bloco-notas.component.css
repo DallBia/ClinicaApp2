@@ -25,3 +25,14 @@
       padding: 2px;
       margin:2px;
     }
+.xtexto{
+  width: 45%;
+  margin: 5%;
+  border-color: #f68fc9;
+}
+.xvalor{
+  width: 15%;
+  margin: 5%;
+  text-align: end;
+  border-color: #f68fc9;
+}

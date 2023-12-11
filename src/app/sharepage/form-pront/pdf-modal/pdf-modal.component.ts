@@ -48,22 +48,20 @@ salvaPDF(){
   const nome = this.CLienteNome + ' 01.pdf'
   pdf.setFontSize(12);
 
-    // Adicione o conteúdo ao PDF
-let texto = this.CLienteNome + '\n'
-for (let i of this.shared.ListaPront){
-  if (i.selecionada == true){
-    texto = texto + '\n' + i.dtInsercao + '\n' + i.texto + '\n(por: ' + i.nomeColab + ')\n';
+  let texto = this.CLienteNome + '\n'
+  for (let i of this.shared.ListaPront){
+    if (i.selecionada == true){
+      texto = texto + '\n' + i.dtInsercao + '\n' + i.texto + '\n(por: ' + i.nomeColab + ')\n';
+    }
   }
-}
-  pdf.text(texto,12,12)
-  pdf.save(nome);
+
   // pdf.html(this.el.nativeElement, {
   //   callback: (pdf) => {
   //     pdf.save(this.CLienteNome);
-  //     this.Fechar();
   //   }
   // })
-
+  pdf.text(texto,12,12)
+  pdf.save(nome);
   this.Fechar();
 }
 

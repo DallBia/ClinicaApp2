@@ -63,6 +63,25 @@ export class ColaboradorService {
   public colaboradorsG: Colaborador[] = [];
   public ColAt!: Colaborador;
   public vSalvar: boolean = true;
+  public equipeVazia: Colaborador = {
+    id: 0,
+    nome: '',
+    dtNasc: '',
+    rg: '',
+    cpf: '',
+    endereco: '',
+    telFixo: '',
+    celular: '',
+    email: '',
+    dtAdmis: '',
+    dtDeslig: '',
+    idPerfil:  0,
+    ativo: true,
+    areaSession: '',
+    senhaHash: '',
+    foto: '',
+  }
+
 
   public ProfN: number = 0;
   public success: boolean = false;
@@ -85,6 +104,11 @@ export class ColaboradorService {
     UpdateColaborador(prof: Colaborador) : Observable<Response<Colaborador[]>>{
       const apiurllogin = `${environment.ApiUrl}/Colaborador/Editar`;
       return this.http.put<Response<Colaborador[]>>(apiurllogin, prof);
+    }
+
+
+      GetColaboradorbyId(id: number) : Promise<any>{
+        return this.http.get<any>(`${environment.ApiUrl}/Colaborador/id/${id}`).toPromise();
     }
 
     async GetCol(){

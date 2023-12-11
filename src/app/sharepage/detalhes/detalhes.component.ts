@@ -38,6 +38,7 @@ export class DetalhesComponent implements OnInit, OnDestroy {
   public ListaColab: Colaborador[] = [];
   public nCliente: any
   public foto = '';
+  public Vlr: boolean = true;
 
 
 public dataCli: any;
@@ -79,6 +80,35 @@ public dataCol: any;
 
 
   }
+
+  altVlr(){
+
+    this.Vlr = false;
+  }
+  AltVlr2(){
+
+    this.Vlr = true;
+  }
+  buscaFoto(){
+    let n = 0;
+    this.agendaService.foto = this.fotoService.semfoto2;
+    for(let l of this.ListaCliente){
+      if (l.nome == this.agendaService.dCliente){
+        n = l.id !== undefined ? l.id : 0;
+      }
+    }
+    if (n !== 0){
+    this.clienteService.GetClienteById(n).subscribe(
+          (data) => {
+            this.delay(100);
+            const Client = data.dados;
+            this.agendaService.foto = Client.foto !== undefined ? Client.foto : '';
+          });
+    }
+  }
+
+
+
 
   ngOnDestroy(): void {
 
@@ -244,6 +274,7 @@ public dataCol: any;
       Dados.id = this.CelAtual.id;
       Dados.obs = this.CelAtual.obs;
       Dados.diaDaSemana = this.CelAtual.diaDaSemana;
+      Dados.valor = this.CelAtual.valor;
     }else{
       Dados.historico = Dados.historico + 'Sessão anterior Excluída.'
       Dados.historico += '\n' +new Date().toLocaleDateString('pt-BR') + ' - ' +  horaFormatada + ':\n' + texto  + '\npor: ' + this.Usr?.name + '\nꟷꚚꟷ\n';
@@ -254,6 +285,7 @@ public dataCol: any;
       Dados.obs = this.CelAtual.obs;
       Dados.diaDaSemana = this.CelAtual.diaDaSemana;
       Dados.id = this.CelAtual.id;
+      Dados.valor = this.CelAtual.valor;
     }
 
     console.log(Dados)

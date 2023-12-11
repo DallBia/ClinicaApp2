@@ -10,12 +10,13 @@
       </div>
     </div>
     <div class="inferior-e">
-      <div class="bloco-antigo" [style.height]="MostraInfo ? '63%' : '100%'">
+      <div class="bloco-antigo" [style.height]="this.shared.MostraInfo ? '63%' : '100%'">
         <div class="listagem">
-          <app-form-pront></app-form-pront>
+          <app-tab-fin  *ngIf="this.tela == 'padrão'"></app-tab-fin>
+          <app-tab-valores  *ngIf="this.tela == 'valores'"></app-tab-valores>
         </div>
       </div>
-      <div class="bloco-input" *ngIf="MostraInfo">
+      <div class="bloco-input" *ngIf="this.shared.MostraInfo">
         <app-bloco-notas #blocoNotas></app-bloco-notas>
       </div>
     </div>
@@ -39,8 +40,8 @@
       <button class="btnBranco">
         Imprimir Relatório
       </button>
-      <button class="btnBranco">
-        Buscar neste Prontuário
+      <button class="btnBranco" (click)="this.altTab()">
+        {{this.btnTab}}
       </button>
       <button class="btnBranco" [style.color]="MostraInfo ? 'white' : 'black'" [style.background-color]="MostraInfo ? 'var(--cor-media)' : 'white'" (click)="newInfo(MostraInfo)">
         {{MostraInfo ? 'Cancelar nova informação' : 'Inserir nova informação'}}

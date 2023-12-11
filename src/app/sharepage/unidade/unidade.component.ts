@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { AgendaService } from 'src/app/services/agenda/agenda.service';
+import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
 
 @Component({
   selector: 'app-unidade',
@@ -21,7 +22,8 @@ ngOnInit(){
   )
 
 }
-constructor(private agendaService: AgendaService) {
+constructor(private agendaService: AgendaService,
+            public agenda2: Agenda2Service) {
 
 
 }
@@ -31,16 +33,18 @@ ToggleUnit(){
   this.x = !this.x;
   const xdia = this.dia;
   if(this.x == true){
-    this.agendaService.setBuscaA(xdia + '%1');
-    this.agendaService.setUnitAtual(1);
+    // this.agendaService.setBuscaA(xdia + '%1');
+    // this.agendaService.setUnitAtual(1);
+    this.agenda2.un = 1
     console.log('Unidade 1')
   }else{
-    this.agendaService.setBuscaA(xdia + '%2');
-    this.agendaService.setUnitAtual(2);
+    // this.agendaService.setBuscaA(xdia + '%2');
+    // this.agendaService.setUnitAtual(2);
+    this.agenda2.un = 2
     console.log('Unidade 2')
   }
 
-  //this.agendaService.recarregar();
+  this.agenda2.recarregar();
 }
 
 }

@@ -15,7 +15,49 @@ import { FileService } from '../foto-service.service';
 
 
 export class ClienteService {
+  public clienteVazio: Cliente = {
+  id: 0, //
+  nome: '', //
+  foto:  '',
+  saiSozinho: false, //
+  dtInclusao:  '',
+  clienteDesde:  '',
+  ativo: false,
+  areaSession:  '',
+  respFinanc:  '',
+  cpf:  '',
+  identidade:  '',
+  dtNascim:  '',
+  celular:  '',
+  telFixo:  '',
+  telComercial:  '',
+  email:  '',
+  endereco: '',
 
+  mae:  '',
+  maeRestric: false,
+  maeIdentidade:  '',
+  maeCpf:  '',
+  maeCelular:  '',
+  maeTelFixo:  '',
+  maeTelComercial:  '',
+  maeEmail:  '',
+  maeEndereco:  '',
+
+  pai: '',
+  paiRestric: false,
+  paiIdentidade: '',
+  paiCpf:  '',
+  paiCelular:  '',
+  paiTelFixo:  '',
+  paiTelComercial:  '',
+  paiEmail:  '',
+  paiEndereco:  '',
+  }
+  public cliente: Cliente = this.clienteVazio;
+  public success: boolean = false;
+  public clientes: Cliente[] = [];
+  public clientesG: Cliente[] = [];
   public caminho: string = '';
   dataSource: TableData[] = [];
   public nLin: TableData[] = [];
@@ -24,70 +66,71 @@ export class ClienteService {
   nChanges!: boolean;
   nVezes: number = 0;
   public fotoAtual: string='';
-public data: any;
+  public data: any;
   public Vazia: TableData[] = [{
-  foto: this.fotoService.semFoto,
-  Ficha: '',
-  selecionada: false,
-  Proxses:  '',
-
-  id: 0,
-  nome:  '',
-  dtNascim:  '',
-  saiSozinho:  'Sim',
-  ativo : true,
-  areaSession:  '',
-  clienteDesde:  '',
-  Idade: '',
-  dtInclusao :  '',
-  respFinanc :  '',
-  identidade :  '',
-  cpf:  '',
-  endereco :  '',
-  email :  '',
-  telFixo: '',
-  celular: '',
-  telComercial: '',
-
-  mae : '',
-  maeRestric : 'Não',
-  maeIdentidade : '',
-  maeCpf: '',
-  maeEndereco : '',
-  maeEmail : '',
-  maeTelFixo: '',
-  maeCelular: '',
-  maeTelComercial: '',
-
-  pai : '',
-  paiRestric : 'Não',
-  paiIdentidade : '',
-  paiCpf: '',
-  paiEndereco : '',
-  paiEmail : '',
-  paiTelFixo: '',
-  paiCelular: '',
-  paiTelComercial: '',
-
+      foto: this.fotoService.semFoto,
+      Ficha: '',
+      selecionada: false,
+      Proxses:  '',
+      id: 0,
+      nome:  '',
+      dtNascim:  '',
+      saiSozinho:  'Sim',
+      ativo : true,
+      areaSession:  '',
+      clienteDesde:  '',
+      Idade: '',
+      dtInclusao :  '',
+      respFinanc :  '',
+      identidade :  '',
+      cpf:  '',
+      endereco :  '',
+      email :  '',
+      telFixo: '',
+      celular: '',
+      telComercial: '',
+      mae : '',
+      maeRestric : 'Não',
+      maeIdentidade : '',
+      maeCpf: '',
+      maeEndereco : '',
+      maeEmail : '',
+      maeTelFixo: '',
+      maeCelular: '',
+      maeTelComercial: '',
+      pai : '',
+      paiRestric : 'Não',
+      paiIdentidade : '',
+      paiCpf: '',
+      paiEndereco : '',
+      paiEmail : '',
+      paiTelFixo: '',
+      paiCelular: '',
+      paiTelComercial: '',
     }];
 
   constructor(private http: HttpClient,
     private fotoService: FileService,) { }
 
-  public success: boolean = false;
-  public clientes: Cliente[] = [];
-  public clientesG: Cliente[] = [];
 
- private apiurl = `${environment.ApiUrl}/Cliente`
- GetClientes(): Promise<any> {
-  return this.http.get<any>(`${this.apiurl}`).toPromise();
-}
+  private apiurl = `${environment.ApiUrl}/Cliente`
+  GetClientes(): Promise<any> {
+    return this.http.get<any>(`${this.apiurl}`).toPromise();
+  }
   CreateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.post<Response<Cliente[]>>(`${this.apiurl}` , cliente);
   }
 
   UpdateCliente(cliente: Cliente) : Observable<Response<Cliente[]>>{
     return this.http.put<Response<Cliente[]>>(`${this.apiurl}/Editar` , cliente);
+  }
+
+  GetClienteById(id: number) : Observable<Response<Cliente>>{
+    return this.http.get<Response<Cliente>>(`${this.apiurl}/id/${id}`);
+  }
+
+  GetClientesById(id: number) : Promise<any>{
+    return this.http.get<any>(`${this.apiurl}/id/${id}`).toPromise();
   }
 
   GetClientesByAgenda(): Promise<any> {
@@ -124,14 +167,21 @@ public data: any;
   }
 
   async BuscaAgenda(){
-
-
         const data = await this.GetClientesByAgenda();
-        console.log(data.dados)
-
     }
 
+  async BuscaClientesById(id: number){
+    try{
+      this.cliente = this.clienteVazio
+      this.data = await this.GetClientesById(id);
+      this.cliente = this.data.dados;
+      return true;
+    }
+    catch{
+      return false;
+    }
 
+  }
 
   async BuscaClientes(){
 

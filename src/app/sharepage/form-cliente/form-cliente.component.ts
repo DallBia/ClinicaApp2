@@ -8,6 +8,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Cliente } from 'src/app/models/Clientes';
 import { CanComponentDeactivate, CanDeactivateGuard } from '../../services/can-deactivate.service';
 import { RouterModule, Routes } from '@angular/router';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-form-cliente',
@@ -17,8 +18,7 @@ import { RouterModule, Routes } from '@angular/router';
 })
 export class FormClienteComponent implements OnInit, OnChanges {
 
-
-  selectedValue = 'Cliente';
+ selectedValue = 'Cliente';
   formulario: FormGroup | undefined;
   Atual!: TableData;
   selectedFile: File | null = null;
@@ -30,7 +30,10 @@ export class FormClienteComponent implements OnInit, OnChanges {
   @Output() onSubmit = new EventEmitter<Cliente>();
 
 
-  constructor(private http: HttpClient, private clienteService: ClienteService, private can: CanDeactivateGuard){}
+  constructor(private http: HttpClient,
+    private clienteService: ClienteService,
+    public shared: SharedService,
+    private can: CanDeactivateGuard){}
 
   canDeactivate(): boolean {
     if (this.can.Alteracoes == true) {

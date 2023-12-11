@@ -12,6 +12,7 @@ import { BlocoNotasComponent } from 'src/app/sharepage/bloco-notas/bloco-notas.c
 import { LoginComponent } from '../login/login.component';
 import { Router } from '@angular/router';
 import { FileService } from 'src/app/services/foto-service.service';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-controle-finaceiro',
@@ -34,14 +35,15 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
   public User!:Colaborador;
   public nUser!: number;
   public UserAll!: any;
-
-
+  public tela: string = 'padrão';
+  public btnTab: string = 'Tabela de Valores'
 
   constructor(private colaboradorService: ColaboradorService,
     public clienteService: ClienteService,
     public fotoService: FileService,
     private prontuarioService: ProntuarioService,
     private router: Router,
+    public shared: SharedService,
     private userService: UserService) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.nCliente = nameC
@@ -54,6 +56,17 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
       this.Atual = clienteAtual;
     });
   }
+
+altTab(){
+  if (this.tela == 'padrão'){
+    this.tela = 'valores'
+    this.btnTab = 'Voltar para Controle'
+  }else{
+    this.tela = 'padrão'
+    this.btnTab = 'Tabela de Valores'
+  }
+}
+
 
   ngOnInit() {
 
@@ -83,7 +96,22 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
 
     }
     this.newInfo(this.MostraInfo);
+    const dados = this.BuscaValores()
+
   }
+
+
+  async BuscaValores(){
+    let data = 'nada por enquanto 2'
+    try{
+      data = await this.shared.BuscaValores();
+    }
+    catch{
+
+    }
+    return data;
+  }
+
 
   newInfo(opt: boolean){
     this.MostraInfo = !opt;

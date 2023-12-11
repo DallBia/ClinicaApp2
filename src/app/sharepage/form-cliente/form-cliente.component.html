@@ -9,17 +9,17 @@
   </div>
   <form [formGroup]="clienteform" (ngSubmit)="submit()" #formDit="ngForm">
     <div class="input_box">
-      <label class="fLabel">Nome:</label>
+      <span class="fLabel">Nome:</span>
       <input type="text"  class="fCampo" formControlName="nome" placeholder="(insira o nome do cliente)" required>
     </div>
     <div>
-      <label class="fLabel">Data de Nascim.:</label>
-      <input type="text"  class="fCampo" formControlName="dtNascim" placeholder="(dd/mm/aaaa)" required>
+      <span class="fLabel">Data de Nascim.:</span>
+      <input [(ngModel)]="this.shared.data" appDateMask type="text"  class="fCampo" formControlName="dtNascim" placeholder="(dd/mm/aaaa)" required>
     </div>
     <div>
       <input type="checkbox"  class="fCheck" style="margin-right:4px;" formControlName="saiSozinho">
-      <label  style="width: 40%; height: 20px;">Pode sair sozinho?</label>
-      <label  style="width: 30%; height: 20px;">Resp. Financeiro:</label>
+      <span  style="width: 40%; height: 20px;">Pode sair sozinho?</span>
+      <span  style="width: 30%; height: 20px;">Resp. Financeiro:</span>
       <select formControlName="respFinanc" >
         <option>Pai</option>
         <option>Mãe</option>
@@ -27,34 +27,34 @@
       </select>
    </div>
    <div *ngIf="clienteform.get('respFinanc')?.value === 'Cliente'">
-    <label class="fLabel2">DADOS DO CLIENTE</label>
+    <span class="fLabel2">DADOS DO CLIENTE</span>
     <div>
-      <label class="fLabel">Identidade:</label>
+      <span class="fLabel">Identidade:</span>
       <input type="text"  class="fCampo" formControlName="identidade" placeholder="(apenas números)" required>
     </div>
     <div>
-      <label class="fLabel">CPF:</label>
+      <span class="fLabel">CPF:</span>
       <input type="text"  class="fCampo" formControlName="cpf" placeholder="(apenas números)" required>
     </div>
     <div>
-      <label class="fLabel">Endereço:</label>
+      <span class="fLabel">Endereço:</span>
       <input type="text"  class="fCampo" formControlName="endereco" placeholder="(rua, número, complemento, bairro, cidade)" required>
       </div>
     <div>
-      <label  class="fLabel">Telefone Fixo:</label>
+      <span  class="fLabel">Telefone Fixo:</span>
       <input type="text"  class="fCampo" formControlName="telFixo" placeholder="(apenas números)" required>
     </div>
     <div>
-        <label class="fLabel">Celular:</label>
+        <span class="fLabel">Celular:</span>
         <input type="text"  class="fCampo" formControlName="celular" placeholder="(apenas números)" required>
     </div>
     <div>
-      <label  class="fLabel">Telefone Comercial:</label>
+      <span  class="fLabel">Telefone Comercial:</span>
       <input type="text"  class="fCampo" formControlName="telComercial" placeholder="(apenas números)">
     </div>
     <div>
-      <label  class="fLabel">E-mail:</label>
-      <input type="email"  class="fCampo" formControlName="email" placeholder="(emai.de@exemplo.com)" required>
+      <span  class="fLabel">E-mail:</span>
+      <input type="email"  class="fCampo" formControlName="email" placeholder="(email.de@exemplo.com)" required>
     </div>
    </div>
 

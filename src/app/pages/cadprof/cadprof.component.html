@@ -41,8 +41,8 @@
               </button>
           </div>
           <div class="btnSalvar">
-              <button class="Rosa" id="Salvar" (click)="Salvar()">  <!-- <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  -->
-                  Salvar
+              <button class="Rosa" [disabled]="this.btnSalva" id="Salvar" (click)="Salvar()">  <!-- <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  -->
+                {{this.txtSalva}}
               </button>
           </div>
           <div class="btnFechar">

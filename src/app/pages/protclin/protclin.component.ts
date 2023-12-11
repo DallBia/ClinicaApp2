@@ -125,7 +125,6 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   {
     const r = this.clienteService.BuscaAgenda();
 
-
   }
 
 

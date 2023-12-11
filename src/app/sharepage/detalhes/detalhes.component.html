@@ -12,7 +12,7 @@
 <div class="inferior" *ngIf="this.agendaService.dSala !== 0">
   <div *ngIf="this.agendaService.visCli">
     <label class="fLabel" for="cliente-select">Cliente:</label>
-    <input type="text" id="cliente-select" list="valores" class="fCampo" [(ngModel)]="this.agendaService.dCliente">
+    <input type="text" id="cliente-select" list="valores" class="fCampo" [(ngModel)]="this.agendaService.dCliente" (blur)="buscaFoto()">
     <datalist id="valores">
       <option *ngFor="let valor of this.ListaCliente" [value]="valor.nome"></option>
     </datalist>
@@ -48,8 +48,8 @@
   </div>
   <div style="display: flex; vertical-align: middle;">
     <label class="fLabel" for="valor">Valor (R$):</label>
-    <input type="text" class="fCampo" style="width: 25%;" [(ngModel)]="this.CelAtual.valor" [ngModelOptions]="{updateOn: 'blur'}" appCurrencyInput />
-    <div style="width: 40%; vertical-align: middle; margin-left: 5px;">{{ this.CelAtual.valor | currency:'BRL':'symbol':'1.2-2' }}</div>
+    <input type="text" *ngIf="this.Vlr == false" class="fCampo" style="width: 25%;" (blur)="AltVlr2()" [(ngModel)]="this.CelAtual.valor" [ngModelOptions]="{updateOn: 'blur'}" appCurrencyInput />
+    <div (click)="altVlr()" *ngIf="this.Vlr == true" class="fLabel" >{{ this.CelAtual.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
   </div>
   <div class="repetition">
     <label class="fLabel" for="Repet">Repetição:</label>

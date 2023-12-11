@@ -1,6 +1,6 @@
 <div class="linha01">
     <div class="ti-botao">
-        <button class="Rosa" (click)="CliqueNovo()" > <!-- [disabled]="!this.vNovo" -->
+        <button class="Rosa" (click)="CliqueNovo()" [disabled]="this.btnNovo" > <!-- [disabled]="!this.vNovo" -->
             <!-- {{this.selectedFicha}} -->
             NOVO
         </button>
@@ -42,12 +42,12 @@
                 </button>
             </div>
             <div class="btnSalvar">
-                <button class="Rosa" id="Salvar" (click)="this.formCliente.submit()">
-                    Salvar
+                <button class="Rosa" [disabled]="this.btnSalva" (click)="this.salvarPessoa()">
+                    {{this.txtSalva}}
                 </button>
             </div>
             <div class="btnFechar">
-                <button class="RosaEscuro" id="Cancelar">
+                <button class="RosaEscuro" (click)="this.cancela()" id="Cancelar">
                   Cancelar
                 </button>
             </div>

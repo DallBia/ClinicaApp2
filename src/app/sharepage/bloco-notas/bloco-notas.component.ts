@@ -11,6 +11,7 @@ import { ProntuarioService } from 'src/app/services/prontuario/prontuario.servic
 import { UserService } from 'src/app/services';
 import { Prontuario } from 'src/app/models/Prontuarios';
 import { SharedService } from 'src/app/shared/shared.service';
+import { Valor } from 'src/app/models/Valores';
 
 @Component({
   selector: 'app-bloco-notas',
@@ -37,6 +38,7 @@ export class BlocoNotasComponent implements OnInit {
   public User!:Colaborador;
   public nUser!: number;
   public UserAll!: any;
+  public rota: string = '';
 //===================================================================
 
   highlightLinks() {
@@ -52,9 +54,14 @@ export class BlocoNotasComponent implements OnInit {
 }
 
 Enviar(){
+  if(this.linkA!=='CONTROLE FINANCEIRO'){
   let texto = this.processedText;
-  // texto = texto.replace(/\r\n|\n/g, '<br><br>')
   this.Insere(texto.toString());
+  }else{
+    this.Insere('CONTROLE FINANCEIRO');
+  }
+
+
 }
 
 onKeydown(event: KeyboardEvent): void {
@@ -113,23 +120,66 @@ Insere (processedText: string) {
         tipo = ''
         break;
     }
-    const texto: Prontuario = {
-      id: this.shared.idTexto,
-      idCliente: this.nCliente,
-      idColab: this.nUser !== undefined ? this.nUser : 0,
-      tipo: tipo,
-      dtInsercao: new Date(),
-      texto: processedText,
-    };
-    if(this.shared.idTexto == 0){
-      this.createProntuario(texto);
+    if (this.linkA == 'CONTROLE FINANCEIRO'){
+      const novo: Valor = {
+        id: this.shared.idTexto,
+        nome: this.shared.texto,
+        valor: parseFloat(this.shared.xvalor.toString()),
+        data: new Date().toISOString().split('T')[0],
+        selecionada: false,
+      }
+      if(this.shared.idTexto == 0){
+        this.createValor(novo);
+      }else{
+        this.updateValor(novo);
+      }
     }else{
-      this.updateProntuario(this.shared.idTexto, texto);
+      const texto: Prontuario = {
+        id: this.shared.idTexto,
+        idCliente: this.nCliente,
+        idColab: this.nUser !== undefined ? this.nUser : 0,
+        tipo: tipo,
+        dtInsercao: new Date(),
+        texto: processedText,
+      };
+      if(this.shared.idTexto == 0){
+        this.createProntuario(texto);
+      }else{
+        this.updateProntuario(texto);
+      }
     }
+
 
   }
 }
 
+createValor(novo: Valor) {
+  const data = this.shared.createValor(novo);
+      this.delay(300);
+      alert('Registro gravado!');
+      this.delay(300);
+      location.reload();
+    }
+
+
+updateValor(novo: Valor) {
+  console.log(novo)
+  try{
+    const data = this.shared.updateValor(novo);
+  }catch{
+    console.error('ex.error');
+  }
+
+      this.delay(300);
+      alert('Registro atualizado!');
+      this.delay(300);
+      location.reload();
+}
+delay(time:number) {
+  setTimeout(() => {
+
+  }, time);
+}
 createProntuario(texto: Prontuario) {
   this.prontuarioService.CreateProntuario(texto).subscribe(
     (data) => {
@@ -143,13 +193,8 @@ createProntuario(texto: Prontuario) {
     }
   );
 }
-delay(time:number) {
-  setTimeout(() => {
 
-  }, time);
-}
-
-updateProntuario(id: number, texto: Prontuario) {
+updateProntuario(texto: Prontuario) {
   this.prontuarioService.UpdateProntuario(texto).subscribe(
     (data) => {
       this.delay(300);
@@ -163,5 +208,14 @@ updateProntuario(id: number, texto: Prontuario) {
   );
 }
 
+formatarNumero(event: any) {
+  // Remove caracteres não numéricos, exceto ponto decimal
+  const valorFormatado = event.target.value.replace(/[^0-9.]/g, '');
 
+  // Substitui vírgulas por ponto decimal
+  const valorFinal = valorFormatado.replace(',', '.');
+
+  // Atualiza o valor do input
+  event.target.value = valorFinal;
+}
 }

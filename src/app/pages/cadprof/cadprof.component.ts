@@ -12,6 +12,7 @@ import { ModalComponent } from "../../sharepage/forms/modal/modal.component";
 import { MatDialog } from "@angular/material/dialog";
 import { EquipeModalComponent } from "./equipe-modal/equipe-modal.component";
 import { PerfilService } from "src/app/services/perfil/perfil.service";
+import { SharedService } from "src/app/shared/shared.service";
 
 
 @Component({
@@ -81,7 +82,8 @@ export class CadprofComponent implements OnDestroy, OnInit {
     ListaFormacaos: any;
     vNovo: boolean = true;
     vSalvar: boolean = true;
-
+    public btnSalva: boolean = false;
+    public txtSalva: string = "Salvar";
     private control!:any;
     private ctrl1: boolean = false;
     private ctrl2: boolean = false;
@@ -93,6 +95,7 @@ export class CadprofComponent implements OnDestroy, OnInit {
     public dialog: MatDialog,
     private perfilService: PerfilService,
     public colaboradorService: ColaboradorService,
+    public shared: SharedService,
     ){
       this.subscription = this.colaboradorService.EquipeA$.subscribe(
         name => this.nEquipe = name
@@ -152,6 +155,10 @@ abrirModal(){
 }
 
 Salvar(){
+  if (this.txtSalva == "Salvar"){
+    this.txtSalva = "Aguarde..."
+    this.btnSalva = true;
+    this.delay(300);
   const Dados = this.formProf.submitE()
   let ProfAlt = this.ProfVazio;
   if (ProfAlt !== null){
@@ -198,12 +205,15 @@ Salvar(){
        const dados = this.colaboradorService.GetCol();
        console.log(dados)
       alert('Registro atualizado!')
+      this.btnSalva = false;
+      this.txtSalva = "Salvar"
       location.reload()
     }, error => {
       console.error('Erro no upload', error);
     });
     }
   }
+}
 }
 
   CliqueNovo(){

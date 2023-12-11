@@ -42,6 +42,11 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   nChanges: boolean = false;
   minhaCondicao: boolean = false;
   vNovo: boolean = true;
+
+  public btnNovo: boolean = false;
+  public btnSalva: boolean = false;
+  public txtSalva: string = "Salvar";
+
   // =================== VARIÁVEIS PARA CRIAR COMPONENTES ===============================================
 
                 novo = [
@@ -105,14 +110,14 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
 
   CliqueNovo(){
-
+    this.btnNovo = true;
     this.clienteService.setChangesA(false);
     this.clienteService.setClienteAtual(this.clienteService.Vazia[0]);
     this.clienteService.setClienteA(-1);
     setTimeout(() => {
-      this.clienteService.setChangesA(true);
+    this.clienteService.setChangesA(true);
     }, 0)
-
+    this.btnNovo = false;
   }
 
     ngOnInit(): void {
@@ -172,8 +177,28 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
     });
   }
 
+  cancela(){
+    if (this.txtSalva == "Salvar"){
+      this.txtSalva = "Aguarde..."
+      this.btnSalva = true;
+    }else{
+      this.btnSalva = false;
+      this.txtSalva= "Salvar"
+    }
+  }
+
+  salvarPessoa(){
+
+      this.formCliente.submit();
+
+
+  }
 
   buscarAlteracoes(event:any){
+    if (this.txtSalva == "Salvar"){
+      this.txtSalva = "Aguarde..."
+      this.btnSalva = true;
+      this.delay(300);
     this.userService.alertas = true;
     let TabNas: string = new Date().toISOString().split('T')[0];
       const TabForm = this.formCliente.clienteform.value
@@ -315,6 +340,7 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
 
       }
 
+    }
   }
 
     FTel(telefone: string) {
@@ -342,11 +368,14 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       this.delay(300)
       this.userService.alertas = true;
       alert('Registro gravado!')
+      this.btnSalva = false;
+      this.txtSalva = "Salvar"
       location.reload()
     }, error => {
       this.userService.alertas = true;
       console.error('Erro no upload', error);
     });
+
   }
 
     updateCliente(cliente: Cliente){
@@ -355,6 +384,8 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
          this.delay(300)
          this.userService.alertas = true;
         alert('Registro atualizado!')
+        this.btnSalva = false;
+        this.txtSalva = "Salvar"
         location.reload()
       }, error => {
         this.userService.alertas = true;
