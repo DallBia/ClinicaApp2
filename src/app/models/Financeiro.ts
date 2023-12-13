@@ -9,4 +9,5 @@ export interface Financeiro{
   valor: number;
   selecionada: boolean;
   recibo: string;
+  refAgenda: number;
 }

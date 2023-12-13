@@ -13,6 +13,8 @@ import { LoginComponent } from '../login/login.component';
 import { Router } from '@angular/router';
 import { FileService } from 'src/app/services/foto-service.service';
 import { SharedService } from 'src/app/shared/shared.service';
+import { FinanceiroService } from 'src/app/services/financeiro/financeiro.service';
+import { Financeiro } from 'src/app/models/Financeiro';
 
 @Component({
   selector: 'app-controle-finaceiro',
@@ -26,13 +28,13 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
   @ViewChild(LoginComponent) login!: LoginComponent;
   texto: string = '';
   private subscription!: Subscription;
-  nCliente!: number;
-  Atual!: TableData;
-  public Ficha:string = 'FICHA';
+  // nCliente!: number;
+  // Atual!: TableData;
+  public Ficha: string = 'FICHA';
   public NomeCliente: string = '';
-  public MostraInfo: boolean = true;
+
   public idFoto: string = '';
-  public User!:Colaborador;
+  // public User!:Colaborador;
   public nUser!: number;
   public UserAll!: any;
   public tela: string = 'padrão';
@@ -44,16 +46,18 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
     private prontuarioService: ProntuarioService,
     private router: Router,
     public shared: SharedService,
-    private userService: UserService) {
+    private userService: UserService,
+    public finService: FinanceiroService,
+    ) {
     this.subscription = this.clienteService.ClienteA$.subscribe(
-      nameC => this.nCliente = nameC
+      nameC => this.finService.nCliente = nameC
     )
     this.subscription = this.userService.EquipeA$.subscribe(
       nameC => this.nUser = nameC
     )
 
     this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-      this.Atual = clienteAtual;
+      this.finService.Atual = clienteAtual;
     });
   }
 
@@ -70,34 +74,44 @@ altTab(){
 
   ngOnInit() {
 
-
     this.subscription = this.clienteService.ClienteA$.subscribe(
-      nameC => this.nCliente = nameC
+      nameC => this.finService.nCliente = nameC
     )
     this.subscription = this.userService.EquipeA$.subscribe(
       nameC => this.nUser = nameC
     )
 
     this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-      this.Atual = clienteAtual;
+      this.finService.Atual = clienteAtual;
     });
 
     this.UserAll = this.colaboradorService.GetColaborador();
 // this.delay(300);
-
-    if(this.nCliente !== 0){
-        this.Ficha = this.Atual.Ficha;
-      this.NomeCliente = this.Atual.nome.toUpperCase();
+    const Funcionarios = this.colaboradorService.GetEquipeMinimal()
+    if(this.finService.nCliente !== 0){
+        this.Ficha = this.finService.Atual.Ficha;
+      this.NomeCliente = this.finService.Atual.nome.toUpperCase();
       this.idFoto = '../../../assets/img/Clientes/' + this.Ficha + '.jpg'
-
+      console.log(this.finService.nCliente)
       }else{
       this.Ficha = 'FICHA';
       this.NomeCliente = '';
 
     }
-    this.newInfo(this.MostraInfo);
+    this.finService.MostraInfo = false;
+    //this.newInfo(this.finService.MostraInfo);
     const dados = this.BuscaValores()
+    this.finService.zerar();
 
+    console.log('ListaFuncionário:')
+    console.log(this.finService.ListaFuncionario)
+    const sel = this.userService.getEquipeA().getValue()
+    for(let i of this.finService.ListaFuncionario){
+      if(i.id == sel){
+        this.finService.info_AtualizadoPor = i.nome;
+        this.finService.Usuário = i.nome;
+      }
+    }
   }
 
 
@@ -105,6 +119,7 @@ altTab(){
     let data = 'nada por enquanto 2'
     try{
       data = await this.shared.BuscaValores();
+      const retorno001 = await this.finService.getFinanceiroById(this.finService.nCliente);
     }
     catch{
 
@@ -114,33 +129,57 @@ altTab(){
 
 
   newInfo(opt: boolean){
-    this.MostraInfo = !opt;
+    if (this.finService.Atual.id == 0){
+      alert ('Você deve primeiro selecionar um cliente na guia FICHA DE CLIENTES')
+    }else{
+      this.finService.MostraInfo = !opt;
+      if(this.finService.MostraInfo == false){
+        this.finService.tabFinanceira.forEach(s => s.selecionada = false);
+        this.finService.zerar();
+      }
+    }
   }
 
-  adicionarEspaco() {
-    this.texto += '\n\n';
+  async Enviar(){
+    if(this.finService.MostraInfo == false){
+      alert ('Não há nada a ser salvo por enquanto...')
+    }else{
+
+
+
+      const valorNumerico = this.finService.info_Valor.replace(/[^\d,]/g, '');
+      const valorPontoFlutuante = valorNumerico.replace(',', '.');
+      const resultado = parseFloat(valorPontoFlutuante);
+      let valor = isNaN(resultado) ? 0 : resultado;
+      if(this.finService.info_Credito == false){
+        valor =  valor*(-1)
+      }
+      const novaData = this.finService.info_Data.split('/');
+      const data = novaData[2]+'-'+novaData[1]+'-'+novaData[0]
+      const dado: Financeiro = {
+        id: this.finService.idLinha,
+        idCliente: this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0,
+        idFuncAlt: this.finService.info_numAtualizadoPor !== undefined ? this.finService.info_numAtualizadoPor : 0,
+        nome: this.finService.info_Movimento,
+        descricao: this.finService.info_Descricao,
+        data: data,
+        valor: valor,
+        selecionada: false,
+        refAgenda:this.finService.info_refAg,
+        recibo: this.finService.info_Recibo,
+      }
+      if(this.finService.idLinha){
+        const result = await this.finService.updateFinanceiro(dado)
+        alert('Dados atualizados!')
+        location.reload()
+      }else{
+        const result = await this.finService.createFinanceiro(dado)
+        alert('Dados inseridos com sucesso!')
+        location.reload()
+      }
+    }
   }
 
-
-  ficha = [
-    { texto: this.Ficha, altura: '10vh', largura: '18vh', cor: 'var(--cor-clara)', size: '20pt' }
-  ];
-  containers = [
-    {altura:'10vh', largura: "200vh"}
-  ];
-  botoes = [
-    { texto: '', altura: '4.6vh', largura: '15vh', cor: 'white' },
-    { texto: '', altura: '4.6vh', largura: '15vh', cor: 'white' },
-    { texto: '', altura: '4.6vh', largura: '15vh', cor: 'white'},
-    { texto: '', altura: '4.6vh', largura: '15vh', cor:'white' }
-  ];
-  botoesInfo = [
-    { texto: 'Anexar Documento', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Ver Documento', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Imprimir Relatório', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Buscar neste Prontuário', altura: '4vh', largura: '30vh', cor: 'white' },
-    { texto: 'Inserir nova informação', altura: '4vh', largura: '30vh', cor: 'white' },
- ]
 
  ngOnDestroy(): void {
       this.subscription.unsubscribe();

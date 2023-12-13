@@ -66,9 +66,23 @@ getAgendaByDate(date: string): Promise<Response<Agenda[]>> {
     });
 }
 
-CreateAgenda(agenda: Agenda) : Observable<Response<Agenda[]>>{
-  return this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda);
-}
+// CreateAgenda(agenda: Agenda) : Observable<Response<Agenda[]>>{
+//   return this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda);
+// }
+  async CreateAgenda(agenda: Agenda): Promise<Response<Agenda[]>> {
+    try {
+      const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda`, agenda).toPromise();
+
+      if (response) {
+        return response;
+      } else {
+        throw new Error('Resposta da API é indefinida.');
+      }
+    } catch (error) {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
+  }
+
 UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
   return this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}` , agenda);
 }

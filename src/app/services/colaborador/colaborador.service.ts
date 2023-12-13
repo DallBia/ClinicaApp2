@@ -9,13 +9,17 @@ import { FormacaoService } from '../formacao/formacao.service';
 import { Formacao } from 'src/app/models/Formacaos';
 import { User } from 'src/app/models';
 import { FileService } from '../foto-service.service';
+import { Tipo } from 'src/app/models/Tipo';
+import { FinanceiroService } from '../financeiro/financeiro.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ColaboradorService {
   constructor(private http: HttpClient, private formacaoService: FormacaoService,
-              private fotoService: FileService) { }
+              private fotoService: FileService,
+              public finService:FinanceiroService,
+              ) { }
 
   public fotoAtual: string='';
   private apiurl = `${environment.ApiUrl}/User`
@@ -107,8 +111,22 @@ export class ColaboradorService {
     }
 
 
-      GetColaboradorbyId(id: number) : Promise<any>{
+    GetColaboradorbyId(id: number) : Promise<any>{
         return this.http.get<any>(`${environment.ApiUrl}/Colaborador/id/${id}`).toPromise();
+    }
+    async GetEquipeMinimal() : Promise<Tipo[]>{
+     try {
+        const response = await this.http.get<Response<Tipo[]>>(`${environment.ApiUrl}/Colaborador/Agenda`).toPromise();
+
+        if (response && response.dados !== undefined && response.sucesso) {
+          this.finService.ListaFuncionario = response.dados;
+          return response.dados;
+        } else {
+          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        }
+      } catch (error) {
+        throw error; // Você pode personalizar essa parte conforme sua necessidade
+      }
     }
 
     async GetCol(){

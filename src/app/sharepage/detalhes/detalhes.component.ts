@@ -314,17 +314,17 @@ public dataCol: any;
 
   salvaAgenda(texto: Agenda) {
     console.log(texto)
-    this.agendaService.CreateAgenda(texto).subscribe(
-      (data) => {
-        this.delay(100);
-        alert('Sessão gravada!');
-        this.delay(100);
-        location.reload();
-      },
-      (error) => {
-        console.error('Erro no upload', error);
-      }
-    );
+    // this.agendaService.CreateAgenda(texto).subscribe(
+    //   (data) => {
+    //     this.delay(100);
+    //     alert('Sessão gravada!');
+    //     this.delay(100);
+    //     location.reload();
+    //   },
+    //   (error) => {
+    //     console.error('Erro no upload', error);
+    //   }
+    // );
   }
   delay(time:number) {
     setTimeout(() => {

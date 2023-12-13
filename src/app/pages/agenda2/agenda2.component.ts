@@ -29,10 +29,10 @@ export class Agenda2Component implements OnInit, OnDestroy{
 
       this.colunas = [];
       this.linhas = [];
-      for (let i = 0; i <= 20; i++) {
+      for (let i = 0; i <= 4; i++) {
         this.colunas.push(i);
       }
-      for (let j = 1; j <= 15; j++) {
+      for (let j = 1; j <= 3; j++) {
         this.linhas.push(j);
       }
 
@@ -47,7 +47,7 @@ export class Agenda2Component implements OnInit, OnDestroy{
     try {
       this.valid1 = await this.agendaService.BuscaAgenda(this.agendaService.dia)
       console.log(this.agendaService.agendaG)
-      this.valid1 = await this.agendaService.BuscaAgenda(this.agendaService.dia)
+      //this.valid1 = await this.agendaService.BuscaAgenda(this.agendaService.dia)
 
     }
     catch(error)   {
@@ -76,20 +76,6 @@ export class Agenda2Component implements OnInit, OnDestroy{
   }
 
 
-  async Dados1(): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      const verificarSucesso1 = () => {
-        if (this.valid1 !== null) {
-          resolve(true);
-        } else {
-          setTimeout(() => {
-            this.Dados1();
-          }, 300);
-        }
-      };
-      verificarSucesso1();
-    });
-  }
 }
 
 

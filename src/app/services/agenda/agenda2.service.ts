@@ -50,7 +50,7 @@ export class Agenda2Service {
     historico:'',
     diaDaSemana:'',
     dia:'',
-    valor: 0,
+    valor: -1000009,
   };
   public tVazia: Tipo = {
     id: 0,
@@ -66,10 +66,12 @@ export class Agenda2Service {
   public celSelect: Agenda = this.Vazia;
   public cellA: Agenda = this.Vazia;
   public agendaDia: TableAgenda[] = [];
+  public agendaDiaAnt: TableAgenda[] = [];
   public linTmp: TableAgenda[] = [];
   public dHora: number = 0;
   public dSala: number = 0;
   public agendaG: Agenda[] = [];
+  public agendaCriada!: Agenda
   public buscaConcluida: boolean = false;
   public ListaCLientes: Tipo[] = [];
   public ListaEquipe: Tipo[] = [];
@@ -78,6 +80,7 @@ export class Agenda2Service {
   public Equipe!: Colaborador;
   public fotografia: boolean = false;
   public changes: boolean = false;
+  public success: boolean = false;
 
   public listaHorarios: any = [
     {n: 0, horario: 'manhã'},
@@ -167,7 +170,9 @@ export class Agenda2Service {
         this.agendaDia = [...this.agendaDia, ...this.linTmp]
       }
     }
+    this.agendaDiaAnt = this.agendaDia;
     this.atualizarAgendaDia(this.agendaDia)
+
     return true;
   }
 
@@ -186,6 +191,98 @@ export class Agenda2Service {
     this.ListaEquipe = data.dados
   }
 
+  async BuscarAgenda(dia: string): Promise<boolean> {
+    this.Cliente = this.clienteService.clienteVazio
+    this.Equipe = this.colaboradorService.equipeVazia
+    this.celSelect = this.Vazia;
+    this.agendaDia = [];
+    const data: Response<Agenda[]> = await this.getAgendaByDate(dia);
+
+    this.agendaG = data.dados;
+    this.success = true
+    return true;
+  }
+
+
+  async BuscaColabor(id: number){
+    let data: any;
+    try{
+      const data = await this.colaboradorService.GetColaboradorbyId(id)
+      this.Equipe = data.dados
+      console.log(this.Equipe)
+    }
+    catch{
+
+    }
+    return true
+
+  }
+
+
+
+    async BuscaValores(){
+      let data = 'nada por enquanto 2'
+      try{
+        data = await this.shared.BuscaValores();
+      }
+      catch{
+
+      }
+      return data;
+    }
+
+
+
+    async BuscaCliente(id: number){
+      const data = await this.clienteService.BuscaClientesById(id)
+      if(data){
+        this.Cliente = this.clienteService.cliente
+      }
+    }
+
+
+    // CreateAgenda(agenda: Agenda) : Observable<Response<Agenda[]>>{
+    //   return this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda);
+    // }
+    // UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
+    //   return this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}` , agenda);
+    // }
+
+    async UpdateAgenda(id: number, agenda: Agenda): Promise<Agenda[]> {
+      try {
+        const response = await this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}` , agenda).toPromise();
+
+        if (response && response.dados !== undefined && response.sucesso) {
+          return response.dados;
+        } else {
+          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        }
+      } catch (error) {
+        throw error; // Você pode personalizar essa parte conforme sua necessidade
+      }
+    }
+    async CreateAgenda(agenda: Agenda): Promise<Agenda[]> {
+      try {
+        const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda).toPromise();
+        if (response && response.dados !== undefined && response.sucesso) {
+          this.agendaG = response.dados;
+          return response.dados;
+        } else {
+          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        }
+      } catch (error) {
+        throw error; // Você pode personalizar essa parte conforme sua necessidade
+      }
+    }
+
+
+
+
+
+
+
+
+
 
   carregarCel(){
 
@@ -194,6 +291,7 @@ export class Agenda2Service {
 
     const s = this.hora * 100;
     const idSelect = s + this.sala;
+
     for(let i of this.agendaDia){
       if (i.idtmp == idSelect){
         this.celSelect ={
@@ -215,6 +313,7 @@ export class Agenda2Service {
           valor:  i.valor,
         }
       }
+      this.cellA = this.celSelect;
     }
 
     this.celSelect.idCliente = this.celSelect.idCliente !== undefined ? this.celSelect.idCliente : 0;
@@ -241,7 +340,7 @@ export class Agenda2Service {
         this.horario = i.horario
       }
     }
-    this.cellA = this.celSelect;
+
   }
 
   carregarSala(){
@@ -270,6 +369,7 @@ export class Agenda2Service {
           obs:  i.obs,
           valor:  0,
         }
+        this.cellA = this.celSelect
       }
     }
 
@@ -300,51 +400,7 @@ export class Agenda2Service {
     }
     console.log(this.celSelect)
     console.log(this.Equipe)
-    //this.cellA = this.celSelect;
-  }
 
-async BuscaColabor(id: number){
-  let data: any;
-  try{
-    const data = await this.colaboradorService.GetColaboradorbyId(id)
-    this.Equipe = data.dados
-    console.log(this.Equipe)
-  }
-  catch{
-
-  }
-  return true
-
-}
-
-
-
-  async BuscaValores(){
-    let data = 'nada por enquanto 2'
-    try{
-      data = await this.shared.BuscaValores();
-    }
-    catch{
-
-    }
-    return data;
-  }
-
-
-
-  async BuscaCliente(id: number){
-    const data = await this.clienteService.BuscaClientesById(id)
-    if(data){
-      this.Cliente = this.clienteService.cliente
-    }
-  }
-
-
-  CreateAgenda(agenda: Agenda) : Observable<Response<Agenda[]>>{
-    return this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda);
-  }
-  UpdateAgenda(id: number, agenda: Agenda) : Observable<Response<Agenda[]>>{
-    return this.http.put<Response<Agenda[]>>(`${this.apiUrl}/UpdateAgenda/${id}` , agenda);
   }
 
 }

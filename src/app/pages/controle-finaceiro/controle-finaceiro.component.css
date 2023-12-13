@@ -44,12 +44,19 @@
 .bloco-antigo{
   width: 97.5%;
   padding: 4px;
-  height: 95%;
+  height: 75%;
   border: 2px solid var(--cor-clara);
   border-radius: 10px;
   overflow: hidden; /* Oculta qualquer conteúdo que exceda a altura máxima */
-}
 
+}
+.totais{
+width: 97.5%;
+height: 25px;
+background-color: #ffb6b6;
+margin-top: 10px;
+margin-bottom: 10px;
+}
 .listagem {
   max-height: 100%; /* Defina a altura máxima desejada para o conteúdo */
   overflow: auto; /* Adicione barras de rolagem quando o conteúdo excede a altura máxima */
@@ -87,15 +94,17 @@
   background-color: white;
 }
 
-
 .bloco-input{
-    height: 35%;
+    height: 22.5%;
     width: 97.5%;
-    margin-top: 1%;
+    background-color:#fdf5df;
+    border: 2px solid  #ffb6b6;
+    border-radius: 10px;
+    position: relative;
   }
 
 .bloco-input::-webkit-scrollbar-thumb {
-  background-color: #fddfed;
+  background-color:#fddfed;
   border-radius: 6px;
 }
 
@@ -187,4 +196,46 @@
   border-color: #ffb6b6;
   border-radius: 6px;
   padding: 2px;
+}
+.inp-sup{
+  height: 50%;
+  width: 100%;
+  display:flex;
+  vertical-align: top;
+}
+.cjt1 {
+  margin-left:5px;
+  height: 40%;
+  width: 50%;
+  vertical-align: top;
+
+}
+.cjt2 {
+  margin-left:1px;
+  height: 40%;
+  width: 20%;
+  vertical-align: top;
+
+}
+.cjtLbl{
+  font-size:small;
+  font-style: oblique;
+  text-align: center;
+  width: 95%;
+}
+
+.cjtLbl2{
+  font-size:medium;
+  font-style: bold;
+  text-align: center;
+  width: 95%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.cjtInp {
+  font-size: medium;
+  border: solid 1px var(--cor-clara);
+  width: 95%;
+
 }
