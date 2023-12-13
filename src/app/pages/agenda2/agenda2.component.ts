@@ -29,10 +29,10 @@ export class Agenda2Component implements OnInit, OnDestroy{
 
       this.colunas = [];
       this.linhas = [];
-      for (let i = 0; i <= 4; i++) {
+      for (let i = 0; i <= 20; i++) {
         this.colunas.push(i);
       }
-      for (let j = 1; j <= 3; j++) {
+      for (let j = 1; j <= 15; j++) {
         this.linhas.push(j);
       }
 
