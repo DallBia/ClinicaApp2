@@ -72,7 +72,7 @@ onKeydown(event: KeyboardEvent): void {
       const endPosition = target.selectionEnd;
       const originalValue = target.value;
       target.value = originalValue.substring(0, startPosition)
-                          + '\n\n'
+                          + '\n'
                           + originalValue.substring(endPosition);
       target.selectionStart = target.selectionEnd = startPosition + 2;
   }
