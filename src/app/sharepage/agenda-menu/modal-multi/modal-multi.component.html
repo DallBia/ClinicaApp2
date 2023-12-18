@@ -1,0 +1,164 @@
+
+  <div class="mat-dialog-content">
+    <table>
+      <thead>
+        <tr>
+          <th>Sessão</th>
+          <th>Profissional</th>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>01</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda[0].profis" (blur)="buscaData(0)">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda[0].dia" (blur)="buscaHora(0)"></td>
+          <td><input type="text" id="hor-select" list="val1" class="fCampo" [(ngModel)]="this.ListaAgenda[0].hora" (blur)="buscaStatus(0)">
+            <datalist id="val1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td *ngIf="this.ListaAgenda[0].status == 'Indisponível.'" class="nao">{{this.ListaAgenda[0].status}}</td>
+          <td *ngIf="this.ListaAgenda[0].status == 'Disponível.'" class="sim">{{this.ListaAgenda[0].status}}</td>
+        </tr>
+
+        <tr>
+          <td>02</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda[1].profis" (blur)="buscaData(1)">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda[1].dia" (blur)="buscaHora(1)"></td>
+          <td><input type="text" id="hor-select" list="val1" class="fCampo" [(ngModel)]="this.ListaAgenda[1].hora" (blur)="buscaStatus(2)">
+            <datalist id="val1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>03</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda[2].profis" (blur)="buscaData(2)">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora(2)"></td>
+          <td><input type="text" id="hor-select" list="val1" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus(2)">
+            <datalist id="val1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>04</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda[3].profis" (blur)="buscaData()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora()"></td>
+          <td><input type="text" id="hor-select" list="valores2" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>05</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda[4].profis" (blur)="buscaData()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora()"></td>
+          <td><input type="text" id="hor-select" list="valores2" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>06</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda.profis" (blur)="buscaData()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora()"></td>
+          <td><input type="text" id="hor-select" list="valores2" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>07</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda.profis" (blur)="buscaData()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora()"></td>
+          <td><input type="text" id="hor-select" list="valores2" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>08</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda.profis" (blur)="buscaData()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora()"></td>
+          <td><input type="text" id="hor-select" list="valores2" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>09</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda.profis" (blur)="buscaData()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora()"></td>
+          <td><input type="text" id="hor-select" list="valores2" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+
+        <tr>
+          <td>10</td>
+          <td><input type="text" id="prof-select" list="valores1" class="fCampo" [(ngModel)]="this.ListaAgenda.profis" (blur)="buscaData()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.ListaEquipe" [value]="valor.nome" ></option>
+            </datalist></td>
+          <td><input type="date" id="dia-select" class="fCampo" [(ngModel)]="this.ListaAgenda.dia" (blur)="buscaHora()"></td>
+          <td><input type="text" id="hor-select" list="valores2" class="fCampo" [(ngModel)]="this.ListaAgenda.hora" (blur)="buscaStatus()">
+            <datalist id="valores1">
+              <option *ngFor="let valor of this.agenda.listaHorarios" [value]="valor.horario" ></option>
+            </datalist></td>
+          <td>test</td>
+        </tr>
+      </tbody>
+    </table>
+    <div mat-dialog-actions>
+      <button class="botão" mat-button (click)="onReserveClick()">Reservar</button>
+      <button class="botão" mat-button (click)="onSaveClick()">Agendar</button>
+      <button class="botão" mat-button (click)="onCloseClick()">Fechar</button>
+    </div>
+
+  </div>
+
+

@@ -1,6 +1,6 @@
 import { TableProf } from './../../models/Tables/TableProf';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from 'src/app/services';
 import { FormacaoService } from 'src/app/services/formacao/formacao.service';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
@@ -11,7 +11,7 @@ import { take } from 'rxjs/operators';
   templateUrl: './grid02.component.html',
   styleUrls: ['./grid02.component.css']
 })
-export class Grid02Component {
+export class Grid02Component implements OnInit{
   dataSource: TableProf[] = [];
   public nLin: TableProf[] = [];
   public Verifica: boolean = false;
@@ -36,16 +36,20 @@ subscription: Subscription;
     for(let i of this.colaboradorService.dataSource){
       i.selecionada = false;
     }
-
-    this.colaboradorService.setEquipeA(numero);
+     const xus = this.colaboradorService.dataSource.find(user => parseInt(user.ficha, 10) === numero)
+   if (xus !== undefined) {
+    this.colaboradorService.eAtual = xus
+   }
     let a: any;
-    this.colaboradorService.setProfAtual(this.colaboradorService.dataSource.find(user => parseInt(user.ficha, 10) === numero) || a);
     l.selecionada = true;
     this.nChanges = true;
     setTimeout(() => {
       this.colaboradorService.setChangesA(true);
     }, 100)
+   this.colaboradorService.setProfAtual(this.colaboradorService.dataSource.find(user => parseInt(user.ficha, 10) === numero) || a);
+      this.colaboradorService.setEquipeA(numero);
   }
+
   constructor(public colaboradorService: ColaboradorService, private userService: UserService, private formacaoService: FormacaoService) {
 
 
@@ -54,5 +58,11 @@ subscription: Subscription;
     )
 
   }
+  ngOnInit(): void {
+
+
+  }
+
+
 
 }

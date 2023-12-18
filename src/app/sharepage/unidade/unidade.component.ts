@@ -9,21 +9,16 @@ import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
   styleUrls: ['./unidade.component.css']
 })
 export class UnidadeComponent implements OnInit {
-public x: boolean=true;
-private subscription!: Subscription;
-private dia: string = new Date().toISOString().split('T')[0];
+public x: boolean = true;
 public Ligado = [
   {fontWeight: 'bolder', fontSize:'x-large',porc:'75%',porc2:'76%'}
 ]
 
 ngOnInit(){
-  this.subscription = this.agendaService.diaA$.subscribe(
-    name => this.dia = name
-  )
+
 
 }
-constructor(private agendaService: AgendaService,
-            public agenda2: Agenda2Service) {
+constructor(public agenda: Agenda2Service) {
 
 
 }
@@ -31,20 +26,15 @@ constructor(private agendaService: AgendaService,
 
 ToggleUnit(){
   this.x = !this.x;
-  const xdia = this.dia;
+  const xdia = this.agenda.dia;
   if(this.x == true){
-    // this.agendaService.setBuscaA(xdia + '%1');
-    // this.agendaService.setUnitAtual(1);
-    this.agenda2.un = 1
+    this.agenda.un = 1
     console.log('Unidade 1')
   }else{
-    // this.agendaService.setBuscaA(xdia + '%2');
-    // this.agendaService.setUnitAtual(2);
-    this.agenda2.un = 2
+    this.agenda.un = 2
     console.log('Unidade 2')
   }
-
-  this.agenda2.recarregar();
+  this.agenda.recarregar();
 }
 
 }

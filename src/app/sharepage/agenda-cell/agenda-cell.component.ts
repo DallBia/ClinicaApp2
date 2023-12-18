@@ -4,6 +4,7 @@ import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
 import { ClienteService } from 'src/app/services/cliente/cliente.service';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
 import { DonoSalaService } from 'src/app/services/donoSala/dono-sala.service';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-agenda-cell',
@@ -27,9 +28,8 @@ export class AgendaCellComponent {
 public dados: any;
 
   constructor(public agendaService: Agenda2Service,
-            private clienteService: ClienteService,
-            private donoSalaService: DonoSalaService,
-            private colaboradorService: ColaboradorService,
+            private shared: SharedService,
+
             )
   {
 
@@ -38,11 +38,9 @@ public dados: any;
 
 
 ngOnInit(){
-  const xpar = this.parametro.split('%');
-  this.lin = parseInt(xpar[0]);
-  this.col = parseInt(xpar[1]);
-  const h = this.lin * 100;
-  this.identif = h + this.col;
+
+this.gerarIdent()
+this.shared.delay(200)
   this.l1 = this.lin == 0 ? true : false;
   this.c1 = this.col == 0 ? true : false;
   if (this.col == 0){
@@ -53,26 +51,40 @@ ngOnInit(){
     }
   }
     this.agendaService.agendaDia$.subscribe((novaAgendaDia) => {
-      this.atualizarNomeCorrespondente();
-    });
-    this.agendaService.changes$.subscribe((bol) => {
-      this.atualizarNomeCorrespondente();
+        this.atualizarNomeCorrespondente();
     });
 }
-atualizarNomeCorrespondente() {
-  const item = this.agendaService.agendaDia.find(item => item.idtmp === this.identif);
-  if(this.col !== 0){
-    this.linha1 = '';
-    this.linha2 = '';
-    this.corDeFundo = 'rgb(255, 255, 255)';
-  }
-  // Verifique se o item foi encontrado antes de acessar o nome
-  if (item) {
-    this.linha1 = item.nome !== undefined ? item.nome : '';
-    this.linha2 = item.subtitulo !== undefined ? item.subtitulo : '';
-    const x = this.agendaService.dia + '%' + this.agendaService.un;
-    this.ReCarregar(x)
-  }
+
+gerarIdent(){
+  const xpar = this.parametro.split('%');
+  this.lin = parseInt(xpar[0]);
+  this.col = parseInt(xpar[1]);
+  const h = this.lin * 100;
+  this.identif = h + this.col;
+}
+
+
+
+async atualizarNomeCorrespondente() {
+ //  if(this.agendaService.agendaDia.length !== 0){
+    if (this.identif == 0){
+      const r = await this.gerarIdent()
+    }
+    const item = this.agendaService.agendaDia.find(item => item.idtmp === this.identif);
+    if(this.col !== 0){
+      this.linha1 = '';
+      this.linha2 = '';
+      // this.corDeFundo = 'rgb(255, 255, 255)';
+    }
+    // Verifique se o item foi encontrado antes de acessar o nome
+    if (item) {
+      this.linha1 = item.nome !== undefined ? item.nome : '';
+      this.linha2 = item.subtitulo !== undefined ? item.subtitulo : '';
+      const x = this.agendaService.dia + '%' + this.agendaService.un;
+      console.log('Em ' + item.idtmp + ' mudamos para ' + this.linha1 + '/' + this.linha2)
+      this.ReCarregar(x)
+    }
+  //}
 }
 ReCarregar(x: string){
 
@@ -91,6 +103,7 @@ if (this.col == 0){
     if(this.lin == 0 || this.lin == 7){
       this.l1 = true;
       this.c1 = false;
+
     }else{
       this.corDeFundo = 'rgb(255, 255, 255)';
     }
@@ -138,7 +151,7 @@ MudarSala(lin: number, col: number){
   this.agendaService.hora = lin;
   this.agendaService.sala = col;
   this.agendaService.carregarSala()
-
+  this.agendaService.carregarCel()
 }
 AltHorario(lin: number, col: number){
   this.agendaService.hora = lin;

@@ -95,6 +95,7 @@ export class CadprofComponent implements OnDestroy, OnInit {
     public dialog: MatDialog,
     private perfilService: PerfilService,
     public colaboradorService: ColaboradorService,
+    public formacao: FormacaoService,
     public shared: SharedService,
     ){
       this.subscription = this.colaboradorService.EquipeA$.subscribe(
@@ -106,7 +107,10 @@ export class CadprofComponent implements OnDestroy, OnInit {
 
   ngOnInit(){
     this.colaboradorService.dataSource = [];
-    this.colaboradorService.inicio();
+
+
+    this.colaboradorService.iniciar();
+    // this.colaboradorService.inicio();
 
     this.subscription = this.colaboradorService.ProfAtual$.subscribe(EquipeAtual => {
       this.ColAt = EquipeAtual;
@@ -153,6 +157,9 @@ export class CadprofComponent implements OnDestroy, OnInit {
 abrirModal(){
 
 }
+
+
+
 
 Salvar(){
   if (this.txtSalva == "Salvar"){

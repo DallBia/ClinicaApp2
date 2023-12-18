@@ -9,54 +9,60 @@ import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
   templateUrl: './custom-date.component.html',
   styleUrls: ['./custom-date.component.css']
 })
-export class CustomDateComponent implements OnInit {
-  displayedDate: Date = new Date();
-  semana = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
-  diaSemana: string = '';
-  dia: string = '';
-  Unit: number = 0;
-  subscription!: Subscription;
-  changes: boolean = false;
-  ctrl: boolean = false;
+export class CustomDateComponent {
+  // displayedDate: Date = new Date();
+  // semana = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+  // diaSemana: string = '';
+  // dia: string = '';
+  // Unit: number = 0;
+  // subscription!: Subscription;
+  // changes: boolean = false;
+  // ctrl: boolean = false;
+  // ParImpar: string = this.agenda2.calcSemanaSimNao(this.displayedDate.toISOString().split('T')[0]) =='P' ? 'P' : 'I';
 
-  constructor(public agendaService: AgendaService,
-              public agenda2: Agenda2Service){}
+  // constructor(
+  //             public agenda2: Agenda2Service,
+  //             ){}
 
-  onDateChange(newDate: Date) {
-    var diaDaSemana = newDate.getDay();
-    var diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-    this.diaSemana = diasDaSemana[diaDaSemana];
-    this.dia = newDate.toISOString();
-    const novoDia = new Date(newDate).toISOString().split('T')[0]
-    this.agendaService.setDiaAtual(novoDia)
-    this.agendaService.setChangesA(false);
-    this.agendaService.setEtapaA(1);
-    this.agenda2.dia = novoDia;
-    this.agenda2.recarregar();
-  }
+  // onDateChange(newDate: Date) {
+  //   const diaDaSemana = newDate.getDay();
+  //   const diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+  //   this.diaSemana = diasDaSemana[diaDaSemana];
+  //   this.dia = newDate.toISOString();
+  //   const novoDia = new Date(newDate).toISOString().split('T')[0]
+  //   this.agenda2.diaSemana = this.diaSemana
+  //   this.agenda2.dia = novoDia;
+  //   const nDia = newDate.toLocaleDateString()
+  //   this.ParImpar = this.agenda2.calcSemanaSimNao(nDia)  =='P' ? 'P' : 'I';
+  //   this.agenda2.diaSemana = this.diaSemana
+  //   this.agenda2.recarregar();
+  //   this.agenda2.recarregar();
+  // }
 
-  onDivClick(newDate: Date) {
-
-
-    //this.onDateChange(dia);
-    var diaDaSemana = newDate.getDay();
-    var diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-    this.diaSemana = diasDaSemana[diaDaSemana];
-    this.dia = newDate.toISOString();
-    const novoDia = new Date(newDate).toISOString().split('T')[0]
-    this.agendaService.setDiaAtual(novoDia)
-    this.agenda2.dia = novoDia;
-    this.agenda2.recarregar();
-    console.log(newDate);
-  }
+  // onDivClick(newDate: Date) {
 
 
+  //   //this.onDateChange(dia);
+  //   const diaDaSemana = newDate.getDay();
+  //   const diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+  //   this.diaSemana = diasDaSemana[diaDaSemana];
+  //   this.agenda2.diaSemana = this.diaSemana
+  //   this.dia = newDate.toISOString();
+  //   const novoDia = new Date(newDate).toISOString().split('T')[0]
+  //   this.agenda2.dia = novoDia;
+  //   const nDia = newDate.toLocaleDateString()
+  //   this.ParImpar = this.agenda2.calcSemanaSimNao(nDia)  =='P' ? 'P' : 'I';
+  //   this.agenda2.diaSemana = this.diaSemana
+  //   this.agenda2.recarregar();
+  // }
 
-  ngOnInit(): void {
-    this.subscription = this.agendaService.UnitA$.subscribe(
-      name => this.Unit = name
-    )
-  }
+
+
+  // ngOnInit(): void {
+  //   // this.subscription = this.agendaService.UnitA$.subscribe(
+  //   //   name => this.Unit = name
+  //   // )
+  // }
 
 }
 

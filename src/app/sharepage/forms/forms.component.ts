@@ -38,8 +38,8 @@ interface FormField {
   psicomotr:boolean,
   neurofeedback:boolean,
   reforcoesc:boolean,
-
 }
+
 @Component({
   selector: 'app-forms',
   templateUrl: './forms.component.html',
@@ -73,6 +73,20 @@ export class FormsComponent implements OnDestroy, OnInit {
       ){
 
   }
+  ngOnInit(): void {
+
+    this.colaboradorService.ProfAtual$.subscribe(Atual => {
+      this.Atual = Atual;
+      this.CarregaForm();
+
+    });
+
+
+    // this.colaboradorService.EquipeA$.subscribe(eAtual => {
+    //   this.nColab = eAtual;
+    //   this.CarregaForm();
+    // });
+  }
 
   submitE(){
     this.submitForm.emit(this.equipeform.value);
@@ -81,15 +95,7 @@ export class FormsComponent implements OnDestroy, OnInit {
   submitF(){
     this.submitForm.emit(this.formacaoform.value);
   }
-  ngOnInit(){
-    this.colaboradorService.ProfAtual$.subscribe(Atual => {
-      this.Atual = Atual;
-    });
-    // this.formacaoService.FormacaoAtual$.subscribe(Atual => {
-    //   this.xFormacao = Atual;
-    // });
-    this.CarregaForm();
-  }
+
   public formulario: any = {
     nomeFormacao: '',
     instituicao: '',
@@ -107,11 +113,18 @@ export class FormsComponent implements OnDestroy, OnInit {
     reforcoesc: false,
   };
 
+
+  async buscaFormacao(id: number){
+    this.xFormacao = await this.formacaoService.getFormacaoById(id)
+  }
+
   CarregaForm(){
     if (this.Atual.foto == '(img)' ){
       this.Atual.foto = this.fotoService.semFoto
     }
-
+    const id = this.Atual.id !== undefined ? this.Atual.id : 0
+    const resp = this.buscaFormacao(id)
+    //this.Atual.formacao = this.xFormacao;
     this.formulario = {
       nomeFormacao: '',
       instituicao: '',
@@ -143,7 +156,7 @@ export class FormsComponent implements OnDestroy, OnInit {
       desde:new FormControl(this.Atual.desde),
       ativo:new FormControl(this.Atual.ativo),
     });
-
+    //this.Atual.formacao = this.xFormacao
 
     if (this.Atual.formacao !== undefined){
 

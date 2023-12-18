@@ -1,0 +1,25 @@
+.mat-dialog-content {
+  background-color: rgb(253, 234, 238);
+  padding: 10px;
+}
+
+/* Adicione o fundo rosa ao modal */
+.mat-dialog-container {
+  background-color: rgb(253, 227, 231);
+}
+
+.botão {
+  background-color:rgb(68, 55, 55);
+  color: rgb(169, 136, 142);
+  border-radius: 10px;
+  border: 1px solid rgb(87, 36, 73);
+}
+
+.sim{
+  color:darkgreen;
+  font-weight: bolder;
+}
+.nao{
+  color:brown;
+  font-weight: bolder;
+}

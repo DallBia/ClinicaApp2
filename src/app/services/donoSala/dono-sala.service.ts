@@ -8,6 +8,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Agenda } from 'src/app/models/Agendas';
 import { environment } from 'src/environments/environment';
 import { Response } from '../../models/Response';
+import { Agenda2Service } from '../agenda/agenda2.service';
+import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 
 @Injectable({
@@ -18,11 +20,18 @@ import { Response } from '../../models/Response';
 
 
 export class DonoSalaService {
+  //  public dono!: DonoSala[];
+  public dono: BehaviorSubject<DonoSala[]> = new BehaviorSubject<DonoSala[]>([]);
+  dono$: Observable<DonoSala[]> = this.dono.asObservable();
+  setDono(novoValor: DonoSala[]): void {
+    this.dono.next(novoValor);
+  }
 
 private donoV: DonoSala[] = []
 private donoA: DonoSala = {
   id: 0,
   unidade: 0,
+  configRept: 'X',
   sala: 0,
   idProfissional: 0,
   area: '',
@@ -34,13 +43,15 @@ private donoA: DonoSala = {
 private success: boolean = false;
 
 
-public dono!: DonoSala[];
 
-  constructor(private http: HttpClient,) {}
 
-  async BuscaDonos(){
+  constructor(private http: HttpClient,
+              ) {
 
-    this.dono = [];
+              }
+
+  async Donos(){
+    // this.dono = [];
     // this.nVezes += 1;
     // console.log('Em clienteService: ' + this.nVezes)
       try {
@@ -52,11 +63,11 @@ public dono!: DonoSala[];
           item.dataFim !== null ? item.dataFim = new Date(item.dataFim!).toLocaleDateString('pt-BR') : '---'
           });
 
-        this.dono = data.dados;
-        this.dono.sort((a, b) => a.dataInicio.localeCompare(b.dataInicio));
-        this.setDonoAtual(data.dados);
-        this.success = data.sucesso;
+          let dono: DonoSala[] = data.dados;
+          dono.sort((a, b) => a.dataInicio.localeCompare(b.dataInicio));
 
+        this.setDono(dono);
+        this.success = data.sucesso;
         return true;
       } catch (error) {
         console.error('Erro ao buscar clientes:', error);
@@ -64,25 +75,15 @@ public dono!: DonoSala[];
       }
     }
 
+    buscaDonos(){
+      const r = this.Donos();
+    }
+
 
     private apiurl = `${environment.ApiUrl}/DonoSala`
     GetDonos(): Promise<any> {
      return this.http.get<any>(`${this.apiurl}`).toPromise();
    }
-     CreateCliente(dono: DonoSala) : Observable<Response<DonoSala[]>>{
-       return this.http.post<Response<DonoSala[]>>(`${this.apiurl}` , dono);
-     }
-     UpdateCliente(dono: DonoSala) : Observable<Response<DonoSala[]>>{
-       return this.http.put<Response<DonoSala[]>>(`${this.apiurl}/Editar` , dono);
-     }
 
-     private Dono = new BehaviorSubject<DonoSala[]>(this.donoV);
-     Dono$ = this.Dono.asObservable();
-     setDonoAtual(dono: DonoSala[]) {
-       this.Dono.next(dono);
-     }
-     getDonoAtual() {
-      return this.Dono.value;
-    }
 
 }

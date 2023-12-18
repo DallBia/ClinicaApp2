@@ -9,6 +9,6 @@ export interface DonoSala{
   dataInicio: string;
   dataFim?: string;
   periodo?: string;
-
+  configRept: string;
 
 }

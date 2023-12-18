@@ -63,6 +63,8 @@ import { TabValoresComponent } from './sharepage/tab-valores/tab-valores.compone
 import { Agenda2Component } from './pages/agenda2/agenda2.component';
 import { AgendaCellComponent } from './sharepage/agenda-cell/agenda-cell.component';
 import { AgendaMenuComponent } from './sharepage/agenda-menu/agenda-menu.component';
+import { ModalMultiComponent } from './sharepage/agenda-menu/modal-multi/modal-multi.component';
+import { ModalArquivoComponent } from './sharepage/arquivos/modal-arquivo/modal-arquivo.component';
 
 
 registerLocaleData(localePt);
@@ -118,6 +120,8 @@ export function tokenGetter() {
     Agenda2Component,
     AgendaCellComponent,
     AgendaMenuComponent,
+    ModalMultiComponent,
+    ModalArquivoComponent,
   ],
 
 

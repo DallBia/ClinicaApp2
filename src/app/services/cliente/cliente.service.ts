@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TableData } from 'src/app/models/Tables/TableData';
 import { TabResult } from 'src/app/models/Tables/TabResult';
 import { FileService } from '../foto-service.service';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Injectable({
   providedIn: 'root'
@@ -110,7 +111,9 @@ export class ClienteService {
     }];
 
   constructor(private http: HttpClient,
-    private fotoService: FileService,) { }
+    private fotoService: FileService,
+    private shared: SharedService,
+    ) { }
 
 
   private apiurl = `${environment.ApiUrl}/Cliente`
@@ -305,6 +308,8 @@ export class ClienteService {
         this.dataSource = [...this.dataSource, ...this.nLin]
       }
     }
+    this.shared.DataS = this.dataSource
+
   }
 
   converterParaDate(dataString: string): Date {

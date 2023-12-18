@@ -42,25 +42,28 @@
 .Informacoes {
     height: 100%;
     width: 15vw;
+    font-size: var(--font);
 }
 
 .Grade {
     overflow: auto;
     max-height: 75vh; /* Ajuste para o valor desejado */
     max-width: 80vw;
-
+    font-size: var(--font);
 }
 
 table {
     position:sticky;
     border-collapse: collapse;
     width: 100%;
+    font-size: var(--font);
   }
   th, td {
     /*border: 1px solid black;/*/
     padding: 8px;
     text-align: left;
     min-width: 11vw; /* Ajuste para o valor desejado */
+    font-size: var(--font);
   }
 
   /* Fixa o cabeçalho no topo */

@@ -45,3 +45,7 @@
 .texto {
     margin:10px;
 }
+.icone {
+  cursor: pointer;
+  transform: translateY(-50%);
+}

@@ -8,7 +8,8 @@ export interface Agenda{
   horario?: string; //
   sala?: number; //
   unidade?: number; //
-  dia?: string; //
+  diaI?: string;
+  diaF?: string; //
   diaDaSemana?: string; //
   repeticao?: string; //
   subtitulo?: string;
@@ -16,6 +17,7 @@ export interface Agenda{
   historico?: string; //
   obs?: string;
   valor?: number;
+  configRept: string;
 
 
 }

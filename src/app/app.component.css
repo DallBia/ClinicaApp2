@@ -7,6 +7,7 @@ body {
   /* font-family: 'Barlow', sans-serif; */
   font-family: 'Dosis', sans-serif;
   /* font-family: 'PT Mono', monospace; */
+  font-size: 1.3vh;
   }
 
   .Dosis {
@@ -23,3 +24,6 @@ body {
     font-family: 'Chivo Mono', monospace;
     color: blueviolet;
   }
+.padrao{
+  font-size: 1.4vh;
+}

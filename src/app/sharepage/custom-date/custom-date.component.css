@@ -35,6 +35,17 @@
   border: solid 1px var(--cor-media);
   padding: 3px;
 }
+.sem2{
+  background: var(--cor-escura);
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  border-radius: 1.2vh;
+  border: solid 1px var(--cor-media);
+  padding: 3px;
+}
 .dia{
   display: flex;
   justify-content: center;

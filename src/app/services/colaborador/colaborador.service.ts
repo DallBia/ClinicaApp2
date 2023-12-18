@@ -19,7 +19,20 @@ export class ColaboradorService {
   constructor(private http: HttpClient, private formacaoService: FormacaoService,
               private fotoService: FileService,
               public finService:FinanceiroService,
+
               ) { }
+
+  public tipo: string = 'tudo';
+  public valor: string = 'tudo'
+  public param: string = 'tudo֍tudo֍0֍P';
+  public firstID: number = 0;
+  public lastID: number = 0;
+  public AfirstID: number = 0;
+  public AlastID: number = 0;
+  public seletor: string = 'X';
+    public btnA: boolean = false;
+    public btnP: boolean = false;
+
 
   public fotoAtual: string='';
   private apiurl = `${environment.ApiUrl}/User`
@@ -48,9 +61,31 @@ export class ColaboradorService {
   dataSource: TableProf[] = [];
 
   nProf = 1;
-  EAtual!: Colaborador[]; // guarda o usuário atual
+  CAtual!: Colaborador[]; // guarda o usuário atual
+  public tableV: TableProf = {
+    foto: '',
+    ficha: '',
+    id: 0,
+    nome: '',
+    nascimento: '',
+    area: '',
+    selecionada: false,
+    desde: '',
+    proxses: '',
+    celular: '',
+    telFixo: '',
+    identidade :'',
+    cpf : '',
+    endereco : '',
+    email : '',
+    ativo : false,
+    perfil : '',
+    formacao : undefined
+  }
+
+  public eAtual: TableProf = this.tableV
+
   nEquipe: number = 0;
-  FAtual: any; //guarda a lista de Formações do usuário.
   nFormacao: number = 0;
   nUsr:number = 0;
 
@@ -59,9 +94,6 @@ export class ColaboradorService {
   Selecionada: string = '';
   ListaEquipe: any;
   ListaFormacaos: any;
-  private control!:any;
-  private ctrl1: boolean = false;
-  private ctrl2: boolean = false;
   public colaboradors: Colaborador[]=[]
   public V: Colaborador[]=[]
   public colaboradorsG: Colaborador[] = [];
@@ -111,6 +143,8 @@ export class ColaboradorService {
     }
 
 
+
+
     GetColaboradorbyId(id: number) : Promise<any>{
         return this.http.get<any>(`${environment.ApiUrl}/Colaborador/id/${id}`).toPromise();
     }
@@ -119,7 +153,9 @@ export class ColaboradorService {
         const response = await this.http.get<Response<Tipo[]>>(`${environment.ApiUrl}/Colaborador/Agenda`).toPromise();
 
         if (response && response.dados !== undefined && response.sucesso) {
-          this.finService.ListaFuncionario = response.dados;
+          this.setProfAtual
+          response.dados;
+
           return response.dados;
         } else {
           throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
@@ -159,9 +195,9 @@ export class ColaboradorService {
         this.colaboradors = this.colaboradorsG;
         this.setEquipeAtual(data.dados);
         this.success = data.sucesso;
-        this.success = await this.Dados1();
+        // this.success = await this.Dados1();
 
-        await this.Carregar();
+        const r = await this.Carregar();
 
         return true;
       } catch (error) {
@@ -226,6 +262,7 @@ export class ColaboradorService {
 
     private ProfAtual = new BehaviorSubject<TableProf>(this.Vazia[0]);
     ProfAtual$ = this.ProfAtual.asObservable();
+
     setProfAtual(name: TableProf) {
       const currentProf = this.ProfAtual.getValue();
       currentProf.foto = name.foto;
@@ -273,53 +310,125 @@ export class ColaboradorService {
     }
 
 
-async inicio(){
-    const r = await this.GetCol()
-        this.formacaoService.GetFormacao().subscribe(data => {
-        this.formacaoService.formacaos = data.dados;
-        this.ctrl2 = this.Dados1();
-     });
-     this.Dados3();
+
+
+// async inicio(){
+//     const r = await this.GetCol()
+//         this.formacaoService.GetFormacao().subscribe(data => {
+//         this.formacaoService.formacaos = data.dados;
+//         this.ctrl2 = this.Dados1();
+//      });
+//      this.Dados3();
+// }
+
+//     Dados1(): boolean {
+//       if (!this.formacaoService.formacaos) {
+//         setTimeout(() => {
+//           this.Dados1();
+//         }, 300);
+//       } else {
+//         return true;
+//       }
+//       return true;
+//     }
+
+
+//     Dados2(): boolean {
+//       if (!this.control) {
+//         setTimeout(() => {
+//           this.Dados2();
+//         }, 300);
+//       } else {
+//         return true;
+//       }
+//       return true;
+//     }
+
+
+//     Dados3() {
+//       if (this.ctrl1 === true && this.ctrl2 === true) {
+//         this.Carregar();
+//       } else {
+//         setTimeout(() => {
+//           this.Dados3();
+//         }, 300);
+//       }
+//     }
+
+proximo(){
+  this.param = this.tipo + '֍' + this.valor + '֍' + this.lastID.toString() + '֍P'
+  console.log(this.param)
+  this.iniciar()
 }
 
-    Dados1(): boolean {
-      if (!this.formacaoService.formacaos) {
-        setTimeout(() => {
-          this.Dados1();
-        }, 300);
-      } else {
-        return true;
+anterior(){
+  this.param = this.tipo + '֍' + this.valor + '֍' + this.firstID.toString() + '֍A'
+  console.log(this.param)
+  this.iniciar()
+}
+    async GetColbyFiltro(id: string): Promise<Colaborador[]> {
+      this.colaboradorsG = [];
+      this.colaboradors = [];
+      this.dataSource = [];
+      const url = `${environment.ApiUrl}/Colaborador`;
+      try {
+        const response = await this.http.get<Response<Colaborador[]>>(`${url}/novoId/${id}`).toPromise();
+
+        if (response && response.dados !== undefined && response.sucesso) {
+          this.colaboradorsG = response.dados;
+          this.colaboradorsG.sort((a, b) => a.nome.localeCompare(b.nome));
+          this.colaboradors = this.colaboradorsG;
+          const mensagem = response.mensagem.split('֍');
+          this.lastID = parseInt(mensagem[1]);
+          this.firstID = parseInt(mensagem[0]);
+          this.AlastID = parseInt(mensagem[1]);
+          this.AfirstID = parseInt(mensagem[0]);
+          this.seletor = mensagem[2]
+          console.log('lastID: ' + this.lastID);
+          console.log('firstID: ' + this.firstID);
+          console.log('seletor: ' + this.seletor);
+          switch (this.seletor){
+            case ('X'):
+              this.btnA = false;
+              this.btnP = false;
+              break;
+            case ('A'):
+              this.btnA = true;
+              this.btnP = true;
+              break;
+            case ('I'):
+              this.btnA = true;
+              this.btnP = false;
+              break;
+            case ('F'):
+              this.btnA = false;
+              this.btnP = true;
+              break;
+            default:
+              this.btnA = false;
+              this.btnP = false;
+              break;
+          }
+          return response.dados;
+        } else {
+          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        }
+      } catch (error) {
+        throw error; // Você pode personalizar essa parte conforme sua necessidade
       }
-      return true;
     }
 
 
-    Dados2(): boolean {
-      if (!this.control) {
-        setTimeout(() => {
-          this.Dados2();
-        }, 300);
-      } else {
-        return true;
-      }
-      return true;
+    async iniciar(){
+      console.log(this.param)
+      const data = await this.GetColbyFiltro(this.param);
+      const dataFormacao = await this.formacaoService.getFormacao();
+      this.Carregar();
     }
-
-
-    Dados3() {
-      if (this.ctrl1 === true && this.ctrl2 === true) {
-        this.Carregar();
-      } else {
-        setTimeout(() => {
-          this.Dados3();
-        }, 300);
-      }
-    }
-
-
-
 
     Carregar(){
+
+      this.dataSource = [];
       for (let i of this.colaboradorsG){
         let tipo = '';
         switch (i.idPerfil) {

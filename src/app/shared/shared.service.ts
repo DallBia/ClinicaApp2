@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { TableProntClin } from '../models/Tables/TableProntClin';
 import {Tipo} from '../models/Tipo';
 import { Valor } from '../models/Valores';
+import { TableData } from '../models/Tables/TableData';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,7 @@ public idTexto: number = 0;
 public valid: boolean=false;
 public validFiltro = false;
 public ListaValores: Valor[] = []
+public DataS: TableData[]=[]
 
 
 
@@ -122,6 +124,10 @@ private ApiValor = `${environment.ApiUrl}/Valor`
     console.log(valor)
     return valor;
   }
+  delay(time:number) {
+    setTimeout(() => {
 
+    }, time);
+  }
 
 }

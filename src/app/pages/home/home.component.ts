@@ -9,6 +9,10 @@ import { UserService } from 'src/app/services';
 import { User } from 'src/app/models';
 import { SharedService } from 'src/app/shared/shared.service';
 import {Info} from '../../models/Infos'
+import { DonoSala } from 'src/app/models/DonoSalas';
+import { DonoSalaService } from 'src/app/services/donoSala/dono-sala.service';
+import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
+import { FinanceiroService } from 'src/app/services/financeiro/financeiro.service';
 
 
 @Component({
@@ -44,6 +48,9 @@ export class HomeComponent implements OnInit {
     private userService: UserService,
     private colaboradorService: ColaboradorService,
     private shared: SharedService,
+    private donoSala: DonoSalaService,
+    private agenda: Agenda2Service,
+    private financeiro: FinanceiroService
     ) {
 
       if(this.UsrAtual){

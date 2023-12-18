@@ -7,7 +7,8 @@ export interface TableAgenda{
   horario?: string; //
   sala?: number; //
   unidade?: number; //
-  dia?: string; //
+  diaI?: string;
+  diaF?: string; //
   diaDaSemana?: string; //
   repeticao?: string; //
   subtitulo?: string;
@@ -16,5 +17,6 @@ export interface TableAgenda{
   obs?: string;
   valor?: number;
   idtmp?: number;
+  configRept: string,
 
 }

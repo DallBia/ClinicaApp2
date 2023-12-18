@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services';
 import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
 import { ClienteService } from 'src/app/services/cliente/cliente.service';
+// import { DonoSalaService } from 'src/app/services/donoSala/dono-sala.service';
 import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
@@ -18,25 +19,46 @@ export class Agenda2Component implements OnInit, OnDestroy{
     private clienteService: ClienteService,
     private userService: UserService,
     public shared: SharedService,
+    // public donoSala: DonoSalaService,
+
     ) {
 
 }
 
   ngOnInit(){
+
       this.main()
       this.buscaClientes()
       this.buscaEquipe()
-
+      // this.donoSala.buscaDonos()
       this.colunas = [];
       this.linhas = [];
-      for (let i = 0; i <= 20; i++) {
+      for (let i = 0; i <= 30; i++) {
         this.colunas.push(i);
       }
       for (let j = 1; j <= 15; j++) {
         this.linhas.push(j);
       }
 
+      // this.donoSala.dono$.subscribe((novoValor) => {
+      //   this.agendaService.donoTmp = this.donoSala.dono.value;
+      //   this.agendaService.validaDono();
+
+      // });
+
   }
+
+
+
+
+  delay(time:number) {
+    setTimeout(() => {
+
+    }, time);
+  }
+
+
+
   ngOnDestroy(){
 
   }
@@ -46,8 +68,6 @@ export class Agenda2Component implements OnInit, OnDestroy{
   async main(){
     try {
       this.valid1 = await this.agendaService.BuscaAgenda(this.agendaService.dia)
-      console.log(this.agendaService.agendaG)
-      //this.valid1 = await this.agendaService.BuscaAgenda(this.agendaService.dia)
 
     }
     catch(error)   {

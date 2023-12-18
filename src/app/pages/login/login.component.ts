@@ -59,6 +59,11 @@ export class LoginComponent implements OnInit {
 
     }
 
+    visibilidadeSenha: boolean = false;
+
+  toggleVisibilidadeSenha(): void {
+    this.visibilidadeSenha = !this.visibilidadeSenha;
+  }
 
   login(email: string, password: string) {
     this.txtSalvar = 'Aguarde...'

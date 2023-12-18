@@ -7,6 +7,10 @@ import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
 import { FinanceiroService } from 'src/app/services/financeiro/financeiro.service';
 import { FileService } from 'src/app/services/foto-service.service';
 import { SharedService } from 'src/app/shared/shared.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalMultiComponent } from './modal-multi/modal-multi.component';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-agenda-menu',
@@ -20,7 +24,9 @@ export class AgendaMenuComponent implements OnInit {
       public foto: FileService,
       public shared: SharedService,
       public userService: UserService,
-      public financeiroService: FinanceiroService
+      public financeiroService: FinanceiroService,
+      public dialog: MatDialog,
+      private router: Router,
 
     ){}
 
@@ -28,6 +34,7 @@ export class AgendaMenuComponent implements OnInit {
       public subscription: Subscription | undefined;
 
   ngOnInit(): void {
+      this.agendaService.buscaData()
       this.shared.BuscaValores()
   }
 
@@ -39,7 +46,23 @@ export class AgendaMenuComponent implements OnInit {
           this.agendaService.celSelect.valor = i.valor
         }
       }
+      if(this.agendaService.celSelect.subtitulo == 'Avaliação Multidisciplinar'){
+        this.openModal()
+      }
     }
+    openModal(): void {
+      const dialogRef = this.dialog.open(ModalMultiComponent, {
+
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('O modal foi fechado.');
+      });
+    }
+
+
+
+
 
     buscaFoto(){
       let id = 0
@@ -83,6 +106,8 @@ export class AgendaMenuComponent implements OnInit {
       }
     }
 
+
+
     async salvaSessao(){
       //let diff = this.saoIguais(this.agendaService.celSelect, this.agendaService.cellA)
       let diff = true
@@ -103,28 +128,42 @@ export class AgendaMenuComponent implements OnInit {
         }
 
         let sessao = '';
+        let dataFim = '';
         switch (this.agendaService.celSelect.repeticao){
           case 'Sessão única':
             sessao = 'Unica';
+            this.agendaService.celSelect.configRept = "X";
+            dataFim = this.agendaService.dia
             break;
           case 'Diária':
             sessao = 'Diaria';
+            this.agendaService.celSelect.configRept = "D%" + this.agendaService.dia.substring(0,2) + '%' + this.agendaService.parImpar
+            dataFim = '2100-01-01'
             break;
           case 'Semanal':
             sessao = 'Semanal';
+            this.agendaService.celSelect.configRept = "S%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar
+            dataFim = '2100-01-01'
             break;
           case 'Quinzenal':
             sessao = 'Quinzenal';
+            this.agendaService.celSelect.configRept = "Q%" + this.agendaService.diaSemana + '%' + this.agendaService.parImpar
+            dataFim = '2100-01-01'
             break;
           case 'Mensal':
             sessao = 'Mensal';
+            this.agendaService.celSelect.configRept = "M%" + this.agendaService.diaSemana + '%' + this.agendaService.dia.substring(0,2)
+            dataFim = '2100-01-01'
             break;
           case 'Cancelar Repetição':
             sessao = 'Cancelar';
+            dataFim = this.diaAnterior(this.agendaService.dia)
             break;
           default:
             sessao = 'Unica';
+            dataFim = this.agendaService.dia
         }
+
 
         let texto = '';
         const dataAtual = new Date();
@@ -137,7 +176,7 @@ export class AgendaMenuComponent implements OnInit {
         if (this.agendaService.cellA.status == ''|| this.agendaService.cellA.status == 'Vago'){
           texto = 'Agendamento de ' + this.agendaService.celSelect.subtitulo + '. ';
           this.agendaService.celSelect.status == 'Pendente';
-        }else{
+        } else {
           if(this.agendaService.celSelect.status == 'Vago'){
             texto = 'Sessão anterior Excluída.';
             this.agendaService.celSelect.repeticao = 'Cancelar';
@@ -162,11 +201,15 @@ export class AgendaMenuComponent implements OnInit {
           }
         }
         this.agendaService.celSelect.repeticao = sessao;
+        if (this.agendaService.celSelect.repeticao == '' || this.agendaService.celSelect.repeticao == undefined){
+          this.agendaService.celSelect.repeticao = 'Unica'
+        }
         let Histmp = '֍' + new Date().toLocaleDateString('pt-BR') + ' - ' +  horaFormatada + ':\n' + texto  + '\npor: ' + Usr?.name + '\nꟷꚚꟷ\n';
         this.agendaService.celSelect.historico += Histmp;
         const usrId = Usr?.userid !== undefined ? parseInt(Usr?.userid, 10) : 0;
         this.agendaService.celSelect.idFuncAlt = usrId
-        this.agendaService.celSelect.dia = this.agendaService.dia;
+        this.agendaService.celSelect.diaI = this.agendaService.dia;
+        this.agendaService.celSelect.diaF = dataFim;
         this.agendaService.celSelect.unidade = this.agendaService.un;
         this.agendaService.celSelect.horario = this.agendaService.horario;
         this.agendaService.celSelect.sala = this.agendaService.sala;
@@ -177,16 +220,13 @@ export class AgendaMenuComponent implements OnInit {
           this.salvaAgenda(this.agendaService.celSelect)
         }
         else{
-          console.log('ANTES da chamada:')
-          console.log(this.dado)
           const resp = await this.buscaFinanceiro(this.agendaService.celSelect.id)
-          console.log('DEPOIS da chamada:')
-          console.log(this.dado)
+
           if(this.dado.idCliente == this.agendaService.celSelect.idCliente){
             this.dado.data = this.agendaService.celSelect.dtAlt
             this.dado.valor = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
             this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt
-            const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.dia
+            const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
             this.dado.descricao = texto
             console.log(this.dado)
             const ok = this.updateFin(this.dado)
@@ -196,6 +236,19 @@ export class AgendaMenuComponent implements OnInit {
       }
     }
 
+
+    diaAnterior(dia: string):  string {
+      const dataOriginalString = dia;
+      const dataOriginal = new Date(dataOriginalString);
+
+      // Subtrair um dia
+      const dataAnterior = new Date(dataOriginal);
+      dataAnterior.setDate(dataAnterior.getDate() - 1);
+
+      // Formatando como string no formato 'YYYY-MM-DD'
+      const dataFim = dataAnterior.toISOString().split('T')[0];
+      return dataFim
+    }
 
     private dado: Financeiro = {
       id: 0,
@@ -244,20 +297,7 @@ export class AgendaMenuComponent implements OnInit {
     }
 
     teste(){
-      // const info: Financeiro = {
-      //     id: 0,
-      //     idCliente: 2,
-      //     idFuncAlt: 2,
-      //     nome: 'Teste novo',
-      //     descricao: 'Sera apagado também',
-      //     data: '2023-12-12',
-      //     valor: 40,
-      //     selecionada: false,
-      //     recibo: '',
-      //     refAgenda: 35,
-      //   }
-      //   const ok = this.createFin(info)
-      //   console.log(ok)
+
       }
 
 
@@ -267,23 +307,13 @@ export class AgendaMenuComponent implements OnInit {
         const okCriaAgenda = await this.agendaService.UpdateAgenda(id, texto)
         alert('Sessão atualizada!');
         this.delay(100);
-        location.reload()
+        this.router.navigate(['/agenda']);
+        this.agendaService.recarregar()
         return true
       }catch{
         alert('Ops!');
         return false}
 
-      // this.agendaService.UpdateAgenda(id, texto).subscribe(
-      //   (data) => {
-      //     this.delay(100);
-      //     alert('Sessão atualizada!');
-      //     this.delay(100);
-      //     location.reload();
-      //   },
-      //   (error) => {
-      //     console.error('Erro no upload', error);
-      //   }
-      // );
 
     }
 
@@ -297,20 +327,20 @@ export class AgendaMenuComponent implements OnInit {
           this.dado.data = x.toISOString().split('T')[0]
           this.dado.valor = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
           this.dado.idFuncAlt = this.agendaService.celSelect.idFuncAlt !== undefined ? this.agendaService.celSelect.idFuncAlt : 0;
-          const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.dia
+          const texto = 'Sessão alterada: ' + this.agendaService.celSelect.subtitulo + ' - ' + this.agendaService.celSelect.diaI
           this.dado.descricao = ''
           this.dado.id = 0
           this.dado.idCliente = this.agendaService.celSelect.idCliente !== undefined ? this.agendaService.celSelect.idCliente : 0;
           this.dado.nome = texto
           this.dado.recibo = ''
           this.dado.selecionada = false
-          const dia = this.agendaService.celSelect.dia !== undefined ? this.agendaService.celSelect.dia : new Date().toISOString().split('T')[0]
+          const dia = this.agendaService.celSelect.diaI !== undefined ? this.agendaService.celSelect.diaI : new Date().toISOString().split('T')[0]
           this.agendaService.success = false
           const busca = await this.agendaService.BuscarAgenda(dia)
 
           for (let i of this.agendaService.agendaG){
             if(i.sala == this.agendaService.celSelect.sala &&
-              i.dia== this.agendaService.celSelect.dia &&
+              i.diaI == this.agendaService.celSelect.diaI &&
               i.horario == this.agendaService.celSelect.horario &&
               i.unidade == this.agendaService.celSelect.unidade
                 ){
@@ -320,17 +350,8 @@ export class AgendaMenuComponent implements OnInit {
           const ok = await this.createFin(this.dado)
           alert('Sessão gravada!');
           this.delay(100);
-          location.reload();
-      //   },
-      //   (error) => {
-      //     console.error('Erro no upload', error);
-      //   }
-      // );
-    }
-    delay(time:number) {
-      setTimeout(() => {
-
-      }, time);
+          this.router.navigate(['/agenda']);
+          this.agendaService.recarregar()
     }
 
 
@@ -358,6 +379,18 @@ export class AgendaMenuComponent implements OnInit {
 
       // Se todas as propriedades forem iguais, retorna true
       return true;
+    }
+
+
+
+
+
+
+
+    delay(time:number) {
+      setTimeout(() => {
+
+      }, time);
     }
 
 }
