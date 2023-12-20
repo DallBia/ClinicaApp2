@@ -57,7 +57,7 @@ export class ClienteService {
   }
 
   public tipo: string = 'tudo';
-  public valor: string = 'tudo'
+  public valor: string = 'tudo';
   public param: string = 'tudo֍tudo֍0֍P';
   public firstID: number = 0;
   public lastID: number = 0;

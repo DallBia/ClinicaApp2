@@ -238,6 +238,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
             break;
           }
           let dia = info[7].substring(0,10)
+
           if(id == PessoaAtual && info[1] == tipoPessoa){
             const lin: Documento[] = [{
               id: i.id,
@@ -271,13 +272,10 @@ private ApiValor = `${environment.ApiUrl}/Valor`
 
       }
       baixarArquivo(id: number): any {
-        // Faça uma solicitação HTTP para obter o arquivo com base nas informações fornecidas
         return new Promise((resolve, reject) => {
           const url = `${environment.ApiUrl}/Image/download/${id}`;
             this.http.get(url, { responseType: 'blob' }).subscribe(
           (response: Blob) => {
-            // Use a biblioteca file-saver para salvar o arquivo no cliente
-
             resolve(response);
           },
           (error) => {
@@ -306,4 +304,23 @@ private ApiValor = `${environment.ApiUrl}/Valor`
         return 'sem nome.pdf';
       }
 
+
+  converterParaDate(dataString: string): Date {
+    const [dia, mes, ano] = dataString.split('/').map(Number);
+    return new Date(ano, mes - 1, dia);
+  }
+
+  reDatas(dataO: string){
+
+    const [dia, mes, ano] = dataO.split('/');
+    if(dia.length == 2){
+      const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+      const dataFormatada = data.toISOString();
+       return (dataFormatada);
+    }
+    else{
+       return (dataO);
+    }
+
+  }
 }
