@@ -74,7 +74,7 @@ async atualizarNomeCorrespondente() {
     if(this.col !== 0){
       this.linha1 = '';
       this.linha2 = '';
-      // this.corDeFundo = 'rgb(255, 255, 255)';
+      this.corDeFundo = 'rgb(255, 255, 255)';
     }
     // Verifique se o item foi encontrado antes de acessar o nome
     if (item) {
@@ -120,21 +120,24 @@ if (this.col == 0){
 
           switch (i.status) {
             case 'Vago':
-              this.corDeFundo = 'rgb(255, 255, 255)';
+              this.corDeFundo = 'white';
               break;
             case 'Pendente':
-              this.corDeFundo = 'rgb(195, 231, 255)';
+              this.corDeFundo = 'lightblue';
               break;
             case 'Realizado':
               this.corDeFundo = 'lawngreen';
               break;
             case 'Desmarcado':
-              this.corDeFundo = 'rgb(238, 200, 103)';
+              this.corDeFundo = 'khaki';
               break;
             case 'Falta':
-              this.corDeFundo = 'rgb(231, 84, 113)';
+              this.corDeFundo = 'indianred';
               break;
             case 'Bloqueado':
+              this.corDeFundo = 'violet';
+              break;
+            case 'Reservado':
               this.corDeFundo = 'silver';
               break;
             default:

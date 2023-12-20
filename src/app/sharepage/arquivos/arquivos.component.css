@@ -2,6 +2,7 @@
   width: 100%;
   background-color: white;
   font-size: small;
+
 }
 .material-symbols-outlined {
   font-variation-settings:
@@ -32,12 +33,35 @@
   color:rgb(85, 85, 85);
   border-bottom: solid 1px rgb(214, 153, 217);
 }
-.cel01 {
-  width: 7%;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    vertical-align: middle;
 }
-.cell02 {
-  width: 70%;
+
+th, td {
+  color:rgb(85, 85, 85);
+  border-bottom: solid 1px rgb(214, 153, 217);
+  padding: 4px;
+  text-align: left;
 }
-.cell03 {
-  width: 16%;
+
+/* Ajuste as larguras conforme necessário */
+th:nth-child(1),
+td:nth-child(1) {
+  width: 10%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 65%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 20%;
 }

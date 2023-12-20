@@ -312,48 +312,6 @@ export class ColaboradorService {
 
 
 
-// async inicio(){
-//     const r = await this.GetCol()
-//         this.formacaoService.GetFormacao().subscribe(data => {
-//         this.formacaoService.formacaos = data.dados;
-//         this.ctrl2 = this.Dados1();
-//      });
-//      this.Dados3();
-// }
-
-//     Dados1(): boolean {
-//       if (!this.formacaoService.formacaos) {
-//         setTimeout(() => {
-//           this.Dados1();
-//         }, 300);
-//       } else {
-//         return true;
-//       }
-//       return true;
-//     }
-
-
-//     Dados2(): boolean {
-//       if (!this.control) {
-//         setTimeout(() => {
-//           this.Dados2();
-//         }, 300);
-//       } else {
-//         return true;
-//       }
-//       return true;
-//     }
-
-
-//     Dados3() {
-//       if (this.ctrl1 === true && this.ctrl2 === true) {
-//         this.Carregar();
-//       } else {
-//         setTimeout(() => {
-//           this.Dados3();
-//         }, 300);
-//       }
-//     }
 
 proximo(){
   this.param = this.tipo + '֍' + this.valor + '֍' + this.lastID.toString() + '֍P'
@@ -366,6 +324,8 @@ anterior(){
   console.log(this.param)
   this.iniciar()
 }
+
+
     async GetColbyFiltro(id: string): Promise<Colaborador[]> {
       this.colaboradorsG = [];
       this.colaboradors = [];

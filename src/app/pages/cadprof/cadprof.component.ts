@@ -13,6 +13,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { EquipeModalComponent } from "./equipe-modal/equipe-modal.component";
 import { PerfilService } from "src/app/services/perfil/perfil.service";
 import { SharedService } from "src/app/shared/shared.service";
+import { FileService } from 'src/app/services/foto-service.service';
+import { ModalArquivoComponent } from 'src/app/sharepage/arquivos/modal-arquivo/modal-arquivo.component';
+import { MeuModalComponent } from "../fichacliente/meu-modal/meu-modal.component";
 
 
 @Component({
@@ -97,6 +100,8 @@ export class CadprofComponent implements OnDestroy, OnInit {
     public colaboradorService: ColaboradorService,
     public formacao: FormacaoService,
     public shared: SharedService,
+    public sharedService: SharedService,
+
     ){
       this.subscription = this.colaboradorService.EquipeA$.subscribe(
         name => this.nEquipe = name
@@ -155,7 +160,25 @@ export class CadprofComponent implements OnDestroy, OnInit {
 }
 
 abrirModal(){
+  this.sharedService.nome = this.sharedService.ListaProfs.nome;
 
+  this.sharedService.docto = {
+    idPessoa: this.sharedService.ListaProfs.id !== undefined ? this.sharedService.ListaProfs.id : 0,
+    cliOuProf:'E',
+    tipo: '',
+    nome: '',
+    descricao: '',
+    dtInclusao: new Date().toISOString(),
+    arquivo: '',
+    formato: '',
+    id:1,
+  }
+  const dialogRef = this.dialog.open(MeuModalComponent, {
+      disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
+  });
+  dialogRef.afterClosed().subscribe(result => {
+
+  });
 }
 
 

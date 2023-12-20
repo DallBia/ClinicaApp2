@@ -65,7 +65,7 @@ import { AgendaCellComponent } from './sharepage/agenda-cell/agenda-cell.compone
 import { AgendaMenuComponent } from './sharepage/agenda-menu/agenda-menu.component';
 import { ModalMultiComponent } from './sharepage/agenda-menu/modal-multi/modal-multi.component';
 import { ModalArquivoComponent } from './sharepage/arquivos/modal-arquivo/modal-arquivo.component';
-
+import {MeuModalComponent} from './pages/fichacliente/meu-modal/meu-modal.component';
 
 registerLocaleData(localePt);
 
@@ -122,6 +122,7 @@ export function tokenGetter() {
     AgendaMenuComponent,
     ModalMultiComponent,
     ModalArquivoComponent,
+    MeuModalComponent,
   ],
 
 

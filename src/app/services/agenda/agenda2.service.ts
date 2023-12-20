@@ -21,6 +21,24 @@ import { Colaborador } from 'src/app/models/Colaboradors';
   providedIn: 'root'
 })
 export class Agenda2Service {
+  public Horarios = [
+    {hora: 0, texto:'-', cor: 'Rosa'},
+    {hora: 1, texto:'08:00', cor: 'Branco'},
+    {hora: 2, texto:'08:50', cor: 'Branco'},
+    {hora: 3, texto:'09:40', cor: 'Branco'},
+    {hora: 4, texto:'10:30', cor: 'Branco'},
+    {hora: 5, texto:'11:20', cor: 'Branco'},
+    {hora: 6, texto:'12:10', cor: 'Branco'},
+    {hora: 7, texto:'-', cor: 'Rosa'},
+    {hora: 8, texto:'13:10', cor: 'Branco'},
+    {hora: 9, texto:'14:00', cor: 'Branco'},
+    {hora: 10, texto:'14:50', cor: 'Branco'},
+    {hora: 11, texto:'15:40', cor: 'Branco'},
+    {hora: 12, texto:'16:30', cor: 'Branco'},
+    {hora: 13, texto:'17:20', cor: 'Branco'},
+    {hora: 14, texto:'18:10', cor: 'Branco'},
+    {hora: 15, texto:'19:00', cor: 'Branco'}
+  ];
 
   private _agendaDiaSubject = new BehaviorSubject<any[]>([]);
   agendaDia$ = this._agendaDiaSubject.asObservable();
@@ -81,7 +99,8 @@ export class Agenda2Service {
   public success: boolean = false;
   // public donoSala: DonoSala[]=[];
   // public donoTmp: DonoSala[]=[];
-
+  public agendaNsessoes: number = 0;
+  public agendaMulti: Agenda[] = [];
 
   public listaHorarios: any = [
     {n: 0, horario: 'manhã'},
@@ -323,11 +342,11 @@ validaRept(agenda: Agenda[]): boolean {
 
 
 
-  GetClientesByAgenda(): Promise<any> {
-    return this.http.get<any>(`${environment.ApiUrl}/Cliente/Agenda`).toPromise();
+  GetClientesByAgenda(tipo: string): Promise<any> {
+    return this.http.get<any>(`${environment.ApiUrl}/Cliente/Agenda/${tipo}`).toPromise();
   }
   async BuscaClientes(){
-    const data = await this.GetClientesByAgenda();
+    const data = await this.GetClientesByAgenda('nome');
     this.ListaCLientes = data.dados
   }
   GetColabByAgenda(): Promise<any> {
@@ -449,6 +468,17 @@ validaRept(agenda: Agenda[]): boolean {
 
       this.parImpar = conta == 0 ? 'P' : 'I'
       return this.parImpar
+
+    }
+    calcDiaSemana(data3: string): string {
+      if (data3.includes('/')){
+        const data = data3.split('-');
+        data3 = data[2] + '-' + data[1] + '-' + data[0]
+      }
+      const diaDaSemana = new Date(data3).getDay();
+      const diasDaSemana = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
+      const result = diasDaSemana[diaDaSemana];
+      return result
 
     }
 

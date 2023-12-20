@@ -9,7 +9,13 @@ export class CurrencyInputDirective {
 
   @HostListener('input', ['$event']) onInput(event: any) {
     const inputVal = event.target.value;
-    const newVal = inputVal.replace(',', '.');
-    this.renderer.setProperty(this.el.nativeElement, 'value', newVal);
+
+    let value = inputVal.replace(',', '.');
+    value = value.replace(/[^\d.]+/g, '').replace(/(\..*)\./g, '$1');
+
+    value = 'R$ ' + value;
+
+
+    this.renderer.setProperty(this.el.nativeElement, 'value', value);
   }
 }

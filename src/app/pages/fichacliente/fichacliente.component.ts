@@ -7,7 +7,7 @@ import { SharedService } from '../../shared/shared.service';  // Atualize o cami
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MeuModalComponent } from './meu-modal/meu-modal.component';
 import { first } from 'rxjs/operators';
 import { Grid01Component } from 'src/app/sharepage/grid01/grid01.component';
@@ -15,6 +15,7 @@ import { TabResult } from 'src/app/models/Tables/TabResult';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
 import { UserService } from 'src/app/services';
 import { FileService } from 'src/app/services/foto-service.service';
+import { ModalArquivoComponent } from 'src/app/sharepage/arquivos/modal-arquivo/modal-arquivo.component';
 
 
 @Component({
@@ -79,12 +80,13 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   // ============== FIM DAS VARIÁVEIS PARA CRIAR COMPONENTES =========================================
 
 
-  constructor(private sharedService: SharedService,
+  constructor(public sharedService: SharedService,
     public dialog: MatDialog,
     private perfilService: PerfilService,
-    private clienteService: ClienteService,
+    public clienteService: ClienteService,
     private userService: UserService,
     private fotoService: FileService,
+
     ){
 
     this.subscription = this.sharedService.selectedName$.subscribe(
@@ -121,8 +123,16 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   }
 
     ngOnInit(): void {
+
+
       this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
         this.Atual = clienteAtual;
+        const n: number = parseInt(this.Atual.Ficha)
+        for (let i of this.clienteService.clientesG){
+          if (n == i.id){
+            this.sharedService.ListaClientes = i;
+          }
+        }
       });
       this.clienteService.ChangesA$.subscribe(chng => {
         this.nChanges = chng;
@@ -131,6 +141,13 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
       if(this.userService.alertas !== true){
         window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
       }
+
+
+
+
+      this.clienteService.dataSource = [];
+      this.clienteService.iniciar();
+
     }
 
   ngOnDestroy() {
@@ -169,6 +186,18 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
   }
 
   abrirModal() {
+    this.sharedService.nome = this.sharedService.ListaClientes.nome;
+      this.sharedService.docto = {
+        id: 0,
+        idPessoa: this.sharedService.ListaClientes.id !== undefined ? this.sharedService.ListaClientes.id : 0,
+        cliOuProf:'C',
+        tipo:'',
+        nome: '',
+        descricao:'',
+        dtInclusao:new Date().toISOString(),
+        arquivo:'',
+        formato:'',
+      }
     const dialogRef = this.dialog.open(MeuModalComponent, {
         disableClose: true  // Isto impede que o modal seja fechado ao clicar fora dele ou pressionar ESC
     });
@@ -177,14 +206,16 @@ export class FichaclienteComponent implements OnDestroy, OnInit {
     });
   }
 
+
+
   cancela(){
-    if (this.txtSalva == "Salvar"){
-      this.txtSalva = "Aguarde..."
-      this.btnSalva = true;
-    }else{
-      this.btnSalva = false;
-      this.txtSalva= "Salvar"
-    }
+    // if (this.txtSalva == "Salvar"){
+    //   this.txtSalva = "Aguarde..."
+    //   this.btnSalva = true;
+    // }else{
+    //   this.btnSalva = false;
+    //   this.txtSalva= "Salvar"
+    // }
   }
 
   salvarPessoa(){

@@ -114,6 +114,32 @@ altTab(){
     }
   }
 
+  receberPagto(valor: string){
+    if (this.finService.info_Valor !== undefined){
+
+      // let valorOriginal: any = this.finService.info_Valor.substring(3, 18)
+      let valorOriginal = parseFloat(this.finService.info_Valor.replace(/[^\d,]/g, '').replace(',', '.'));
+      let valorPagto = parseFloat(this.finService.info_GeraPagto.replace(/[^\d,]/g, '').replace(',', '.'));
+      let origNumerico: number = !Number.isNaN(valorOriginal) ? valorOriginal : 0;
+      let pagtoNumerico: number = !Number.isNaN(valorPagto) ? valorPagto : 0;
+
+      // valorOriginal = valorOriginal.replace(',', '.');
+      // let valorPagto: any = this.finService.info_GeraPagto.substring(3, 18)
+      // valorPagto = valorPagto.replace(',', '.');
+      // let origNumerico: number = !Number.isNaN(parseFloat(valorOriginal)) ? parseFloat(valorOriginal) : 0;
+      // let pagtoNumerico: number = !Number.isNaN(parseFloat(valorPagto)) ? parseFloat(valorPagto) : 0;
+      if (origNumerico > 0 && pagtoNumerico == 0){
+        this.finService.info_GeraPagto = this.finService.info_Valor
+        let dt =  new Date().toISOString();
+        dt = dt.substring(0,10)
+        let dt2 = dt.split('-')
+        dt = dt2[2] + '/' + dt2[1] + '/' + dt2[0]
+        this.finService.info_DataAt = dt;
+      }
+    }
+  }
+
+
 
   async BuscaValores(){
     let data = 'nada por enquanto 2'

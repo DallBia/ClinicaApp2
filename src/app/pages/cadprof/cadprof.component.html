@@ -24,40 +24,39 @@
   </div>
 </div>
 
-  <div class="corpo">
-    <div class="lado-esquerdo">
-      <div class="grid-result">
-        <app-grid02></app-grid02>
-      </div>
-      <div class="botoes1">
-        <button class="Branco1" id="ant" [disabled]="this.colaboradorService.btnA" (click)="this.colaboradorService.anterior()">Anterior</button>
-        <button class="Branco1" id="prox" [disabled]="this.colaboradorService.btnP" (click)="this.colaboradorService.proximo()">Próximo</button>
-      </div>
+<div class="corpo">
+  <div class="lado-esquerdo">
+    <div class="grid-result">
+      <app-grid02></app-grid02>
     </div>
-    <div class="lado-direito">
-      <div class="formul-result">
-        <div *ngIf="this.nProf!=0">
-          <app-forms *ngIf="nChanges"></app-forms>
-        </div>
-      </div>
-      <div class="botoes-finais">
-        <div class="btnAnexar">
-            <button class="Branco" id="Anexar" (click)="abrirModal()"> <!-- <button class="Branco" id="Anexar" (click)="abrirModal()">-->
-                Anexar Arquivos
-            </button>
-        </div>
-        <div class="btnSalvar">
-            <button class="Rosa" [disabled]="this.btnSalva" id="Salvar" (click)="Salvar()">  <!-- <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  -->
-              {{this.txtSalva}}
-            </button>
-        </div>
-        <div class="btnFechar">
-            <button class="RosaEscuro" id="Cancelar">
-              Cancelar
-            </button>
-        </div>
-      </div>
+    <div class="botoes1">
+      <button class="Branco1" id="ant" [disabled]="this.colaboradorService.btnA" (click)="this.colaboradorService.anterior()">Anterior</button>
+      <button class="Branco1" id="prox" [disabled]="this.colaboradorService.btnP" (click)="this.colaboradorService.proximo()">Próximo</button>
     </div>
   </div>
+  <div class="lado-direito">
+    <div class="formul-result">
+      <div *ngIf="this.nProf!=0">
+        <app-forms *ngIf="nChanges"></app-forms>
+      </div>
+    </div>
+    <div class="botoes-finais">
+      <div class="btnAnexar">
+        <button class="Branco" id="Anexar" (click)="abrirModal()" [disabled]="!this.shared.btnAnexPro"> <!-- <button class="Branco" id="Anexar" (click)="abrirModal()">-->
+          Anexar Arquivos
+        </button>
+      </div>
+    <div class="btnSalvar">
+        <button class="Rosa" [disabled]="this.btnSalva" id="Salvar" (click)="Salvar()">  <!-- <button class="Rosa" id="Salvar" (click)="Salvar()" [disabled]="!this.colaboradorService.vSalvar">  -->
+          {{this.txtSalva}}
+        </button>
+    </div>
+    <div class="btnFechar">
+        <button class="RosaEscuro" id="Cancelar">
+          Cancelar
+        </button>
+    </div>
+  </div>
+</div>
 
 

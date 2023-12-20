@@ -55,6 +55,19 @@ export class ClienteService {
   paiEmail:  '',
   paiEndereco:  '',
   }
+
+  public tipo: string = 'tudo';
+  public valor: string = 'tudo'
+  public param: string = 'tudo֍tudo֍0֍P';
+  public firstID: number = 0;
+  public lastID: number = 0;
+  public AfirstID: number = 0;
+  public AlastID: number = 0;
+  public seletor: string = 'X';
+    public btnA: boolean = false;
+    public btnP: boolean = false;
+
+
   public cliente: Cliente = this.clienteVazio;
   public success: boolean = false;
   public clientes: Cliente[] = [];
@@ -188,20 +201,20 @@ export class ClienteService {
 
   async BuscaClientes(){
 
-    this.clientes = [];
-    this.clientesG = [];
-      try {
-        this.data = await this.GetClientes();
-        this.success = this.data.sucesso;
-        this.success = await this.Dados1();
+    // this.clientes = [];
+    // this.clientesG = [];
+    //   try {
+    //     this.data = await this.GetClientes();
+    //     this.success = this.data.sucesso;
+    //     this.success = await this.Dados1();
 
-        await this.Carregar();
+    //     await this.Carregar();
 
-        return true;
-      } catch (error) {
-        console.error('Erro ao buscar clientes:', error);
-        return false;
-      }
+    //     return true;
+    //   } catch (error) {
+    //     console.error('Erro ao buscar clientes:', error);
+    //     return false;
+    //   }
     }
 
 
@@ -222,34 +235,115 @@ export class ClienteService {
   }
 
 
+
+  proximo(){
+    this.param = this.tipo + '֍' + this.valor + '֍' + this.lastID.toString() + '֍P'
+    console.log(this.param)
+    this.iniciar()
+  }
+
+  anterior(){
+    this.param = this.tipo + '֍' + this.valor + '֍' + this.firstID.toString() + '֍A'
+    console.log(this.param)
+    this.iniciar()
+  }
+  async GetClienteByFiltro(id: string): Promise<Cliente[]> {
+    this.clientesG = [];
+    this.clientes = [];
+    this.dataSource = [];
+    const url = `${environment.ApiUrl}/Cliente`;
+    try {
+      const response = await this.http.get<Response<Cliente[]>>(`${url}/novoId/${id}`).toPromise();
+
+      if (response && response.dados !== undefined && response.sucesso) {
+        this.clientesG = response.dados;
+        this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
+        this.clientes = this.clientesG;
+        const mensagem = response.mensagem.split('֍');
+        this.lastID = parseInt(mensagem[1]);
+        this.firstID = parseInt(mensagem[0]);
+        this.AlastID = parseInt(mensagem[1]);
+        this.AfirstID = parseInt(mensagem[0]);
+        this.seletor = mensagem[2]
+        console.log('lastID: ' + this.lastID);
+        console.log('firstID: ' + this.firstID);
+        console.log('seletor: ' + this.seletor);
+        switch (this.seletor){
+          case ('X'):
+            this.btnA = false;
+            this.btnP = false;
+            break;
+          case ('A'):
+            this.btnA = true;
+            this.btnP = true;
+            break;
+          case ('I'):
+            this.btnA = true;
+            this.btnP = false;
+            break;
+          case ('F'):
+            this.btnA = false;
+            this.btnP = true;
+            break;
+          default:
+            this.btnA = false;
+            this.btnP = false;
+            break;
+        }
+        return response.dados;
+      } else {
+        throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+      }
+    } catch (error) {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    }
+  }
+
+
+  async iniciar(){
+    console.log(this.param)
+    this.data = await this.GetClienteByFiltro(this.param);
+    this.Carregar();
+  }
+
+
+  pLin: TableData[] = [];
+
   async Carregar(){
 
-    const dados = this.data.dados;
-        dados.map((item: { clienteDesde: string | number | Date | null; dtInclusao: string | number | Date | null; dtNascim: string | number | Date | null; }) => {
-          item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toISOString().split('T')[0] : '---'
-          item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toISOString().split('T')[0] : '---'
-          item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toISOString().split('T')[0] : '---'
+    // const dados = this.data.dados;
+    // const dados = this.data;
+    //     dados.map((item: { clienteDesde: string | number | Date | null; dtInclusao: string | number | Date | null; dtNascim: string | number | Date | null; }) => {
+    //       item.clienteDesde !== null ? item.clienteDesde = new Date(item.clienteDesde!).toISOString().split('T')[0] : '---'
+    //       item.dtInclusao !== null ? item.dtInclusao = new Date(item.dtInclusao!).toISOString().split('T')[0] : '---'
+    //       item.dtNascim !== null ? item.dtNascim = new Date(item.dtNascim!).toISOString().split('T')[0] : '---'
 
-          const dtNascim = item.dtNascim !== null ? item.dtNascim.split('-') : '*-*-*';
-          item.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
-          const clienteDesde = item.clienteDesde !== null ? item.clienteDesde.split('-') : '*-*-*';
-          item.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
-          const dtInclusao = item.dtInclusao !== null ? item.dtInclusao.split('-') : '*-*-*';
-          item.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
+    //       const dtNascim = item.dtNascim !== null ? item.dtNascim.split('-') : '*-*-*';
+    //       item.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
+    //       const clienteDesde = item.clienteDesde !== null ? item.clienteDesde.split('-') : '*-*-*';
+    //       item.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
+    //       const dtInclusao = item.dtInclusao !== null ? item.dtInclusao.split('-') : '*-*-*';
+    //       item.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
 
-           });
+    //        });
 
-        this.clientesG = this.data.dados;
-        this.clientesG.sort((a, b) => a.nome.localeCompare(b.nome));
-        this.clientes = this.data.dados;
-        this.setListaCliente(this.data.dados);
-    this.dataSource = [];
     for (let i of this.clientesG) {
       let aSaiS: string = 'Não';
       let aRestM: string = 'Não';
       let aRestP: string = 'Não';
 
       if(i.id !== undefined){
+
+        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toISOString().split('T')[0] : '---'
+        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toISOString().split('T')[0] : '---'
+        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toISOString().split('T')[0] : '---'
+
+        const dtNascim = i.dtNascim !== null ? i.dtNascim.split('-') : '*-*-*';
+        i.dtNascim = dtNascim[2] + '/'+ dtNascim[1] + '/'+ dtNascim[0];
+        const clienteDesde = i.clienteDesde !== null ? i.clienteDesde.split('-') : '*-*-*';
+        i.clienteDesde = clienteDesde[2] + '/'+ clienteDesde[1] + '/'+ clienteDesde[0];
+        const dtInclusao = i.dtInclusao !== null ? i.dtInclusao.split('-') : '*-*-*';
+        i.dtInclusao = dtInclusao[2] + '/'+ dtInclusao[1] + '/'+ dtInclusao[0];
 
         if(i.maeRestric === true){
           aRestM = 'Sim';
@@ -308,7 +402,7 @@ export class ClienteService {
         this.dataSource = [...this.dataSource, ...this.nLin]
       }
     }
-    this.shared.DataS = this.dataSource
+    //this.shared.DataS = this.dataSource
 
   }
 

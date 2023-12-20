@@ -50,7 +50,7 @@ font-size: 1.4vh;
   font-size: 1.4vh;
 }
 .material-icons {
-  font-size: 5vh;
+  font-size: 4.5vh;
   color: var(--cor-escura);
   cursor: pointer;
   transition: box-shadow 0.3s;
@@ -58,7 +58,7 @@ font-size: 1.4vh;
 .material-icons:hover {
 box-shadow: 0 0 5px 5px pink;
 background-color: pink;
-font-size: 1.4vh;
+font-size: 4.5vh;
 }
 .ti-check {
   height: 80%;

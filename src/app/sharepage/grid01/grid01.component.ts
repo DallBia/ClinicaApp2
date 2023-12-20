@@ -24,7 +24,7 @@ export class Grid01Component {
   ngOnInit(): void {
 
     this.clienteService.BuscaClientes()
-
+    this.sharedService.btnAnexCli = false;
 
   }
 
@@ -36,13 +36,20 @@ export class Grid01Component {
       if (isNaN(numero)) {
         numero = 0;
     }
-
+    this.sharedService.ClienteAtual = numero;
+    this.sharedService.btnAnexCli = true;
+    const dados = this.clienteService.clientesG.find(cliente => cliente.id === numero);
+    if (dados !== undefined){
+      this.sharedService.ListaClientes = dados;
+    }
     this.clienteService.dataSource.forEach(l => l.selecionada = false);// Desmarcar todas as outras linhas
     this.clienteService.setClienteA(numero);
 
     this.clienteService.setClienteAtual(this.clienteService.dataSource.find(cliente => parseInt(cliente.Ficha, 10) === numero) || this.clienteService.Vazia[0]);
 
     l.selecionada = true;
+    this.sharedService.PessoaDoctos = "C";
+    this.sharedService.carregarListaDeArquivos()
     this.nChanges = true;
     setTimeout(() => {
       this.clienteService.setChangesA(true);

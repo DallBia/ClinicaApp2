@@ -1,9 +1,13 @@
 export interface Documento{
 
-  Id?: number;
-  IdPessoa?: number;
-  ClientProf?: string;
-  Tipo?: string;
-  Descricao?: string;
-  DtInclusao?: string;
+  id?: number;
+  idPessoa?: number;
+  cliOuProf?: string;
+  tipo?: string;
+  nome: string;
+  descricao?: string;
+  dtInclusao?: string;
+  arquivo: string;
+  formato: string;
+
 }

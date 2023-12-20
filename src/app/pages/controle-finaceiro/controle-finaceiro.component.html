@@ -17,8 +17,12 @@
         </div>
         </div>
         <div class="totais">
+          <span>TOTAIS:</span>
 
         </div>
+
+        <!-- AQUI SÃO MOSTRADOS OS COMPONENTES PARA EDIÇÃO -->
+
       <div class="bloco-input" *ngIf="this.finService.MostraInfo">
         <div class="inp-sup" style="top: 0;">
           <div class="cjt1">
@@ -29,15 +33,15 @@
             <span class="cjtLbl">Valor</span>
             <span class="cjtLbl2" (click)="this.finService.AltCD()" [style.color]="this.finService.info_Credito ? 'white' : 'black'" [style.background-color]="this.finService.info_Credito ? 'var(--cor-media)' : 'white'">Custo</span>
             <span class="cjtLbl2" (click)="this.finService.AltCD()" [style.color]="!this.finService.info_Credito ? 'white' : 'black'" [style.background-color]="!this.finService.info_Credito ? 'var(--cor-media)' : 'white'">Pagto</span>
-            <input class="cjtInp" [(ngModel)]="finService.info_Valor" appCurrency>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="finService.info_Valor" appCurrency>
           </div>
           <div class="cjt2" style="width: 15%;">
             <span class="cjtLbl">Data</span>
             <input class="cjtInp"  appDateMask [(ngModel)]="this.finService.info_Data">
           </div>
-          <div class="cjt2" style="width: 15%;" *ngIf="this.finService.idLinha > 0">
-            <span class="cjtLbl">Gerar Pagamento</span>
-            <input class="cjtInp" [(ngModel)]="this.finService.info_GeraPagto" [ngModelOptions]="{updateOn: 'blur'}" appCurrencyInput>
+          <div class="cjt2">
+            <span class="cjtLbl">Atualizado por:</span>
+            <span class="cjtLbl2">{{this.finService.info_AtualizadoPor}}</span>
           </div>
         </div>
         <div class="inp-sup" style="top: 50%;">
@@ -45,11 +49,10 @@
             <span class="cjtLbl">Descrição</span>
             <input class="cjtInp" [(ngModel)]="this.finService.info_Descricao">
           </div>
-          <div class="cjt2">
-            <span class="cjtLbl">Atualizado por:</span>
-            <span class="cjtLbl2">{{this.finService.info_AtualizadoPor}}</span>
-            </div>
-
+          <div class="cjt2" style="width: 15%;" *ngIf="this.finService.idLinha > 0">
+            <span class="cjtLbl">Gerar Pagamento</span>
+            <input class="cjtInp" appCurrencyInput [(ngModel)]="this.finService.info_GeraPagto" (focus)="receberPagto(this.finService.info_Valor)" [ngModelOptions]="{updateOn: 'blur'}">
+          </div>
           <div class="cjt2" style="width: 15%;">
             <span class="cjtLbl">Data</span>
             <input class="cjtInp" appDateMask [(ngModel)]="this.finService.info_DataAt">

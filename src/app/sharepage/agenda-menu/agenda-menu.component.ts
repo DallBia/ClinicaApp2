@@ -47,10 +47,28 @@ export class AgendaMenuComponent implements OnInit {
         }
       }
       if(this.agendaService.celSelect.subtitulo == 'Avaliação Multidisciplinar'){
-        this.openModal()
+        this.openModal(10)
+      }
+      if(this.agendaService.celSelect.subtitulo == 'Avaliação Neuropsicológica'){
+        this.openModal(5)
+      }
+      if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 05'){
+        this.openModal(5)
+      }
+      if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 10'){
+        this.openModal(10)
+      }
+      if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 20'){
+        this.openModal(20)
+      }
+      if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 30'){
+        this.openModal(30)
       }
     }
-    openModal(): void {
+    openModal(n: number): void {
+      console.log(this.agendaService.ListaValores)
+
+      this.agendaService.agendaNsessoes = n
       const dialogRef = this.dialog.open(ModalMultiComponent, {
 
       });
@@ -100,6 +118,7 @@ export class AgendaMenuComponent implements OnInit {
               alert('Só é possível bloquear um horário vago. Por favor, limpe o horário antes de bloquear.');
         }else{
           this.agendaService.celSelect.status = status;
+          this.agendaService.celSelect.subtitulo = '(bloqueado)';
         }
       }else{
         this.agendaService.celSelect.status = status;
@@ -215,6 +234,11 @@ export class AgendaMenuComponent implements OnInit {
         this.agendaService.celSelect.sala = this.agendaService.sala;
         this.agendaService.celSelect.dtAlt = new Date().toISOString();
         this.agendaService.celSelect.status = this.agendaService.celSelect.status == '' ? 'Pendente' : this.agendaService.celSelect.status
+        if (this.agendaService.celSelect.subtitulo !== undefined){
+          this.agendaService.celSelect.subtitulo = this.agendaService.celSelect.subtitulo.length == 0 ? '' : this.agendaService.celSelect.subtitulo
+        }else{
+          this.agendaService.celSelect.subtitulo = '';
+        }
 
         if(this.agendaService.celSelect.id == 0 || this.agendaService.celSelect.id == undefined){
           this.salvaAgenda(this.agendaService.celSelect)

@@ -26,6 +26,7 @@
   border-bottom: solid 1px rosybrown;
   border-left: solid 1px rgb(253, 236, 236);
   border-right: solid 1px rgb(253, 236, 236);
+  overflow: auto;
 }
 .fLabel {
   height: 30px;

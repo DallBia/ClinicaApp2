@@ -5,6 +5,7 @@
       <input id="file-input" #fileInput type="file" style="display: none;" (change)="onFileSelected($event)">
     </div>
     <div class="EspacoDoctos">
+      <app-arquivos></app-arquivos>
     </div>
   </div>
   <form [formGroup]="clienteform" (ngSubmit)="submit()" #formDit="ngForm">

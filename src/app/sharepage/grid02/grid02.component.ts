@@ -5,6 +5,7 @@ import { UserService } from 'src/app/services';
 import { FormacaoService } from 'src/app/services/formacao/formacao.service';
 import { ColaboradorService } from 'src/app/services/colaborador/colaborador.service';
 import { take } from 'rxjs/operators';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-grid02',
@@ -33,6 +34,7 @@ subscription: Subscription;
       if (isNaN(numero)) {
         numero = 0;
     }
+    this.sharedService.ProfAtual = numero;
     for(let i of this.colaboradorService.dataSource){
       i.selecionada = false;
     }
@@ -40,8 +42,15 @@ subscription: Subscription;
    if (xus !== undefined) {
     this.colaboradorService.eAtual = xus
    }
+   const dados = this.colaboradorService.colaboradorsG.find(user => user.id === numero)
+   if (dados !== undefined) {
+    this.sharedService.ListaProfs = dados;
+   }
     let a: any;
     l.selecionada = true;
+    this.sharedService.btnAnexPro = true;
+    this.sharedService.PessoaDoctos = "E";
+    this.sharedService.carregarListaDeArquivos()
     this.nChanges = true;
     setTimeout(() => {
       this.colaboradorService.setChangesA(true);
@@ -50,7 +59,11 @@ subscription: Subscription;
       this.colaboradorService.setEquipeA(numero);
   }
 
-  constructor(public colaboradorService: ColaboradorService, private userService: UserService, private formacaoService: FormacaoService) {
+  constructor(public colaboradorService: ColaboradorService,
+              private userService: UserService,
+              private formacaoService: FormacaoService,
+              public sharedService: SharedService,
+              ) {
 
 
     this.subscription = this.colaboradorService.ChangesA$.subscribe(
