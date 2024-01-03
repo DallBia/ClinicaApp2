@@ -135,7 +135,7 @@ if (this.col == 0){
               this.corDeFundo = 'indianred';
               break;
             case 'Bloqueado':
-              this.corDeFundo = 'violet';
+              this.corDeFundo = 'rgb(42, 42, 55)';
               break;
             case 'Reservado':
               this.corDeFundo = 'silver';

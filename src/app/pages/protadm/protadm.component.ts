@@ -88,10 +88,11 @@ export class ProtadmComponent implements OnInit, OnDestroy{
 
   newInfo(opt: boolean){
     this.shared.MostraInfo = !opt;
+    this.shared.texto = '';
   }
 
   adicionarEspaco() {
-    this.texto += '\n\n';
+    //this.texto += '\n\n';
   }
 
 

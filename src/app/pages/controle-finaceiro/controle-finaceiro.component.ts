@@ -15,6 +15,7 @@ import { FileService } from 'src/app/services/foto-service.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { FinanceiroService } from 'src/app/services/financeiro/financeiro.service';
 import { Financeiro } from 'src/app/models/Financeiro';
+import { HeaderService } from 'src/app/sharepage/navbar/header.service';
 
 @Component({
   selector: 'app-controle-finaceiro',
@@ -45,6 +46,7 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
     public fotoService: FileService,
     private prontuarioService: ProntuarioService,
     private router: Router,
+    private headerService: HeaderService,
     public shared: SharedService,
     private userService: UserService,
     public finService: FinanceiroService,
@@ -55,7 +57,13 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
     this.subscription = this.userService.EquipeA$.subscribe(
       nameC => this.nUser = nameC
     )
-
+  //   this.subscription = this.finService.ctrFinChange$.subscribe(
+  //     (valor) => {
+  //     if (valor == true){
+  //       this.finService.setctrFinChange(false)
+  //       this.Carregar();
+  //     }
+  // });
     this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
       this.finService.Atual = clienteAtual;
     });
@@ -73,7 +81,8 @@ altTab(){
 
 
   ngOnInit() {
-
+    this.finService.zerar();
+    this.finService.tabFinanceira = [];
     this.subscription = this.clienteService.ClienteA$.subscribe(
       nameC => this.finService.nCliente = nameC
     )
@@ -100,7 +109,24 @@ altTab(){
     }
     this.finService.MostraInfo = false;
     //this.newInfo(this.finService.MostraInfo);
+
     const dados = this.BuscaValores()
+    this.Carregar(dados);
+
+  }
+
+  async BuscaValores(){
+    let data = 'nada por enquanto 2'
+    try{
+      data = await this.shared.BuscaValores();
+      const retorno001 = await this.finService.getFinanceiroById(this.finService.nCliente);
+    }
+    catch{
+
+    }
+    return data;
+  }
+  Carregar(dados: any){
     this.finService.zerar();
 
     console.log('ListaFuncionário:')
@@ -113,7 +139,6 @@ altTab(){
       }
     }
   }
-
   receberPagto(valor: string){
     if (this.finService.info_Valor !== undefined){
 
@@ -123,11 +148,6 @@ altTab(){
       let origNumerico: number = !Number.isNaN(valorOriginal) ? valorOriginal : 0;
       let pagtoNumerico: number = !Number.isNaN(valorPagto) ? valorPagto : 0;
 
-      // valorOriginal = valorOriginal.replace(',', '.');
-      // let valorPagto: any = this.finService.info_GeraPagto.substring(3, 18)
-      // valorPagto = valorPagto.replace(',', '.');
-      // let origNumerico: number = !Number.isNaN(parseFloat(valorOriginal)) ? parseFloat(valorOriginal) : 0;
-      // let pagtoNumerico: number = !Number.isNaN(parseFloat(valorPagto)) ? parseFloat(valorPagto) : 0;
       if (origNumerico > 0 && pagtoNumerico == 0){
         this.finService.info_GeraPagto = this.finService.info_Valor
         let dt =  new Date().toISOString();
@@ -141,17 +161,7 @@ altTab(){
 
 
 
-  async BuscaValores(){
-    let data = 'nada por enquanto 2'
-    try{
-      data = await this.shared.BuscaValores();
-      const retorno001 = await this.finService.getFinanceiroById(this.finService.nCliente);
-    }
-    catch{
 
-    }
-    return data;
-  }
 
 
   newInfo(opt: boolean){
@@ -196,15 +206,20 @@ altTab(){
       }
       if(this.finService.idLinha){
         const result = await this.finService.updateFinanceiro(dado)
+        const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
+        this.finService.getFinanceiroById(id)
         alert('Dados atualizados!')
-        location.reload()
+        this.router.navigate(['/controleFinaceiro']);
       }else{
         const result = await this.finService.createFinanceiro(dado)
+        const id = this.finService.Atual.id !== undefined ? this.finService.Atual.id : 0;
+        this.finService.getFinanceiroById(id)
         alert('Dados inseridos com sucesso!')
-        location.reload()
+        this.router.navigate(['/controleFinaceiro']);
       }
     }
   }
+
 
 
  ngOnDestroy(): void {

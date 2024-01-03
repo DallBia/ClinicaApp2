@@ -35,6 +35,18 @@ export class SharedService {
     setSelectedNascimento(name: string) {
     this.selectedNascimentoSubject.next(name);
   }
+  private protadmChange = new BehaviorSubject<boolean>(false);
+  protadmChange$ = this.protadmChange.asObservable();
+    setprotadmChange(name: boolean) {
+    this.protadmChange.next(name);
+  }
+  private protcliChange = new BehaviorSubject<boolean>(false);
+  protcliChange$ = this.protcliChange.asObservable();
+    setprotcliChange(name: boolean) {
+    this.protcliChange.next(name);
+  }
+
+
 
 public data: string = "01/01/2000";
   private selectedImageSource = new BehaviorSubject<string | null>(null);
@@ -44,6 +56,7 @@ public data: string = "01/01/2000";
   setSelectedImage(imageUrl: string): void {
     this.selectedImageSource.next(imageUrl);
   }
+
 
 public ListaNomesC: Tipo[] = [];
 public ClienteAtual: number = 0;
@@ -85,6 +98,7 @@ public ListaPront: TableProntClin[] = [];
 
   private selectedRowSource = new BehaviorSubject<any>(null);
     currentSelectedRow = this.selectedRowSource.asObservable();
+
 
   changeSelectedRow(row: any) {
         this.selectedRowSource.next(row);
@@ -143,7 +157,7 @@ private ApiValor = `${environment.ApiUrl}/Valor`
       this.ListaValores = valor
     }
     catch{
-      valor = 'nada por enquanto 4';
+
     }
     console.log(valor)
     return valor;

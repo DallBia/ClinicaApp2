@@ -199,6 +199,7 @@ export class AgendaMenuComponent implements OnInit {
           if(this.agendaService.celSelect.status == 'Vago'){
             texto = 'Sessão anterior Excluída.';
             this.agendaService.celSelect.repeticao = 'Cancelar';
+            this.agendaService.celSelect.subtitulo ='';
             this.agendaService.celSelect.nome = '';
             this.agendaService.celSelect.idCliente = 0;
             this.agendaService.celSelect.subtitulo = '';
@@ -344,9 +345,7 @@ export class AgendaMenuComponent implements OnInit {
     async salvaAgenda(DadosEntrada: Agenda) {
       console.log(DadosEntrada)
       const okCriaAgenda = await this.agendaService.CreateAgenda(DadosEntrada)
-      // this.agendaService.CreateAgenda(texto).subscribe(
-      //   (data) => {
-      //     this.delay(100);
+
           const x = this.agendaService.celSelect.dtAlt !== undefined ? new Date(this.agendaService.celSelect.dtAlt) :new Date();
           this.dado.data = x.toISOString().split('T')[0]
           this.dado.valor = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
@@ -385,23 +384,18 @@ export class AgendaMenuComponent implements OnInit {
         return false;
       }
 
-      // Obtém as chaves (propriedades) dos objetos
       const chavesAgenda1 = Object.keys(agenda1);
       const chavesAgenda2 = Object.keys(agenda2);
 
-      // Verifica se o número de propriedades é o mesmo
       if (chavesAgenda1.length !== chavesAgenda2.length) {
         return false;
       }
       const n = chavesAgenda1.length
-      // Itera sobre as chaves e compara os valores
       for (let i = 0; i < n; i++) {
         if (chavesAgenda1[i] !== chavesAgenda2[i]) {
           return false;
         }
       }
-
-      // Se todas as propriedades forem iguais, retorna true
       return true;
     }
 

@@ -55,8 +55,26 @@ width: 97.5%;
 height: 25px;
 background-color: #ffb6b6;
 margin-top: 10px;
+font-size: 1.7vh;
 margin-bottom: 10px;
 }
+.tot01{
+  display: inline-block;
+  text-align: left;
+  width: 50%;
+  font-size: 1.7vh;
+  font-family: 'Roboto', monospace;
+}
+.tot02{
+  display: inline-block;
+  text-align: right;
+  width: 15%;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 1.7vh;
+  font-family: 'Roboto', monospace;
+}
+
 .listagem {
   max-height: 100%; /* Defina a altura máxima desejada para o conteúdo */
   overflow: auto; /* Adicione barras de rolagem quando o conteúdo excede a altura máxima */

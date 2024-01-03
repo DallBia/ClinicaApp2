@@ -65,7 +65,7 @@
     <div class="tags" (click)="setStatus('Desmarcado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Desmarcado' ? true : false}" style="background-color:khaki;">Desmarcada</div>
     <div class="tags" (click)="setStatus('Falta')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Falta' ? true : false}" style="background-color:indianred;">Falta</div>
     <div class="tags" (click)="setStatus('Pendente')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Pendente' ? true : false}" style="background-color:lightblue;">Pendente</div>
-    <div class="tags" (click)="setStatus('Bloqueado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Bloqueado' ? true : false}" style="background-color:violet;">Bloquear Hora</div>
+    <div class="tags" (click)="setStatus('Bloqueado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Bloqueado' ? true : false}" style="background-color:rgb(42, 42, 55); color:azure">Bloquear Hora</div>
     <div class="tags" (click)="setStatus('Reservado')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Reservado' || '' ? true : false}" style="background-color:silver;">Reservar</div>
     <div class="tags" (click)="setStatus('Vago')" [ngClass]="{'tagsSelect': this.agendaService.celSelect.status == 'Vago' || '' ? true : false}" style="background-color:white;">Limpar Hora</div>
   </div>

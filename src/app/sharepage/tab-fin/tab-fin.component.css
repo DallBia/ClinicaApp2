@@ -9,17 +9,24 @@ border-bottom: solid 1px  pink;
 }
 
 .t01{
+  font-family: 'Roboto', monospace;
   width: 55%;
 }
 .t02 {
+  font-family: 'Roboto', monospace;
   width: 10%;
+  font-size: 1.5vh;
   text-align: end;
 }
 .t04{
+  font-family: 'Roboto', monospace;
   width: 10%;
+  font-size: 1.5vh;
   text-align: end;
 }
 .t03 {
+  font-family: 'Roboto', monospace;
+  font-size: 1.5vh;
   width: 2.5%;
 }
 .corpo {

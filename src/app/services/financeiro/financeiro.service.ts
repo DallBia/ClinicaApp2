@@ -36,11 +36,18 @@ export class FinanceiroService {
   public info_refAg: number = 0;
   public info_Recibo: string = '';
 
+public entradas: string = 'R$ 0,00';
+public saidas: string = 'R$ 0,00';
+public saldo: string = 'R$ 0,00';
   troca(){
     this.info_Credito = !this.info_Credito
   }
 
-
+  private ctrFinChange = new BehaviorSubject<boolean>(false);
+  ctrFinChange$ = this.ctrFinChange.asObservable();
+    setctrFinChange(name: boolean) {
+    this.ctrFinChange.next(name);
+  }
   constructor(private http: HttpClient,
     private shared: SharedService,
     private user: UserService,
@@ -82,7 +89,6 @@ abrirEdicao(){
   async createFinanceiro(dado: Financeiro): Promise<Financeiro[]> {
     try {
       const response = await this.http.post<Response<Financeiro[]>>(`${this.apiUrl}` , dado).toPromise();
-
       if (response && response.dados !== undefined && response.sucesso) {
         return response.dados;
       } else {
@@ -114,6 +120,7 @@ abrirEdicao(){
       const response = await this.http.get<Response<Financeiro[]>>(`${this.apiUrl}/Cliente/${id}`).toPromise();
       if (response && response.dados !== undefined && response.sucesso) {
         this.tabFinanceira = response.dados;
+        this.calcularBalanco()
         return response.dados;
       } else {
         throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
@@ -123,8 +130,33 @@ abrirEdicao(){
     }
   }
 
+calcularBalanco(){
+  let entradas = 0;
+  let saidas = 0;
+  for (let i of this.tabFinanceira){
+    if (i.valor == -1000009){
+      i.valor = 0;
+    }
+    if(i.valor > 0){
+      entradas += i.valor;
+    }else{
+      saidas += i.valor;
+    }
+  }
+  let saldo = entradas + saidas
+  this.entradas = this.formataNum(entradas)
+  this.saidas = this.formataNum(saidas)
+  this.saldo = this.formataNum(saldo)
+}
 
-
+formataNum(num: number): string{
+  const numeroComDuasCasas: string = num.toFixed(2);
+  let divid: string = Number(numeroComDuasCasas).toLocaleString('pt-BR');
+  divid = divid + ',00';
+  let Ad = divid.split(',')
+  divid = 'R$ ' + Ad[0] + ',' + Ad[1]
+  return divid
+}
   zerar(){
 
   this.info_Movimento = '';

@@ -93,7 +93,7 @@ export class ProtclinComponent implements OnInit, OnDestroy{
   }
 
   adicionarEspaco() {
-    this.texto += '\n\n';
+
   }
 
 

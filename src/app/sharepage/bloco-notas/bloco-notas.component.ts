@@ -12,6 +12,8 @@ import { UserService } from 'src/app/services';
 import { Prontuario } from 'src/app/models/Prontuarios';
 import { SharedService } from 'src/app/shared/shared.service';
 import { Valor } from 'src/app/models/Valores';
+import { Router } from '@angular/router';
+import { ProtadmComponent } from 'src/app/pages/protadm/protadm.component';
 
 @Component({
   selector: 'app-bloco-notas',
@@ -25,6 +27,8 @@ export class BlocoNotasComponent implements OnInit {
 
   //==================================================================
   @ViewChild(LoginComponent) login!: LoginComponent;
+  @ViewChild('protadmRef') protadm!: ProtadmComponent;
+
 
   texto: string = '';
   linkA!: string;
@@ -81,7 +85,9 @@ onKeydown(event: KeyboardEvent): void {
   private headerService: HeaderService,
   public shared: SharedService,
   private prontuarioService: ProntuarioService,
-  private userService: UserService) { }
+  private userService: UserService,
+  private router: Router,
+  ) { }
 
   ngOnInit() {
       this.subscription = this.clienteService.ClienteA$.subscribe(
@@ -96,10 +102,46 @@ onKeydown(event: KeyboardEvent): void {
       });
       this.headerService.LinkA$.subscribe(link => {
         this.linkA = link;
+        switch (this.linkA){
+          case ('PRONTUÁRIO CLÍNICO'):
+            this.rota = '/protclin'
+            break;
+          case ('PRONTUÁRIO ADMINISTRATIVO'):
+            this.rota = '/protadm'
+            break;
+          case ('CONTROLE FINANCEIRO'):
+            this.rota = '/controleFinaceiro'
+            break;
+          default:
+            this.rota = '/inicio'
+        }
       });
 
       console.log(this.shared.texto)
       this.processedText = this.shared.texto;
+}
+
+recarrega(data: Prontuario[]){
+  console.log(data)
+      data.map((i: any) => {
+        i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toLocaleDateString('pt-BR') : '---'
+        i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toLocaleDateString('pt-BR') : '---'
+        i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toLocaleDateString('pt-BR') : '---'
+      })
+      this.prontuarioService.prontuarioG = data
+          this.prontuarioService.prontuarioG.sort((a, b) => (a.dtInsercao - b.dtInsercao));
+          this.shared.setprotadmChange(true);
+      alert('Registro gravado!');
+      this.delay(300);
+      this.shared.MostraInfo = !this.shared.MostraInfo;
+  switch(this.rota){
+    case ('/protadm'):
+      this.router.navigate([this.rota]);
+      break;
+    case ('/protclin'):
+      this.router.navigate([this.rota]);
+      break;
+  }
 }
 
 
@@ -152,13 +194,26 @@ Insere (processedText: string) {
 
   }
 }
+carregaProtAdm(data: Prontuario[]){
+  data.map((i: any) => {
+    i.clienteDesde !== null ? i.clienteDesde = new Date(i.clienteDesde!).toLocaleDateString('pt-BR') : '---'
+    i.dtInclusao !== null ? i.dtInclusao = new Date(i.dtInclusao!).toLocaleDateString('pt-BR') : '---'
+    i.dtNascim !== null ? i.dtNascim = new Date(i.dtNascim!).toLocaleDateString('pt-BR') : '---'
+  })
+  this.prontuarioService.prontuarioG = data
+      this.prontuarioService.prontuarioG.sort((a, b) => (a.dtInsercao - b.dtInsercao));
+      this.shared.setprotadmChange(true);
+}
+
 
 createValor(novo: Valor) {
   const data = this.shared.createValor(novo);
       this.delay(300);
       alert('Registro gravado!');
       this.delay(300);
-      location.reload();
+      this.router.navigate([this.rota]);
+
+      this.shared.MostraInfo = false;
     }
 
 
@@ -173,7 +228,7 @@ updateValor(novo: Valor) {
       this.delay(300);
       alert('Registro atualizado!');
       this.delay(300);
-      location.reload();
+
 }
 delay(time:number) {
   setTimeout(() => {
@@ -184,9 +239,7 @@ createProntuario(texto: Prontuario) {
   this.prontuarioService.CreateProntuario(texto).subscribe(
     (data) => {
       this.delay(300);
-      alert('Registro gravado!');
-      this.delay(300);
-      location.reload();
+      this.recarrega(data.dados)
     },
     (error) => {
       console.error('Erro no upload', error);
@@ -197,10 +250,12 @@ createProntuario(texto: Prontuario) {
 updateProntuario(texto: Prontuario) {
   this.prontuarioService.UpdateProntuario(texto).subscribe(
     (data) => {
-      this.delay(300);
-      alert('Registro atualizado!');
-      this.delay(300);
-      location.reload();
+
+      // this.delay(300);
+      // this.carregaProtAdm(data.dados);
+      // alert('Registro atualizado!');
+      // this.delay(300);
+      this.recarrega(data.dados)
     },
     (error) => {
       console.error('Erro no upload', error);

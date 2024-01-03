@@ -56,7 +56,7 @@ border-radius: 5px;
 background-color: rgb(255, 203, 227);
 border: solid 1px rgb(210, 210, 210);
 margin: 2px;
-font-size: var(--font);
+font-size: 2.5vh;
 font-weight: bolder;
 color: var(--cor-escura);
 display: flex; /* Ativa o modelo de layout flex */
@@ -82,7 +82,7 @@ width: 12vw;
 padding: 1px;
 border: solid 2px var(--cor-media);
 border-radius: 10px;
-background-color:var(--cor-clara);
+background-color: var(--cor-clara);
 display: inline-flex;
 margin: 1px;
 border-left: none;

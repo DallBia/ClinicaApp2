@@ -42,22 +42,22 @@ export class FormProntComponent implements OnInit {
     tipo: string = '';
 
     ngOnChanges(changes: SimpleChanges) {
-      if (changes['prontuarioService']) {
-        this.CarregarFuncionario()
-        this.Carregar()
-      }
-      if (changes['userService']) {
-        this.CarregarFuncionario()
-        this.Carregar()
-      }
-      if (changes[this.nCliente]) {
-        this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
-          this.Atual = clienteAtual;
-        });
-        this.clienteService.ClienteA$.subscribe(clienteA => {
-          this.nCliente = clienteA;
-        });
-      }
+      // if (changes['prontuarioService']) {
+      //   this.CarregarFuncionario()
+      //   this.Carregar()
+      // }
+      // if (changes['userService']) {
+      //   this.CarregarFuncionario()
+      //   this.Carregar()
+      // }
+      // if (changes[this.nCliente]) {
+      //   this.clienteService.ClienteAtual$.subscribe(clienteAtual => {
+      //     this.Atual = clienteAtual;
+      //   });
+      //   this.clienteService.ClienteA$.subscribe(clienteA => {
+      //     this.nCliente = clienteA;
+      //   });
+      // }
     }
   constructor(private headerService: HeaderService,
     private colaboradorService: ColaboradorService,
@@ -70,6 +70,17 @@ export class FormProntComponent implements OnInit {
     this.subscription = this.clienteService.ChangesA$.subscribe(
       name => this.nChanges = name
     )
+
+    this.subscription = this.clienteService.ChangesA$.subscribe(
+      name => this.nChanges = name
+    )
+    this.subscription = this.shared.protadmChange$.subscribe(
+      (valor) => {
+      if (valor == true){
+        this.shared.setprotadmChange(false)
+        this.Carregar();
+      }
+  });
 
   }
 
