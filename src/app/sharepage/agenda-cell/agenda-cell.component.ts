@@ -81,7 +81,7 @@ async atualizarNomeCorrespondente() {
       this.linha1 = item.nome !== undefined ? item.nome : '';
       this.linha2 = item.subtitulo !== undefined ? item.subtitulo : '';
       const x = this.agendaService.dia + '%' + this.agendaService.un;
-      console.log('Em ' + item.idtmp + ' mudamos para ' + this.linha1 + '/' + this.linha2)
+      //console.log('Em ' + item.idtmp + ' mudamos para ' + this.linha1 + '/' + this.linha2)
       this.ReCarregar(x)
     }
   //}

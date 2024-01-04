@@ -149,5 +149,18 @@
     border-right: none 2px var(--cor-escura);
 
 }
+.botVER {
+  height: 25px;
+  width: 13%;
+  background-color: var(--cor-clara);
+  color: var(--cor-escura);
+    border-radius: 1vh;
+    margin-left: 5px;
+
+    border-bottom: solid 2px var(--cor-escura);
+    border-top: solid 2px var(--cor-escura);
+    border-left: none 2px var(--cor-escura);
+    border-right: none 2px var(--cor-escura);
+}
 
 /*ꟷꚚꟷ ֍ ─●─*/

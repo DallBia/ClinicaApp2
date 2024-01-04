@@ -1,50 +1,52 @@
 
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Agenda } from 'src/app/models/Agendas';
 import { UserService } from 'src/app/services';
 import { Agenda2Service } from 'src/app/services/agenda/agenda2.service';
+import { SharedService } from 'src/app/shared/shared.service';
+import { ModalConfirComponent } from 'src/app/sharepage/modal-confir/modal-confir.component';
+
 
 @Component({
   selector: 'app-modal-multi',
   templateUrl: './modal-multi.component.html',
   styleUrls: ['./modal-multi.component.css']
 })
-export class ModalMultiComponent implements OnInit{
+export class ModalMultiComponent implements OnInit, OnDestroy{
 
   public informacao = '';
-public ListaAgenda: any = [];
-public idPr = 0;
-public numReserva: string = '';
+  public ListaAgenda: any = [];
+  public idPr = 0;
+
+  public valorStr: string = '';
 
   constructor(
     public agenda: Agenda2Service,
     private userService: UserService,
+    public dialog: MatDialog,
+    public shared: SharedService,
     public dialogRef: MatDialogRef<ModalMultiComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
-
-  ngOnInit() {
-    this.ListaAgenda = [];
-    const n = this.agenda.agendaNsessoes;
-    let id00 = new Date()
-    let id01 = id00.toISOString()
-    id01 = id01.replace(/\D/g, '')
-    this.numReserva = id01
-    for (let i = 0; i < n; i++) {
-      const lin = {
-        id: i,
-        sessao: (i+1).toString(),
-        profis: '',
-        dia: '',
-        hora: '',
-        status: '○',
-      }
-      this.ListaAgenda.push(lin);
-    }
+  ngOnDestroy(): void {
+    this.agenda.ListaAgenda = []
   }
 
+  ngOnInit() {
+    this.ListaAgenda= []
+      this.ListaAgenda = this.agenda.ListaAgenda;
+      const n = this.agenda.agendaNsessoes;
+  }
+
+
+
+
+
+  ajustaValor(i: number){
+
+  }
 
   exemploChamadaApi(): void {
 
@@ -55,6 +57,7 @@ public numReserva: string = '';
   onCloseClick(): void {
     this.dialogRef.close();
   }
+
 
 
 buscaData(n?: number){
@@ -114,6 +117,7 @@ async busca(n?: number){
           obs: '',
           valor: 0,
           configRept: rept,
+          multi: this.agenda.numReserva,
         }
         console.log(origem)
         const data = await this.agenda.getAgendaMulti(origem)
@@ -138,8 +142,10 @@ async busca(n?: number){
             subtitulo: '',
             status: 'Vago',
             historico: '',
+            profis: this.ListaAgenda[x].profis,
             obs: '',
             valor: 0,
+            multi: this.agenda.numReserva,
             configRept: '',
           }
           console.log(origem2)
@@ -173,13 +179,16 @@ async busca(n?: number){
                 diaI: this.ListaAgenda[x].dia,
                 diaF: this.ListaAgenda[x].dia,
                 repeticao: 'Unica',
-                subtitulo: 'Multi (' + nn + ' de ' + this.agenda.agendaNsessoes + ')',
+                subtitulo: 'ო(' + nn + ' de ' + this.agenda.agendaNsessoes + ') ' + this.agenda.celSelect.subtitulo,
                 status: '',
-                historico: this.numReserva + ' (' + nn + ' de ' + this.agenda.agendaNsessoes + ')',
+                profis: this.ListaAgenda[x].profis,
+                historico: this.agenda.numReserva + ' (' + nn + ' de ' + this.agenda.agendaNsessoes + ')',
                 obs: '',
+                multi: this.agenda.numReserva,
                 valor: nn == 1 ? this.agenda.celSelect.valor : 0,
                 configRept: 'X',
               }
+              console.log(this.agenda.agendaMulti[n])
             }
 
           }else{
@@ -206,10 +215,54 @@ async onReserveClick(){
       this.delay(500)
       console.log('Aguardando...')
     }
-
   }
   this.informacao = '';
   this.onCloseClick();
+  this.agenda.recarregar()
+}
+
+
+onCancelClick(): void{
+  this.shared.textoModal = 'Selecione a opção desejada:'
+  this.shared.tituloModal = 'Confirme o cancelamento das reservas'
+  this.shared.nbotoes = ['Apenas as reservas de ' + this.agenda.numReserva, 'Todas as reservas de ' + this.agenda.celSelect.nome]
+  const dialogRefConfirm = this.dialog.open(ModalConfirComponent, {
+
+  });
+  dialogRefConfirm.afterClosed().subscribe(result => {
+      //alert('A opção escolhida foi: '+ this.shared.respostaModal)
+      this.Cancela();
+  });
+
+};
+
+async Cancela(){
+  this.informacao = 'Aguarde...';
+  let param = '';
+  let id = 0;
+  let dt = ''
+  if (this.shared.respostaModal[0] == 'A'){
+    id = 2;
+    param = this.agenda.numReserva
+    dt=id.toString() + '֍' + param
+  }else{
+    id = 1;
+    param = this.agenda.celSelect.nome !== undefined ? this.agenda.celSelect.nome : '';
+    dt=id.toString() + '֍' + param
+  }
+  // const r = await this.agenda.MultiAgenda(dt);
+  // this.delay(300)
+  //   this.onCloseClick();
+    this.agenda.MultiAgenda(id, param).subscribe((data) => {
+      console.log(data.mensagem)
+      this.delay(300)
+
+      this.onCloseClick();
+      alert(data.mensagem);
+      this.agenda.recarregar()
+    }, error => {
+      console.error('Erro no upload', error);
+    });
 }
 
 

@@ -40,6 +40,9 @@ export class ControleFinaceiroComponent implements OnInit, OnDestroy{
   public UserAll!: any;
   public tela: string = 'padrão';
   public btnTab: string = 'Tabela de Valores'
+  public btnCliFunc: string = '(Clínica->Funcionário)'
+  public tela1: string = 'cli'
+
 
   constructor(private colaboradorService: ColaboradorService,
     public clienteService: ClienteService,
@@ -76,6 +79,17 @@ altTab(){
   }else{
     this.tela = 'padrão'
     this.btnTab = 'Tabela de Valores'
+  }
+}
+
+
+altCliFunc(){
+  if (this.tela1 == 'cli'){
+    this.tela1 = 'func'
+    this.btnCliFunc = '(Cliente->Clínica)'
+  }else{
+    this.tela1 = 'cli'
+    this.btnCliFunc = '(Clínica->Funcionário)'
   }
 }
 

@@ -90,8 +90,18 @@ public docto: Documento = {
 }
 
 
-//--- variável para ajudar no modal do Prontuário:
-public ListaPront: TableProntClin[] = [];
+//--- variável para ajudar no modal de confirmação:
+
+public nbotoes: string[] = [];
+public tituloModal: string = '';
+public textoModal: string = '';
+public ListaPront: TableProntClin[] = []; //modal do Prontuário
+public respostaModal: string ='';
+
+
+
+
+
 
 //=============================================
 

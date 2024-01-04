@@ -18,5 +18,6 @@ export interface TableAgenda{
   valor?: number;
   idtmp?: number;
   configRept: string,
-
+  multi?: string,
+  profis?: string,
 }

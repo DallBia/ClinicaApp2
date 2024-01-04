@@ -1,3 +1,4 @@
+import { DadosformComponent } from './../dadosform/dadosform.component';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Agenda } from 'src/app/models/Agendas';
@@ -36,6 +37,22 @@ export class AgendaMenuComponent implements OnInit {
   ngOnInit(): void {
       this.agendaService.buscaData()
       this.shared.BuscaValores()
+      this.subscription = this.agendaService.segueModal$.subscribe(Segue => {
+        if (Segue == true){
+          this.agendaService.atualizarsegueModal(false);
+          const dialogRef = this.dialog.open(ModalMultiComponent, {
+
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('O modal foi fechado.');
+            this.subscription?.unsubscribe
+
+          });
+        }
+
+      });
+
   }
 
     public Vlr: boolean = true;
@@ -47,37 +64,75 @@ export class AgendaMenuComponent implements OnInit {
         }
       }
       if(this.agendaService.celSelect.subtitulo == 'Avaliação Multidisciplinar'){
-        this.openModal(10)
+        this.openModal(10, 'X')
       }
       if(this.agendaService.celSelect.subtitulo == 'Avaliação Neuropsicológica'){
-        this.openModal(5)
+        this.openModal(5, 'X')
       }
       if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 05'){
-        this.openModal(5)
+        this.openModal(5, 'X')
       }
       if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 10'){
-        this.openModal(10)
+        this.openModal(10, 'X')
       }
       if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 20'){
-        this.openModal(20)
+        this.openModal(20, 'X')
       }
       if(this.agendaService.celSelect.subtitulo == 'Reforço Escolar - Pacote 30'){
-        this.openModal(30)
+        this.openModal(30, 'X')
       }
     }
-    openModal(n: number): void {
+    openModal(n: number, tipo: string): void {
+      let r: any = 0;
       console.log(this.agendaService.ListaValores)
-
       this.agendaService.agendaNsessoes = n
-      const dialogRef = this.dialog.open(ModalMultiComponent, {
+      if(n >0){
+        let id00 = new Date()
+        let id01 = id00.toISOString()
+        id01 = id01.replace(/\D/g, '')
+        this.agendaService.numReserva = id01
 
-      });
 
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('O modal foi fechado.');
-      });
+
+        const vlr = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor : 0;
+        const valorSess: number = this.agendaService.celSelect.valor !== undefined ? this.agendaService.celSelect.valor / n : 0;
+        this.agendaService.valorStr = this.transformarNumeroEmString(vlr)
+        for (let i = 0; i < n; i++) {
+          const lin = {
+            id: i,
+            sessao: (i+1).toString(),
+            profis: '',
+            dia: '',
+            hora: '',
+            status: '',
+            valor: valorSess,
+          }
+          this.agendaService.ListaAgenda.push(lin);
+        }
+        this.agendaService.atualizarsegueModal(true);
+      }else{
+        this.agendaService.numReserva = tipo
+        const parm = 'id֍' + this.agendaService.numReserva.toString()
+        r = this.BuscaAg(parm);
+      }
     }
 
+    transformarNumeroEmString(num: number): string {
+      const parteInt = Math.floor(num);
+      let parteFrac = num - parteInt;
+      parteFrac = (Math.floor(parteFrac * 100))/100;
+      num = parteInt + parteFrac;
+      const v = num.toString();
+      return v;
+    }
+
+
+
+async BuscaAg(p: string){
+  const resp = await this.agendaService.getAgendaByReserva(p);
+  return resp.dados
+
+}
 
 
 
@@ -195,8 +250,8 @@ export class AgendaMenuComponent implements OnInit {
         if (this.agendaService.cellA.status == ''|| this.agendaService.cellA.status == 'Vago'){
           texto = 'Agendamento de ' + this.agendaService.celSelect.subtitulo + '. ';
           this.agendaService.celSelect.status == 'Pendente';
-        } else {
-          if(this.agendaService.celSelect.status == 'Vago'){
+        }
+        if(this.agendaService.celSelect.status == 'Vago'){
             texto = 'Sessão anterior Excluída.';
             this.agendaService.celSelect.repeticao = 'Cancelar';
             this.agendaService.celSelect.subtitulo ='';
@@ -219,7 +274,7 @@ export class AgendaMenuComponent implements OnInit {
               texto += 'Novo Status: ' + this.agendaService.celSelect.status + '. '
             }
           }
-        }
+
         this.agendaService.celSelect.repeticao = sessao;
         if (this.agendaService.celSelect.repeticao == '' || this.agendaService.celSelect.repeticao == undefined){
           this.agendaService.celSelect.repeticao = 'Unica'

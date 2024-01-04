@@ -18,6 +18,7 @@ export interface Agenda{
   obs?: string;
   valor?: number;
   configRept: string;
-
+  multi?: string;
+  profis?:string;
 
 }

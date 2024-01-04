@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Agenda } from 'src/app/models/Agendas';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Response } from '../../models/Response';
 import { ClienteService } from '../cliente/cliente.service';
 import { ColaboradorService } from '../colaborador/colaborador.service';
@@ -13,6 +13,7 @@ import { Cliente } from 'src/app/models/Clientes';
 import { FileService } from '../foto-service.service';
 import { Valor}from 'src/app/models/Valores';
 import { Colaborador } from 'src/app/models/Colaboradors';
+import { lAgenda } from 'src/app/models/lAgenda';
 // import { DonoSala } from 'src/app/models/DonoSalas';
 
 
@@ -46,7 +47,13 @@ export class Agenda2Service {
     this._agendaDiaSubject.next(novaAgendaDia);
   }
 
+  private segueModal = new BehaviorSubject<boolean>(false);
+  segueModal$ = this.segueModal.asObservable();
+  atualizarsegueModal(bol: boolean) {
+    this.segueModal.next(bol);
+  }
 
+public botaoVer: string = '';
   public Vazia: Agenda = {
     id: 0,
     idCliente:0,
@@ -101,7 +108,7 @@ export class Agenda2Service {
   // public donoTmp: DonoSala[]=[];
   public agendaNsessoes: number = 0;
   public agendaMulti: Agenda[] = [];
-
+  public numReserva: string = '';
   public listaHorarios: any = [
     {n: 0, horario: 'manhã'},
     {n: 1, horario: '08:00'},
@@ -121,8 +128,8 @@ export class Agenda2Service {
     {n: 15, horario: '19:00'},
   ]
 
-
-
+  public ListaAgenda: lAgenda[] = [];
+  public valorStr = '';
 
   constructor(private http: HttpClient,
     private clienteService: ClienteService,
@@ -140,105 +147,9 @@ export class Agenda2Service {
 
   }
 
-  // async validaDono(){
-  //   console.log('Par Impar: ' + this.parImpar)
-  //   const diaDaSemana = new Date(this.dia).getDay();
-  //   const diasDaSemana = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-  //   this.diaSemana = diasDaSemana[diaDaSemana];
-  //   console.log('Dia Semana:' + this.diaSemana)
-  //   console.log()
-  //   for (let i of this.donoTmp){
-  //     let vRet = false;
-  //     const Rep = i.configRept.split('%')
-  //     let lin: DonoSala[]=[]
-  //     if (Rep[0]=="D"){
-  //       vRet = true
-  //     }
-  //     if (Rep[0]=="S" && Rep[1] == this.diaSemana){
-  //       vRet = true
-  //     }
-  //     if (Rep[0]=="Q" && Rep[1] == this.diaSemana && Rep[2] == this.parImpar){
-  //       vRet = true
-  //     }
-  //     if (Rep[0]=="M" && Rep[2] == this.dia){
-  //       vRet = true
-  //     }
-
-  //     if(vRet == true){
-  //       lin = [{
-  //         id: i.id,
-  //         unidade: i.unidade,
-  //         sala: i.sala,
-  //         idProfissional:i.idProfissional,
-  //         area: i.area,
-  //         diaSemana: i.diaSemana,
-  //         dataInicio: i.dataInicio,
-  //         dataFim: i.dataFim,
-  //         periodo: i.periodo,
-  //         configRept: i.configRept,
-  //       }]
-  //       this.donoSala = [...this.donoSala, ...lin]
-  //     }
-  //   }
-
-  //   for (let i of this.donoSala){
-  //     let nomeProfissional = '';
-  //     if(i.unidade == this.un){
-  //       const ntmp = this.listaHorarios.find((item: { horario: string | undefined; }) => item.horario === i.periodo);
-  //       if (i.periodo == 'manhã' || i.periodo == 'tarde'){
-  //         const idprof = this.ListaEquipe.find((item: { nome: string | undefined, id: number | undefined }) => item.id === i.idProfissional);
-  //         if (idprof) {
-  //           nomeProfissional = idprof.nome;
-  //         }
-  //       }
-
-  //       const n = ntmp.n !== undefined ? ntmp.n  * 100: 0;
-  //       const s = i.sala !== undefined ? i.sala : 0;
-  //       const idTemp = n + s;
-  //       let verif = false;
-  //       for (let j of this.agendaDia){
-  //         if (idTemp == j.idtmp){
-  //           if (j.nome == ''){
-  //             j.nome = nomeProfissional
-  //           j.subtitulo = i.area
-  //           }
-  //           verif = true
-  //         }
-  //       }
-  //       if (verif == false){
-  //         const Lin: TableAgenda[] = [{
-  //           id: i.id,
-  //           idCliente: 0,
-  //           nome:  nomeProfissional,
-  //           idFuncAlt:  0,
-  //           dtAlt:  '',
-  //           configRept: i.configRept,
-  //           horario:  i.periodo,
-  //           sala:  i.sala,
-  //           unidade:  i.unidade,
-  //           diaI:  this.dia,
-  //           diaF: this.dia,
-  //           diaDaSemana:  this.diaSemana,
-  //           repeticao:  '',
-  //           subtitulo:  i.area,
-  //           status: 'Pendente',
-  //           historico:  '',
-  //           obs:  'Gerado automaticamente pela repetição',
-  //           valor:  0,
-  //           idtmp: idTemp
-  //       }]
-  //       this.agendaDia = [...this.agendaDia, ...Lin]
-  //       console.log('AgendaDia em AgendaService:')
-  //       console.log(this.agendaDia)
-  //       console.log('Em Shared, os clientes:')
-  //       console.log(this.shared.DataS)
-  //       }
-
-  //     }
-  //   }
-  // }
 
   private apiUrl = `${environment.ApiUrl}/Agenda`;
+
   getAgendaByDate(date: string): Promise<Response<Agenda[]>> {
   return this.http.get<Response<Agenda[]>>(`${this.apiUrl}/AgendaByDate/${date}`)
     .toPromise()
@@ -265,6 +176,45 @@ export class Agenda2Service {
     .catch(error => {
       throw error; // Você pode personalizar essa parte conforme sua necessidade
     });
+  }
+
+  getAgendaByReserva(parm: string): Promise<Response<Agenda[]>> {    // Use http.post para enviar dados no corpo da requisição
+    return this.http.get<Response<Agenda[]>>(`${this.apiUrl}/Multi/${parm}`).toPromise()
+    .then(response => {
+      if (response) {
+        this.agendaMulti = []
+        this.agendaMulti = response.dados;
+        let n = 0;
+        for (let i of response.dados){
+          n += 1
+
+          const lin = {
+            id: i.id,
+            sessao: n.toString(),
+            profis: i.profis,
+            dia: i.diaI,
+            hora: i.horario,
+            status: '●',
+            valor: i.valor,
+          }
+          this.ListaAgenda.push(lin);
+        }
+        this.agendaNsessoes = this.agendaMulti.length;
+        console.log(this.agendaMulti)
+        console.log(this.agendaNsessoes)
+        this.atualizarsegueModal(true);
+        return response;
+      } else {
+        throw new Error('Resposta da API é indefinida.');
+      }
+    })
+    .catch(error => {
+      throw error; // Você pode personalizar essa parte conforme sua necessidade
+    });
+  }
+  async BuscarAgendaPorReserva(param: string): Promise<Agenda[]> {
+    const data: Response<Agenda[]> = await this.getAgendaByReserva(param);
+    return data.dados;
   }
 
   async BuscaAgenda(dia: string): Promise<boolean> {
@@ -305,6 +255,7 @@ export class Agenda2Service {
           status:  i.status,
           historico:  i.historico,
           obs:  i.obs,
+          multi: i.multi,
           valor:  i.valor,
           idtmp: idTemp
         }]
@@ -421,14 +372,48 @@ validaRept(agenda: Agenda[]): boolean {
           throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
         }
       } catch (error) {
-        throw error; // Você pode personalizar essa parte conforme sua necessidade
+        throw error;
       }
     }
+    MultiAgenda(id: number, prm: any): Observable<Response<Agenda[]>> {
+      const headers = new HttpHeaders({
+          'Content-Type': 'application/json'
+      });
+
+      const prmJsonString = JSON.stringify(prm);
+
+      return this.http.put<Response<Agenda[]>>(`${this.apiUrl}/MultiAgenda/${id}`, prmJsonString, { headers });
+  }
+
+/*
+    async MultiAgenda(prm: string) : Promise<Agenda[]>{
+      try {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json'
+      });
+
+      const prmJsonString = JSON.stringify(prm);
+
+        const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/MultiAgenda` , prm).toPromise();
+        if (response && response.dados !== undefined) {
+          //this.agendaG = response.dados;
+          alert(response.mensagem + ' agendamentos alterados.')
+          console.log(response.dados)
+          return response.dados;
+        } else {
+          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
+        }
+      } catch (error) {
+        throw error;
+      }
+    }
+*/
     async CreateAgenda(agenda: Agenda): Promise<Agenda[]> {
       try {
         const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda).toPromise();
         if (response && response.dados !== undefined && response.sucesso) {
           this.agendaG = response.dados;
+
           return response.dados;
         } else {
           throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
@@ -437,6 +422,8 @@ validaRept(agenda: Agenda[]): boolean {
         throw error; // Você pode personalizar essa parte conforme sua necessidade
       }
     }
+
+
 
 
 
@@ -548,6 +535,7 @@ validaRept(agenda: Agenda[]): boolean {
           status:  i.status,
           historico:  i.historico,
           obs:  i.obs,
+          multi: i.multi,
           valor:  i.valor,
         }
       }
@@ -584,7 +572,10 @@ validaRept(agenda: Agenda[]): boolean {
         this.horario = i.horario
       }
     }
-
+    this.botaoVer = '';
+    if (this.celSelect.multi !== undefined && this.celSelect.multi !== null){
+      this.botaoVer = this.celSelect.multi;
+    }
   }
 
   carregarSala(){

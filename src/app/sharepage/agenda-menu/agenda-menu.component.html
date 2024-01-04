@@ -35,7 +35,7 @@
   </div>
   <div>
     <span class="fLabel" for="sessao-select">Sessão:</span>
-    <input type="text" id="sessao-select" list="valores2" class="fCampo" [(ngModel)]="this.agendaService.celSelect.subtitulo" (blur)="buscaValor()">
+    <input type="text" id="sessao-select" list="valores2" class="fCampo" style="width: 65%;" [(ngModel)]="this.agendaService.celSelect.subtitulo" (blur)="buscaValor()">
     <datalist id="valores2">
       <option *ngFor="let valor of this.shared.ListaValores" [value]="valor.nome" ></option>
       <option value="Devolutiva de avaliação"></option>
@@ -43,6 +43,7 @@
       <option value="Reunião"></option>
       <option value="Entrevista"></option>
     </datalist>
+    <button *ngIf="this.agendaService.botaoVer !== ''" class="botVER" (click)="openModal(0, this.agendaService.botaoVer)" >VER</button>
   </div>
   <div style="display: flex; vertical-align: middle;" *ngIf="this.agendaService.horario !== 'manhã' && this.agendaService.horario !== 'tarde'">
     <span class="fLabel" for="valor">Valor (R$):</span>
