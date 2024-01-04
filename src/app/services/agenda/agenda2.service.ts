@@ -375,6 +375,8 @@ validaRept(agenda: Agenda[]): boolean {
         throw error;
       }
     }
+
+
     MultiAgenda(id: number, prm: any): Observable<Response<Agenda[]>> {
       const headers = new HttpHeaders({
           'Content-Type': 'application/json'
@@ -385,29 +387,6 @@ validaRept(agenda: Agenda[]): boolean {
       return this.http.put<Response<Agenda[]>>(`${this.apiUrl}/MultiAgenda/${id}`, prmJsonString, { headers });
   }
 
-/*
-    async MultiAgenda(prm: string) : Promise<Agenda[]>{
-      try {
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-      });
-
-      const prmJsonString = JSON.stringify(prm);
-
-        const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/MultiAgenda` , prm).toPromise();
-        if (response && response.dados !== undefined) {
-          //this.agendaG = response.dados;
-          alert(response.mensagem + ' agendamentos alterados.')
-          console.log(response.dados)
-          return response.dados;
-        } else {
-          throw new Error('Resposta da API é indefinida, não contém dados ou não é bem-sucedida.');
-        }
-      } catch (error) {
-        throw error;
-      }
-    }
-*/
     async CreateAgenda(agenda: Agenda): Promise<Agenda[]> {
       try {
         const response = await this.http.post<Response<Agenda[]>>(`${this.apiUrl}/CreateAgenda` , agenda).toPromise();

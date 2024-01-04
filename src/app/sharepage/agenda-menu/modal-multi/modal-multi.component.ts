@@ -217,8 +217,8 @@ async onReserveClick(){
     }
   }
   this.informacao = '';
+  this.agenda.recarregar();
   this.onCloseClick();
-  this.agenda.recarregar()
 }
 
 
@@ -240,19 +240,22 @@ async Cancela(){
   this.informacao = 'Aguarde...';
   let param = '';
   let id = 0;
-  let dt = ''
-  if (this.shared.respostaModal[0] == 'A'){
-    id = 2;
-    param = this.agenda.numReserva
-    dt=id.toString() + '֍' + param
-  }else{
-    id = 1;
-    param = this.agenda.celSelect.nome !== undefined ? this.agenda.celSelect.nome : '';
-    dt=id.toString() + '֍' + param
+
+  switch (this.shared.respostaModal[0]){
+    case ('A'):
+      id = 2;
+      param = this.agenda.numReserva
+    break;
+    case ('T'):
+      id = 1;
+      param = this.agenda.celSelect.nome !== undefined ? this.agenda.celSelect.nome : '';
+    break;
+    default:
+      id = 0;
+      param = this.agenda.celSelect.nome !== undefined ? this.agenda.numReserva : '';
+    break;
   }
-  // const r = await this.agenda.MultiAgenda(dt);
-  // this.delay(300)
-  //   this.onCloseClick();
+
     this.agenda.MultiAgenda(id, param).subscribe((data) => {
       console.log(data.mensagem)
       this.delay(300)
@@ -272,11 +275,10 @@ delay(time:number) {
   }, time);
 }
 
-onSaveClick(){}
-// sessao: (i+1).toString(),
-//         profis: '',
-//         dia: '',
-//         hora: '',
-//         status:
+onSaveClick(){
+  this.shared.respostaModal = 'Marcar'
+  this.Cancela();
+}
+
 }
 
