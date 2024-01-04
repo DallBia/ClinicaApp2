@@ -2,139 +2,120 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    autopilot.gke.io/resource-adjustment: '{"input":{"containers":[{"limits":{"cpu":"100m","memory":"100Mi"},"requests":{"cpu":"100m","memory":"60Mi"},"name":"clinica-webapp"}]},"output":{"containers":[{"limits":{"cpu":"250m","ephemeral-storage":"1Gi","memory":"512Mi"},"requests":{"cpu":"250m","ephemeral-storage":"1Gi","memory":"512Mi"},"name":"clinica-webapp"}]},"modified":true}'
+    autopilot.gke.io/resource-adjustment: >-
+      {"input":{"containers":[{"limits":{"cpu":"100m","memory":"100Mi"},"requests":{"cpu":"100m","memory":"60Mi"},"name":"clinica-webapp"}]},"output":{"containers":[{"limits":{"cpu":"250m","ephemeral-storage":"1Gi","memory":"512Mi"},"requests":{"cpu":"250m","ephemeral-storage":"1Gi","memory":"512Mi"},"name":"clinica-webapp"}]},"modified":true}
     autopilot.gke.io/warden-version: 2.7.41
-    deployment.kubernetes.io/revision: "30"
-    gcb-build-id: eedb6825-35a6-4460-9def-17fa8af3b311
-    gcb-trigger-id: f653c3d7-5e9e-4f7a-95bb-15be059012b4
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"autopilot.gke.io/resource-adjustment":"{\"input\":{\"containers\":[{\"limits\":{\"cpu\":\"100m\",\"memory\":\"100Mi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"60Mi\"},\"name\":\"clinica-webapp\"}]},\"output\":{\"containers\":[{\"limits\":{\"cpu\":\"250m\",\"ephemeral-storage\":\"1Gi\",\"memory\":\"512Mi\"},\"requests\":{\"cpu\":\"250m\",\"ephemeral-storage\":\"1Gi\",\"memory\":\"512Mi\"},\"name\":\"clinica-webapp\"}]},\"modified\":true}","autopilot.gke.io/warden-version":"2.7.41","gcb-build-id":"eedb6825-35a6-4460-9def-17fa8af3b311","gcb-trigger-id":"f653c3d7-5e9e-4f7a-95bb-15be059012b4"},"labels":{"app":"clinica-webapp","app.kubernetes.io/managed-by":"gcp-cloud-build-deploy","app.kubernetes.io/name":"clinica-webapp-deployment","app.kubernetes.io/version":"0ebab33e4f0083ccd5c34d7d7c881a5d0ff71a24"},"managedFields":[{"apiVersion":"apps/v1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{".":{},"f:kubectl.kubernetes.io/last-applied-configuration":{}},"f:labels":{".":{},"f:app":{}}},"f:spec":{"f:progressDeadlineSeconds":{},"f:replicas":{},"f:revisionHistoryLimit":{},"f:selector":{},"f:strategy":{"f:rollingUpdate":{".":{},"f:maxSurge":{},"f:maxUnavailable":{}},"f:type":{}},"f:template":{"f:metadata":{"f:labels":{".":{},"f:app":{}}},"f:spec":{"f:containers":{"k:{\"name\":\"clinica-webapp\"}":{".":{},"f:env":{".":{},"k:{\"name\":\"TZ\"}":{".":{},"f:name":{},"f:value":{}}},"f:image":{},"f:imagePullPolicy":{},"f:name":{},"f:ports":{".":{},"k:{\"containerPort\":443,\"protocol\":\"TCP\"}":{".":{},"f:containerPort":{},"f:name":{},"f:protocol":{}},"k:{\"containerPort\":80,\"protocol\":\"TCP\"}":{".":{},"f:containerPort":{},"f:name":{},"f:protocol":{}}},"f:resources":{".":{},"f:limits":{".":{},"f:cpu":{},"f:memory":{}},"f:requests":{".":{},"f:cpu":{},"f:memory":{}}},"f:terminationMessagePath":{},"f:terminationMessagePolicy":{}}},"f:dnsPolicy":{},"f:restartPolicy":{},"f:schedulerName":{},"f:securityContext":{},"f:terminationGracePeriodSeconds":{}}}}},"manager":"kubectl-client-side-apply","operation":"Update","time":"2023-09-26T00:54:18Z"},{"apiVersion":"apps/v1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{"f:deployment.kubernetes.io/revision":{}}},"f:status":{"f:conditions":{".":{},"k:{\"type\":\"Available\"}":{".":{},"f:lastTransitionTime":{},"f:lastUpdateTime":{},"f:message":{},"f:reason":{},"f:status":{},"f:type":{}},"k:{\"type\":\"Progressing\"}":{".":{},"f:lastTransitionTime":{},"f:lastUpdateTime":{},"f:message":{},"f:reason":{},"f:status":{},"f:type":{}}},"f:observedGeneration":{},"f:replicas":{},"f:unavailableReplicas":{},"f:updatedReplicas":{}}},"manager":"kube-controller-manager","operation":"Update","subresource":"status","time":"2023-09-26T01:04:19Z"}],"name":"clinica-webapp-deployment","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"clinica-webapp"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"gcb-build-id":"eedb6825-35a6-4460-9def-17fa8af3b311","gcb-trigger-id":"f653c3d7-5e9e-4f7a-95bb-15be059012b4"},"labels":{"app":"clinica-webapp","app.kubernetes.io/managed-by":"gcp-cloud-build-deploy","app.kubernetes.io/name":"clinica-webapp-deployment","app.kubernetes.io/version":"0ebab33e4f0083ccd5c34d7d7c881a5d0ff71a24"}},"spec":{"containers":[{"env":[{"name":"TZ","value":"America/Sao_Paulo"}],"image":"gcr.io/clinica-400119/github.com/dallbia/clinicaapp@sha256:878f420c95b12fc165ccc6c7d2bd2d56b87cd67114b99dcff14d6027823b5b8e","imagePullPolicy":"IfNotPresent","name":"clinica-webapp","ports":[{"containerPort":80,"name":"http-port","protocol":"TCP"},{"containerPort":443,"name":"https-port","protocol":"TCP"}],"resources":{"limits":{"cpu":"250m","ephemeral-storage":"1Gi","memory":"512Mi"},"requests":{"cpu":"250m","ephemeral-storage":"1Gi","memory":"512Mi"}},"securityContext":{"capabilities":{"drop":["NET_RAW"]}}}],"securityContext":{"seccompProfile":{"type":"RuntimeDefault"}},"tolerations":[{"effect":"NoSchedule","key":"kubernetes.io/arch","operator":"Equal","value":"amd64"}]}}}}
-  creationTimestamp: "2023-10-04T00:27:41Z"
-  generation: 30
   labels:
     app: clinica-webapp
-    app.kubernetes.io/managed-by: gcp-cloud-build-deploy
-    app.kubernetes.io/name: clinica-webapp-deployment
-    app.kubernetes.io/version: 0ebab33e4f0083ccd5c34d7d7c881a5d0ff71a24
   managedFields:
-  - apiVersion: apps/v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:annotations:
-          .: {}
-          f:gcb-build-id: {}
-          f:kubectl.kubernetes.io/last-applied-configuration: {}
-        f:labels:
-          .: {}
-          f:app: {}
-          f:app.kubernetes.io/version: {}
-      f:spec:
-        f:progressDeadlineSeconds: {}
-        f:replicas: {}
-        f:revisionHistoryLimit: {}
-        f:selector: {}
-        f:strategy:
-          f:rollingUpdate:
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
             .: {}
-            f:maxSurge: {}
-            f:maxUnavailable: {}
-          f:type: {}
-        f:template:
-          f:metadata:
-            f:annotations:
-              f:gcb-build-id: {}
-            f:labels:
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+        'f:spec':
+          'f:progressDeadlineSeconds': {}
+          'f:replicas': {}
+          'f:revisionHistoryLimit': {}
+          'f:selector': {}
+          'f:strategy':
+            'f:rollingUpdate':
               .: {}
-              f:app: {}
-              f:app.kubernetes.io/version: {}
-          f:spec:
-            f:containers:
-              k:{"name":"clinica-webapp"}:
+              'f:maxSurge': {}
+              'f:maxUnavailable': {}
+            'f:type': {}
+          'f:template':
+            'f:metadata':
+              'f:labels':
                 .: {}
-                f:env:
+                'f:app': {}
+            'f:spec':
+              'f:containers':
+                'k:{"name":"clinica-webapp"}':
                   .: {}
-                  k:{"name":"TZ"}:
+                  'f:env':
                     .: {}
-                    f:name: {}
-                    f:value: {}
-                f:image: {}
-                f:imagePullPolicy: {}
-                f:name: {}
-                f:ports:
-                  .: {}
-                  k:{"containerPort":80,"protocol":"TCP"}:
+                    'k:{"name":"TZ"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                  'f:image': {}
+                  'f:imagePullPolicy': {}
+                  'f:name': {}
+                  'f:ports':
                     .: {}
-                    f:containerPort: {}
-                    f:name: {}
-                    f:protocol: {}
-                  k:{"containerPort":443,"protocol":"TCP"}:
+                    'k:{"containerPort":80,"protocol":"TCP"}':
+                      .: {}
+                      'f:containerPort': {}
+                      'f:name': {}
+                      'f:protocol': {}
+                    'k:{"containerPort":443,"protocol":"TCP"}':
+                      .: {}
+                      'f:containerPort': {}
+                      'f:name': {}
+                      'f:protocol': {}
+                  'f:resources':
                     .: {}
-                    f:containerPort: {}
-                    f:name: {}
-                    f:protocol: {}
-                f:resources:
-                  .: {}
-                  f:limits:
-                    .: {}
-                    f:cpu: {}
-                    f:memory: {}
-                  f:requests:
-                    .: {}
-                    f:cpu: {}
-                    f:memory: {}
-                f:terminationMessagePath: {}
-                f:terminationMessagePolicy: {}
-            f:dnsPolicy: {}
-            f:restartPolicy: {}
-            f:schedulerName: {}
-            f:securityContext: {}
-            f:terminationGracePeriodSeconds: {}
-    manager: kubectl-client-side-apply
-    operation: Update
-    time: "2024-01-04T18:35:48Z"
-  - apiVersion: apps/v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:annotations:
-          f:deployment.kubernetes.io/revision: {}
-      f:status:
-        f:availableReplicas: {}
-        f:conditions:
-          .: {}
-          k:{"type":"Available"}:
+                    'f:limits':
+                      .: {}
+                      'f:cpu': {}
+                      'f:memory': {}
+                    'f:requests':
+                      .: {}
+                      'f:cpu': {}
+                      'f:memory': {}
+                  'f:terminationMessagePath': {}
+                  'f:terminationMessagePolicy': {}
+              'f:dnsPolicy': {}
+              'f:restartPolicy': {}
+              'f:schedulerName': {}
+              'f:securityContext': {}
+              'f:terminationGracePeriodSeconds': {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: '2023-09-26T00:54:18Z'
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:deployment.kubernetes.io/revision': {}
+        'f:status':
+          'f:conditions':
             .: {}
-            f:lastTransitionTime: {}
-            f:lastUpdateTime: {}
-            f:message: {}
-            f:reason: {}
-            f:status: {}
-            f:type: {}
-          k:{"type":"Progressing"}:
-            .: {}
-            f:lastTransitionTime: {}
-            f:lastUpdateTime: {}
-            f:message: {}
-            f:reason: {}
-            f:status: {}
-            f:type: {}
-        f:observedGeneration: {}
-        f:readyReplicas: {}
-        f:replicas: {}
-        f:updatedReplicas: {}
-    manager: kube-controller-manager
-    operation: Update
-    subresource: status
-    time: "2024-01-04T18:35:51Z"
+            'k:{"type":"Available"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Progressing"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+          'f:observedGeneration': {}
+          'f:replicas': {}
+          'f:unavailableReplicas': {}
+          'f:updatedReplicas': {}
+      manager: kube-controller-manager
+      operation: Update
+      subresource: status
+      time: '2023-09-26T01:04:19Z'
   name: clinica-webapp-deployment
   namespace: default
-  resourceVersion: "87342651"
-  uid: 9360a01b-0720-424e-a85e-ae09fbe83506
 spec:
-  progressDeadlineSeconds: 600
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: clinica-webapp
@@ -145,73 +126,122 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        gcb-build-id: eedb6825-35a6-4460-9def-17fa8af3b311
-        gcb-trigger-id: f653c3d7-5e9e-4f7a-95bb-15be059012b4
-      //creationTimestamp: null
       labels:
         app: clinica-webapp
-        app.kubernetes.io/managed-by: gcp-cloud-build-deploy
-        app.kubernetes.io/name: clinica-webapp-deployment
-        app.kubernetes.io/version: 0ebab33e4f0083ccd5c34d7d7c881a5d0ff71a24
     spec:
       containers:
-      - env:
-        - name: TZ
-          value: America/Sao_Paulo
-        image: gcr.io/clinica-400119/github.com/dallbia/clinicaapp@sha256:878f420c95b12fc165ccc6c7d2bd2d56b87cd67114b99dcff14d6027823b5b8e
-        imagePullPolicy: IfNotPresent
-        name: clinica-webapp
-        ports:
-        - containerPort: 80
-          name: http-port
-          protocol: TCP
-        - containerPort: 443
-          name: https-port
-          protocol: TCP
-        resources:
-          limits:
-            cpu: 250m
-            ephemeral-storage: 1Gi
-            memory: 512Mi
-          requests:
-            cpu: 250m
-            ephemeral-storage: 1Gi
-            memory: 512Mi
-        securityContext:
-          capabilities:
-            drop:
-            - NET_RAW
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
+        - env:
+            - name: TZ
+              value: America/Sao_Paulo
+          image: gcr.io/clinica-400119/github.com/dallbia/clinicaapp
+          imagePullPolicy: IfNotPresent
+          name: clinica-webapp
+          ports:
+            - containerPort: 80
+              name: http-port
+              protocol: TCP
+            - containerPort: 443
+              name: https-port
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 250m
+              ephemeral-storage: 1Gi
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              ephemeral-storage: 1Gi
+              memory: 512Mi
+          securityContext:
+            capabilities:
+              drop:
+                - NET_RAW
       securityContext:
         seccompProfile:
           type: RuntimeDefault
-      terminationGracePeriodSeconds: 30
       tolerations:
-      - effect: NoSchedule
-        key: kubernetes.io/arch
-        operator: Equal
-        value: amd64
-status:
-  availableReplicas: 1
-  conditions:
-  - lastTransitionTime: "2024-01-02T21:52:36Z"
-    lastUpdateTime: "2024-01-02T21:52:36Z"
-    message: Deployment has minimum availability.
-    reason: MinimumReplicasAvailable
-    status: "True"
-    type: Available
-  - lastTransitionTime: "2023-10-04T00:27:41Z"
-    lastUpdateTime: "2024-01-04T18:35:51Z"
-    message: ReplicaSet "clinica-webapp-deployment-578469ff4b" has successfully progressed.
-    reason: NewReplicaSetAvailable
-    status: "True"
-    type: Progressing
-  observedGeneration: 30
-  readyReplicas: 1
-  replicas: 1
-  updatedReplicas: 1
+        - effect: NoSchedule
+          key: kubernetes.io/arch
+          operator: Equal
+          value: amd64
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+        'f:spec':
+          'f:allocateLoadBalancerNodePorts': {}
+          'f:externalTrafficPolicy': {}
+          'f:internalTrafficPolicy': {}
+          'f:ports':
+            .: {}
+            'k:{"port":80,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+            'k:{"port":443,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector': {}
+          'f:sessionAffinity': {}
+          'f:type': {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: '2023-09-26T00:54:07Z'
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:finalizers':
+            .: {}
+            'v:"service.kubernetes.io/load-balancer-cleanup"': {}
+        'f:status':
+          'f:loadBalancer':
+            'f:ingress': {}
+      manager: cloud-controller-manager
+      operation: Update
+      subresource: status
+      time: '2023-09-26T00:54:39Z'
+  name: clinica-webapp-svc
+  namespace: default
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 34.118.232.17
+  clusterIPs:
+    - 34.118.232.17
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      nodePort: 32631
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: https
+      nodePort: 31675
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    app: clinica-webapp
+  sessionAffinity: None
+  type: LoadBalancer
