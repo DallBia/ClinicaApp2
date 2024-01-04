@@ -201,20 +201,20 @@ export class ClienteService {
 
   async BuscaClientes(){
 
-    // this.clientes = [];
-    // this.clientesG = [];
-    //   try {
-    //     this.data = await this.GetClientes();
-    //     this.success = this.data.sucesso;
-    //     this.success = await this.Dados1();
+    this.clientes = [];
+    this.clientesG = [];
+      try {
+        this.data = await this.GetClientes();
+        this.success = this.data.sucesso;
+        this.success = await this.Dados1();
 
-    //     await this.Carregar();
+        await this.Carregar();
 
-    //     return true;
-    //   } catch (error) {
-    //     console.error('Erro ao buscar clientes:', error);
-    //     return false;
-    //   }
+        return true;
+      } catch (error) {
+        console.error('Erro ao buscar clientes:', error);
+        return false;
+      }
     }
 
 
